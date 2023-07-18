@@ -9,20 +9,26 @@
 # include <stdlib.h>
 # include <stdbool.h>
 
-#ifndef MACOS
-# define MACOS 1
-# include "macos_keycodes.h"
-#endif
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
 
-#ifndef WIN_TITLE
-# define WIN_TITLE "cub3D - Alex & Leighton"
-#endif
-#ifndef WIN_WIDTH
-# define WIN_WIDTH 1280
-#endif
-#ifndef WIN_HEIGHT
-# define WIN_HEIGHT 720
-#endif
+# ifndef MACOS
+#  define MACOS 1
+# endif
+# ifdef MACOS
+#  include "macos_keycodes.h"
+# endif
+
+# ifndef WIN_TITLE
+#  define WIN_TITLE "cub3D - Alex & Leighton"
+# endif
+# ifndef WIN_WIDTH
+#  define WIN_WIDTH 1280
+# endif
+# ifndef WIN_HEIGHT
+#  define WIN_HEIGHT 720
+# endif
 
 typedef struct s_mlx_data
 {

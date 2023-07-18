@@ -5,6 +5,8 @@
 
 int	close_mlx_window(t_mlx_data *mlx)
 {
+	if (DEBUG)
+		printf("Exiting cub3D!\n");
 	mlx_destroy_window(mlx->data, mlx->window);
 	exit(1);
 	return (0);
@@ -12,6 +14,8 @@ int	close_mlx_window(t_mlx_data *mlx)
 
 int	key_press(int keycode, t_mlx_data *mlx)
 {
+	if (DEBUG)
+		printf("Key Pressed: %i...\t", keycode);
 	if (MACOS)
 	{
 		if (keycode == KEY_ESC)
