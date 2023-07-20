@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:23:39 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/20 11:28:45 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/20 20:51:06 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 
 # include <stdio.h>
 # include <stdbool.h>
+# include <stdarg.h>
 
 /* ===========================================================
 	Debug definition to avoid inellisense errors.
@@ -63,6 +64,13 @@
 	Struct declerations.
 =========================================================== */
 
+typedef struct e_validator
+{
+	bool	success;
+	size_t	error_count;
+	char	**error_messages;
+}	t_validator;
+
 typedef struct s_mlx_data
 {
 	void	*data;
@@ -73,6 +81,7 @@ typedef struct s_cub3D_map_data
 {
 	size_t	m_width;
 	size_t	m_height;
+	char	**tiles;
 }	t_map;
 
 typedef struct s_cub3d
@@ -87,17 +96,29 @@ typedef struct s_cub3d
 
 // Exit cub3D.
 
-void	exit_free(t_map **data);
+void		exit_free(t_map **data);
 
 // Initialiser.
 
-void	initialise_cub3d(t_cub3d *app, const char *map_filepath);
-t_map	*initialise_map_data(const char *map_filepath, t_map **data);
+void		initialise_cub3d(t_cub3d *app, const char *map_filepath);
+
+// Parser.
+
+void		parse_map_file(const char *filepath, t_map **data);
+t_validator	new_validator(void);
+t_validator	*add_validation_error(t_validator *validator, const char *message);
+void		free_validator(t_validator *validator);
 
 // Events.
 
-int		key_press(int keycode, t_cub3d *app);
-int		close_mlx_window(t_cub3d *app);
+int			key_press(int keycode, t_cub3d *app);
+int			close_mlx_window(t_cub3d *app);
+
+// Utils.
+
+int			open_file(const char *filepath);
+void		vfree(size_t count, ...);
+char		**str_append2d(char **array, const char *s);
 
 /* ===========================================================
 	!! End of file !!
