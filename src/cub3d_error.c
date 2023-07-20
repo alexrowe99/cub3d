@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   cub3d_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 12:24:07 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/19 19:25:13 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/20 20:24:57 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D_error.h"
 #include "libft.h"
 
-void	*print_error(char *message)
+void	*print_error(const char *message)
 {
 	const char	*prefix;
 	size_t		prefix_len;
