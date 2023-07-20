@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 13:27:12 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/19 20:40:15 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/20 11:41:19 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,12 @@ static void	*read_map_file(const char *filepath, t_map **data)
 	}
 	close(fd);
 
-	// Compare width and height results here.
-	bool valid = expected[0] == (*data)->m_width
-		&& expected[1] == (*data)->m_height;
+	bool valid = true;
 	if (DEBUG)
 	{
+		// Compare width and height results here.
+		valid = expected[0] == (*data)->m_width
+			&& expected[1] == (*data)->m_height;
 		printf("=========================================\n");
 		if (!valid)
 		{

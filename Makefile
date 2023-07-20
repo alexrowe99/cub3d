@@ -2,7 +2,7 @@
 # 	- COMPILES AND ARCHIVE GNL OBJECTS
 SHELL := bash
 
-SRC = src/*.c
+SRC = $(shell find src -type file -name '*.c')
 INC = inc
 LIB = lib
 

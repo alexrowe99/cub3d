@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 15:54:13 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/19 19:32:13 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/20 11:40:44 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ void	initialise_cub3d(t_cub3d *app, const char *map_filepath)
 	ft_bzero(app, sizeof(t_cub3d));
 	if (!validate_file_extension(map_filepath)
 		|| !initialise_map_data(map_filepath, &app->map_data))
-		return ((void)exit_free(&app->map_data));
+		exit_free(&app->map_data);
 
 	// Initialise mlx here...
 	if (!initialise_mlx(&app->mlx, app))
-		return ((void)exit_free(&app->map_data));
+		exit_free(&app->map_data);
 
 	if (DEBUG)
 		printf("CUB3D INTIALISED SUCCESSFULLY!\n");
