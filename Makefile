@@ -56,7 +56,7 @@ else
 	@printf "Compiling libft\t\t\t"
 	@make -s -C $(LIBFT_DIR)
 	@printf "\e[0;92mDONE!\e[0m\n"
-	@printf "Compiling printf\t\t\t"
+	@printf "Compiling printf\t\t"
 	@make -s -C $(PRINTF_DIR)
 	@printf "\e[0;92mDONE!\e[0m\n"
 	@printf "Compiling get next line\t\t"
