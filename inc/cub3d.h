@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:23:39 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/20 20:51:06 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/23 13:49:36 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # include "get_next_line.h"
 # include "libft.h"
 
-# include "cub3D_error.h"
+# include "cub3d_error.h"
 
 # include <stdio.h>
 # include <stdbool.h>

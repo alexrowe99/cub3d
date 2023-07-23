@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3D_error.h                                      :+:      :+:    :+:   */
+/*   cub3d_error.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 12:57:09 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/20 20:25:06 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/23 16:59:03 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,14 @@
 */
 
 # define __ERR_MAP_INIT_FAIL__ "Failed to initialise map data"
+# define __ERR_MAP_POPTILE_FAIL__ "Could not populate map tiles"
 
 /*
 	Defined reasons for generic error messages.
 */
 
 # define __MEM_ALLOC__ "memory allocation failed."
+# define __MAP_INVALID__ "map tiles are invalid."
 
 void	*print_error(const char *message);
 

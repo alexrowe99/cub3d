@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:25:16 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/20 11:31:03 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/23 16:27:35 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,18 @@
 void	exit_free(t_map **data)
 {
 	if (*data)
+	{
+		if ((*data)->tiles)
+		{
+			while ((*data)->m_height--)
+			{
+				if ((*data)->tiles[(*data)->m_height])
+					free((*data)->tiles[(*data)->m_height]);
+			}
+			free((*data)->tiles);
+		}
 		free(*data);
+	}
 	*data = NULL;
 	exit(1);
 }

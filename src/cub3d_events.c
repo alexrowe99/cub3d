@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   events.c                                           :+:      :+:    :+:   */
+/*   cub3d_events.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 16:20:00 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/19 19:06:58 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/23 15:17:12 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,8 @@ int	close_mlx_window(t_cub3d *app)
 {
 	if (DEBUG)
 		printf("Exiting cub3D!\n");
-	if (app->map_data)
-	{
-		free(app->map_data);
-		app->map_data = NULL;
-	}
 	mlx_destroy_window(app->mlx.data, app->mlx.window);
-	exit(1);
+	exit_free(&app->map_data);
 	return (0);
 }
 

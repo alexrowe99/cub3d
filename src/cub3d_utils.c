@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:39:26 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/20 20:51:06 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/23 16:46:26 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,7 @@
 // Returns the file descriptor.
 int	open_file(const char *filepath)
 {
-	int	fd;
-
-	fd = open(filepath, O_RDONLY);
-	if (fd < 0)
-		print_error("Failed to open file.");
-	return (fd);
+	return (open(filepath, O_RDONLY));
 }
 
 // Free... but with variadic arguments.
@@ -46,7 +41,8 @@ void	vfree(size_t count, ...)
 
 char	**str_append2d(char **array, const char *s)
 {
-	size_t	array_len;
+	ssize_t	i;
+	ssize_t	array_len;
 	char	**append;
 
 	array_len = 0;
@@ -56,11 +52,16 @@ char	**str_append2d(char **array, const char *s)
 			array_len++;
 	}
 	append = malloc((array_len + 2) * sizeof(char *));
-	if (!append)
-		return (NULL);
-	append[array_len + 1] = NULL;
-	append[array_len] = ft_strdup(s);
+	i = -1;
+	if (append)
+	{
+		append[array_len + 1] = NULL;
+		append[array_len] = ft_strdup(s);
+		while (++i < array_len)
+			append[i] = ft_strdup(array[i]);
+	}
 	while (array_len--)
-		append[array_len] = ft_strdup(array[array_len]);
+		free(array[array_len]);
+	free(array);
 	return (append);
 }

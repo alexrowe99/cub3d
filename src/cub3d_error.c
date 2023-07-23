@@ -6,11 +6,11 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 12:24:07 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/20 20:24:57 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/23 13:49:58 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D_error.h"
+#include "cub3d_error.h"
 #include "libft.h"
 
 void	*print_error(const char *message)
