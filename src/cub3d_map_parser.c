@@ -6,26 +6,11 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 13:47:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/23 17:02:13 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/24 13:08:50 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-enum e_parser_actions
-{
-	READ = 0,
-	PROCESS,
-	COUNT_PARSER_ACTIONS
-};
-
-typedef struct s_map_parser
-{
-	char		*line[COUNT_PARSER_ACTIONS];
-	bool		(*process_line)(const char *, t_map **data,
-		t_validator	*validation);
-	t_validator	validation;
-}	t_parser;
 
 // Generic method that processes each line in the specified file using the 
 // function provided by the function pointer 'process_line'.
@@ -71,11 +56,8 @@ static bool	save_map_dimensions(const char *process_line, t_map **data,
 		(*data)->m_height++;
 	}
 	else
-	{
-		validation = add_validation_error(validation,
-				__ERR_MAP_INIT_FAIL__" : Could not process line.");
-		return (false);
-	}
+		return (add_validation_error(validation,
+			__ERR_MAP_INIT_FAIL__" : Could not process line.")->success);
 	return (true);
 }
 
@@ -133,5 +115,10 @@ void	parse_map_file(const char *filepath, t_map **data)
 	read_map_file(open_file(filepath), data, &parser, populate_map_tiles);
 	if (!parser.validation.success)
 		parser_exit(&parser.validation, data);
+
+	validate_map_tiles(data, &parser);
+	// if (!parser.validation.success)
+		parser_exit(&parser.validation, data);
+
 	free_validator(&parser.validation);
 }

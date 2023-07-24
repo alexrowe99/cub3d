@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:23:39 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/23 13:49:36 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/24 12:47:17 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,21 @@ typedef struct s_cub3D_map_data
 	char	**tiles;
 }	t_map;
 
+enum e_parser_actions
+{
+	READ = 0,
+	PROCESS,
+	COUNT_PARSER_ACTIONS
+};
+
+typedef struct s_map_parser
+{
+	char		*line[COUNT_PARSER_ACTIONS];
+	bool		(*process_line)(const char *, t_map **data,
+		t_validator	*validation);
+	t_validator	validation;
+}	t_parser;
+
 typedef struct s_cub3d
 {
 	t_mlx	mlx;
@@ -108,6 +123,8 @@ void		parse_map_file(const char *filepath, t_map **data);
 t_validator	new_validator(void);
 t_validator	*add_validation_error(t_validator *validator, const char *message);
 void		free_validator(t_validator *validator);
+
+void		validate_map_tiles(t_map **data, t_parser *parser);
 
 // Events.
 
