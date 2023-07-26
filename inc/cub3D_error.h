@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 12:57:09 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/23 16:59:03 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/26 09:51:57 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,15 @@
 	Defined error messages for generic errors.
 */
 
-# define __ERR_MAP_INIT_FAIL__ "Failed to initialise map data"
-# define __ERR_MAP_POPTILE_FAIL__ "Could not populate map tiles"
+# define ERR_INIT_MAP "Failed to initialise map data"
+# define ERR_PARSE_MAP "Failed to parse map data"
 
 /*
 	Defined reasons for generic error messages.
 */
 
-# define __MEM_ALLOC__ "memory allocation failed."
-# define __MAP_INVALID__ "map tiles are invalid."
+# define MEM_ALLOC "memory allocation failed."
+# define INVALID_MAP_TILES "invalid map tiles are present."
 
 void	*print_error(const char *message);
 

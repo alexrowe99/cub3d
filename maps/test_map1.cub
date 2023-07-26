@@ -1,3 +1,11 @@
+NO ./hello.xpm
+SO ./hello.xpm
+EA ./hello.xpm
+WE ./hello.xpm
+
+F 255,30,0
+C 255,255,30
+
     111111111
     1E0000001
     11111000111

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 12:24:07 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/23 13:49:58 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/26 15:41:36 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	*print_error(const char *message)
 
 	prefix = TEXT_RED "Error";
 	prefix_len = ft_strlen(prefix);
-	seperator = TEXT_WHITE " : ";
+	seperator = TEXT_WHITE ":\n";
 	seperator_len = ft_strlen(seperator);
 	ft_bzero(buffer, MAX_BUFFER);
 	ft_memcpy(buffer, prefix, prefix_len);

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:23:39 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/24 12:47:17 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/26 14:50:41 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,48 +61,87 @@
 # endif
 
 /* ===========================================================
+	Enumerations declerations.
+=========================================================== */
+
+enum e_map_tile_types
+{
+	MAP_TILE_NONE = 0,
+	MAP_TILE_EMPTY = ' ',
+	MAP_TILE_FLOOR = '0',
+	MAP_TILE_WALL = '1',
+	MAP_TILE_SPAWN_NORTH = 'N',
+	MAP_TILE_SPAWN_SOUTH = 'S',
+	MAP_TILE_SPAWN_EAST = 'E',
+	MAP_TILE_SPAWN_WEST = 'W',
+	MAP_TILE_VALIDATE_FLOOR = '#'
+};
+
+enum e_data_index
+{
+	DATA_TEXTURE,
+	DATA_RGB,
+	DATA_MAP,
+	COUNT_DATA_INDEX
+};
+
+typedef enum e_map_texture_type
+{
+	NORTH_WALL,
+	SOUTH_WALL,
+	EAST_WALL,
+	WEST_WALL,
+	COUNT_TEXTURE_TYPES
+}	t_texture_type;
+
+/* ===========================================================
 	Struct declerations.
 =========================================================== */
 
-typedef struct e_validator
+typedef struct s_map_file
 {
-	bool	success;
-	size_t	error_count;
-	char	**error_messages;
-}	t_validator;
+	char			**data;
+	size_t			line_count;
+	size_t			offset[COUNT_DATA_INDEX];
+}	t_file;
 
-typedef struct s_mlx_data
+typedef struct s_validation
 {
-	void	*data;
-	void	*window;
-}	t_mlx;
+	bool			caught_error;
+	size_t			error_count;
+	char			**error_messages;
+}	t_validation;
+
+typedef struct s_map_tile
+{
+	char			type;
+	bool			visited;
+}	t_map_tile;
 
 typedef struct s_cub3D_map_data
 {
-	size_t	m_width;
-	size_t	m_height;
-	char	**tiles;
+	size_t			map_width;
+	size_t			map_height;
+	t_map_tile		**tiles;
+	char			*texture_paths[COUNT_TEXTURE_TYPES];
 }	t_map;
 
-enum e_parser_actions
+typedef struct s_initialiser
 {
-	READ = 0,
-	PROCESS,
-	COUNT_PARSER_ACTIONS
-};
+	bool			*error;
+	t_validation	validation;
+}	t_initialiser;
 
-typedef struct s_map_parser
+typedef struct s_mlx_data
 {
-	char		*line[COUNT_PARSER_ACTIONS];
-	bool		(*process_line)(const char *, t_map **data,
-		t_validator	*validation);
-	t_validator	validation;
-}	t_parser;
+	void			*data;
+	void			*window;
+}	t_mlx;
 
 typedef struct s_cub3d
 {
-	t_mlx	mlx;
-	t_map	*map_data;
+	t_mlx			mlx;
+	t_map			*map_data;
 }	t_cub3d;
 
 /* ===========================================================
@@ -111,31 +150,42 @@ typedef struct s_cub3d
 
 // Exit cub3D.
 
-void		exit_free(t_map **data);
+void			exit_free(t_map **data);
 
 // Initialiser.
 
-void		initialise_cub3d(t_cub3d *app, const char *map_filepath);
+void			initialise_cub3d(t_cub3d *app, const char *map_filepath);
+t_initialiser	*initialise_map_data(const char *map_filepath, t_map **data,
+	t_initialiser *initialiser);
 
-// Parser.
+// Map File.
 
-void		parse_map_file(const char *filepath, t_map **data);
-t_validator	new_validator(void);
-t_validator	*add_validation_error(t_validator *validator, const char *message);
-void		free_validator(t_validator *validator);
+void			*free_file_data(t_file **file);
+t_file			*get_map_file_contents(const char *filepath,
+	t_initialiser *init);
 
-void		validate_map_tiles(t_map **data, t_parser *parser);
+// Map Parser.
+
+t_initialiser	*parse_map_data(t_file *map_file, t_map **data,
+	t_initialiser *init);
+
+// Validator.
+
+t_validation	new_validator(void);
+t_validation	*add_validation_error(t_validation *validator,
+	const char *message);
+void			free_validator(t_validation *validator);
+void			validation_exit(t_validation *validation, t_map **data);
 
 // Events.
 
-int			key_press(int keycode, t_cub3d *app);
-int			close_mlx_window(t_cub3d *app);
+int				key_press(int keycode, t_cub3d *app);
+int				close_mlx_window(t_cub3d *app);
 
 // Utils.
 
-int			open_file(const char *filepath);
-void		vfree(size_t count, ...);
-char		**str_append2d(char **array, const char *s);
+void			vfree(size_t count, ...);
+char			**str_append2d(char **array, const char *s);
 
 /* ===========================================================
 	!! End of file !!
