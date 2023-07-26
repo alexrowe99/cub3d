@@ -3,8 +3,8 @@ SO ./hello.xpm
 EA ./hello.xpm
 WE ./hello.xpm
 
-F 255,30,0
-C 255,255,30
+F 255,30,60
+C 210,210,30
 
     111111111
     1E0000001

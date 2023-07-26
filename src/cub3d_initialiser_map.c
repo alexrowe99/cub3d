@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 15:36:33 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/26 15:22:24 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/26 23:25:29 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,77 +37,7 @@ bool	populate_map_tiles(const char *line, t_map **data,
 	y++;
 	return (false);
 }
-
-t_initialiser	*initialise_map_data(const char *filepath, t_map **data,
-	t_initialiser *init)
-{
-	t_file	*map_file;
-
-	map_file = get_map_file_contents(filepath, init);
-	if (!map_file)
-		return (init);
-	if (DEBUG)
-	{
-		printf("=========== PRINTING MAP FILE CONTENTS ===========\n");
-		for (size_t i = 0; i < map_file->line_count; i++)
-			printf("%s\n", map_file->data[i]);
-		printf("==================================================\n");
-	}
-	*data = ft_calloc(1, sizeof(t_map));
-	if (!*data)
-	{
-		free_file_data(&map_file);
-		init->error = &(add_validation_error(&init->validation,
-			ERR_INIT_MAP" : "MEM_ALLOC)->caught_error);
-		return (init);
-	}
-	return (parse_map_data(map_file, data, init));
-
-	// if (DEBUG)
-	// {
-	// 	if (map_file->offset[DATA_RGB])
-	// 	{
-	// 		for (size_t	row = map_file->offset[DATA_RGB]; row; row--)
-	// 			printf("Texture found! %s\n", map_file->data[row - 1]);
-	// 	}
-	// 	else
-	// 		printf("No textures in file...\n");
-	// 	printf("==================================================\n");
-	// }
-
-	// if (DEBUG)
-	// 	printf("========= GATHERING FLOOR & CEILING RGB ==========\n");
-
-	// for (size_t i = 0; i < 2 && i + index < map_file->line_count; i++)
-	// {
-	// 	char *line = ft_strtrim(map_file->data[index], "\t ");
-	// 	if (*line == 'F' || *line == 'C')
-	// 	{
-	// 		if (DEBUG)
-	// 		{
-	// 			printf("Can not parse line... NOT YET IMPLEMENTED\nline: %s\n", 
-	// 				map_file->data[index]);
-	// 		}
-	// 		index++;
-	// 	}
-	// 	free(line);
-	// }
-	// if (index > map_file->offset[DATA_RGB])
-	// 	map_file->offset[DATA_MAP] = index;
-	// if (DEBUG)
-	// {
-	// 	if (map_file->offset[DATA_MAP])
-	// 	{
-	// 		for (size_t	row = map_file->offset[DATA_MAP]; row > map_file->offset[DATA_RGB]; row--)
-	// 			printf("RGB values found! %s\n", map_file->data[row - 1]);
-	// 	}
-	// 	else
-	// 		printf("No RGB values found...\n");
-	// 	printf("==================================================\n");
-	// }
-
-	// // Map Tiles...
-	// if (DEBUG)
+\
 	// 	printf("============== GATHERING MAP TILES ===============\n");
 
 	// size_t width = 0;
@@ -193,46 +123,9 @@ t_initialiser	*initialise_map_data(const char *filepath, t_map **data,
 	// 	return (init);
 	// }
 
-	// if (DEBUG)
-	// {
-	// 	printf("Map width: %zu; Map height: %zu;\n", (*data)->map_width,
-	// 		(*data)->map_height);
-	// 	printf("\n");
-	// 	for (size_t y = 0; y < (*data)->map_height; y++)
-	// 	{
-	// 		for (size_t x = 0; x < (*data)->map_width; x++)
-	// 		{
-	// 			printf("%c,", (*data)->tiles[y][x].type);
-	// 		}
-	// 		printf("\n");
-	// 	}
-	// 	printf("==================================================\n");
-	// }
-
+	// DO FLOODFILL VALIDATION HERE!!!
 
 	// free_file_data(&map_file);
 	// exit_free(data);
-	// // return (init);
-
-	
-	// // read_map_file(open_file(filepath), data, init, save_map_dimensions);
-	// // (*data)->tiles = init_map_tiles(filepath, data, init);
-	// // if (init->error)
-	// // 	validation_exit(&init->validation, data);
-
-	// // for (size_t y = 0; y < (*data)->map_height; y++)
-	// // {
-	// // 	for (size_t x = 0; x < (*data)->map_width; x++)
-	// // 		printf("%c,", (*data)->tiles[y][x].type);
-	// // 	printf("\n");
-	// // }
-
-	// // exit_free(data);
-	// // exit(1);
-
-	// // parser.validation = parse_map_file(map_filepath, data, &parser);
-	// // if (parser.validation->success == false)
-	// // 	validation_exit(parser.validation, data);
 	// return (init);
-}
 

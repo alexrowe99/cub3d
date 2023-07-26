@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:23:39 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/26 17:59:39 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/26 23:26:33 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # include <stdarg.h>
 
 /* ===========================================================
-	Debug definition to avoid inellisense errors.
+	Debug definition to avoid intellisense errors.
 =========================================================== */
 
 # ifndef DEBUG
@@ -61,7 +61,7 @@
 # endif
 
 /* ===========================================================
-	Enumerations declerations.
+	Enumerations definitions.
 =========================================================== */
 
 enum e_map_tile_types
@@ -94,15 +94,31 @@ typedef enum e_map_texture_type
 	COUNT_TEXTURE_TYPES
 }	t_texture_type;
 
+// FC - Floor & Ceiling.
+
+typedef enum e_parser_functions
+{
+	TEXTURE_PATHS,
+	FC_RGB_VALUES,
+	MAP_TILES,
+	COUNT_PARSER_FUNCTIONS
+}	t_parse;
+
+enum e_store_rgb_values
+{
+	FLOOR_RGB,
+	CEILING_RGB,
+	COUNT_RGB_PARSE
+};
+
 /* ===========================================================
-	Struct declerations.
+	Struct definitions.
 =========================================================== */
 
 typedef struct s_map_file
 {
 	char			**data;
 	size_t			line_count;
-	size_t			offset[COUNT_DATA_INDEX];
 }	t_file;
 
 typedef struct s_validation
@@ -118,12 +134,20 @@ typedef struct s_map_tile
 	bool			visited;
 }	t_map_tile;
 
+typedef struct s_rgb
+{
+	int				r;
+	int				g;
+	int				b;
+}	t_rgb;
+
 typedef struct s_cub3D_map_data
 {
 	size_t			map_width;
 	size_t			map_height;
 	t_map_tile		**tiles;
 	char			*texture_paths[COUNT_TEXTURE_TYPES];
+	t_rgb			rgb[COUNT_RGB_PARSE];
 }	t_map;
 
 typedef struct s_initialiser
@@ -155,29 +179,44 @@ void			exit_free(t_map **data);
 // Initialiser.
 
 void			initialise_cub3d(t_cub3d *app, const char *map_filepath);
-t_initialiser	*initialise_map_data(const char *map_filepath, t_map **data,
-	t_initialiser *initialiser);
 
 // Map File.
 
 void			*free_file_data(t_file **file);
 t_file			*get_map_file_contents(const char *filepath,
-	t_initialiser *init);
+					t_initialiser *init);
 
 // Map Parser.
 
 t_initialiser	*parse_map_data(t_file *map_file, t_map **data,
-	t_initialiser *init);
-bool			*validate_texture_paths(size_t *row_offset, t_map **data,
-	t_validation *validation);
-bool			has_texture_header(const char *s);
+					t_initialiser *init);
+void			parse_wall_texture_path(char **info, size_t *row_offset,
+					t_map **data, t_initialiser *init);
 t_texture_type	texture_type(char c);
+bool			has_texture_header(const char *s);
+bool			*validate_texture_paths(size_t *row_offset, t_map **data,
+					t_validation *validation);
+void			parse_floor_ceiling_rgb_values(char **info, size_t *row_offset,
+					t_map **data, t_initialiser *init);
+size_t			rgb_store_index(char c);
+t_initialiser	*parse_rgb_value(char *parse_line, t_rgb *colour,
+					t_initialiser *init);
+
+// Parse textures.
+
+// void			parse_wall_texture_path(char **info, size_t *row_offset,
+// 					t_map **data, t_initialiser *init);
+
+// Parse floor and ceiling rgb values.
+
+// void			parse_floor_ceiling_rgb_values(char **info, size_t *row_offset,
+// 					t_map **data, t_initialiser *init);
 
 // Validator.
 
 t_validation	new_validator(void);
 t_validation	*add_validation_error(t_validation *validator,
-	const char *message);
+					const char *message);
 void			free_validator(t_validation *validator);
 void			validation_exit(t_validation *validation, t_map **data);
 

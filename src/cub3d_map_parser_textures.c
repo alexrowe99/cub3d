@@ -6,24 +6,11 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 13:33:32 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/26 17:59:12 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/26 21:14:57 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include <fcntl.h>
-
-// FC - Floor & Ceiling.
-
-typedef enum e_parser_functions
-{
-	TEXTURE_PATHS,
-	FC_RGB_VALUES,
-	MAP_TILES,
-	COUNT_PARSER_FUNCTIONS
-}	t_parse;
-
-// Texture Parser
 
 bool	has_texture_header(const char *s)
 {
@@ -72,4 +59,3 @@ bool	*validate_texture_paths(size_t *row_offset, t_map **data,
 	}
 	return (&validation->caught_error);
 }
-

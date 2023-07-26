@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 15:54:13 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/26 18:07:24 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/26 23:11:18 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,25 @@ static void	validate_file_extension(const char *map_filepath)
 		free(error_message);
 		exit(1);
 	}
+}
+
+static t_initialiser	*initialise_map_data(const char *filepath, t_map **data,
+	t_initialiser *init)
+{
+	t_file	*map_file;
+
+	map_file = get_map_file_contents(filepath, init);
+	if (!map_file)
+		return (init);
+	*data = ft_calloc(1, sizeof(t_map));
+	if (!*data)
+	{
+		free_file_data(&map_file);
+		init->error = &(add_validation_error(&init->validation,
+			ERR_INIT_MAP" : "MEM_ALLOC)->caught_error);
+		return (init);
+	}
+	return (parse_map_data(map_file, data, init));
 }
 
 bool	initialise_mlx(t_mlx *mlx, t_cub3d *app)
