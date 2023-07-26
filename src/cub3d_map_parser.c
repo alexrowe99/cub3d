@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/26 13:33:32 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/26 17:52:21 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/26 18:06:18 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,56 +22,6 @@ typedef enum e_parser_functions
 	MAP_TILES,
 	COUNT_PARSER_FUNCTIONS
 }	t_parse;
-
-// Texture Parser
-
-static bool	has_texture_header(const char *s)
-{
-	return (!ft_strncmp(s, "NO", 2) || !ft_strncmp(s, "SO", 2)
-		|| !ft_strncmp(s, "EA", 2) || !ft_strncmp(s, "WE", 2));
-}
-
-static t_texture_type	texture_type(char c)
-{
-	if (c == 'N')
-		return (NORTH_WALL);
-	if (c == 'S')
-		return (SOUTH_WALL);
-	if (c == 'E')
-		return (EAST_WALL);
-	if (c == 'W')
-		return (WEST_WALL);
-	return (COUNT_TEXTURE_TYPES);
-}
-
-static bool	*validate_texture_paths(size_t *row_offset, t_map **data,
-	t_validation *validation)
-{
-	size_t	i;
-	char	*extension;
-
-	if (*row_offset != COUNT_TEXTURE_TYPES)
-		return (&(add_validation_error(validation,
-					ERR_PARSE_MAP" : missing texture(s).")->caught_error));
-	i = COUNT_TEXTURE_TYPES;
-	while (!validation->caught_error && i--)
-	{
-		if (!(*data)->texture_paths[i][2])
-		{
-			add_validation_error(validation,
-				ERR_PARSE_MAP" : path to texture is empty.");
-			break;
-		}
-		extension = ft_strrchr(&(*data)->texture_paths[i][2], '.');
-		if (!extension || ft_strncmp(extension, ".xpm", 4))
-		{
-			add_validation_error(validation,
-				ERR_PARSE_MAP" : invalid texture file... must be '.xpm'.");
-			break ;
-		}
-	}
-	return (&validation->caught_error);
-}
 
 // 	- Store paths to texture sprites.
 // 	- Store rgb values for floor and ceiling colours.
@@ -126,6 +76,7 @@ t_initialiser	*parse_map_data(t_file *map_file, t_map **data,
 	void	(*parse[COUNT_PARSER_FUNCTIONS])(char **, size_t *, t_map **,
 			t_initialiser *);
 
+	ft_bzero(parse, sizeof(void *) * COUNT_PARSER_FUNCTIONS);
 	parse[TEXTURE_PATHS] = parse_wall_texture_path;
 	// parse[FC_RGB_VALUES] = parse_floor_ceiling_rgb_values;
 	// parse[MAP_TILES] = parse_map_tile_characters;
@@ -133,7 +84,11 @@ t_initialiser	*parse_map_data(t_file *map_file, t_map **data,
 	row_offset = 0;
 	init->error = &init->validation.caught_error;
 	while (!*init->error && information < COUNT_PARSER_FUNCTIONS)
+	{
+		if (!parse[information])
+			break ;
 		parse[information++](map_file->data, &row_offset, data, init);
+	}
 	free_file_data(&map_file);
 	return (init);
 }

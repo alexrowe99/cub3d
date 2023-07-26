@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:23:39 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/26 14:50:41 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/26 17:59:39 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,10 @@ t_file			*get_map_file_contents(const char *filepath,
 
 t_initialiser	*parse_map_data(t_file *map_file, t_map **data,
 	t_initialiser *init);
+bool			*validate_texture_paths(size_t *row_offset, t_map **data,
+	t_validation *validation);
+bool			has_texture_header(const char *s);
+t_texture_type	texture_type(char c);
 
 // Validator.
 
