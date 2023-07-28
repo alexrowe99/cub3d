@@ -9,7 +9,7 @@ execute_test()
 {
 	local TESTPID=-1
 	local TESTFILE=$1
-	local TESTNAME=${TESTFILE:10:$(expr ${#TESTFILE} - 14)}
+	local TESTNAME=${TESTFILE:$2:$(expr ${#TESTFILE} - $(expr $2 + $3))}
 
 	printf " $TESTNAME..."
 	if [ ${#TESTNAME} -lt 20 ]; then
@@ -43,25 +43,32 @@ execute_test()
 	fi
 }
 
+SUFFIX=".cub"
 echo Testing Texture Parser
-for MAP in $(echo $(find maps -type f -name 'test_invalid_texture*.cub') \
+PREFIX="test_texture_"
+for MAP in $(echo $(find maps -type f -name "$PREFIX*.cub") \
 | xargs -n1 | sort | xargs)
 do
-	execute_test $MAP
+	PREFIX="maps/test_texture_"
+	execute_test $MAP ${#PREFIX} ${#SUFFIX}
 done
 
 echo Testing RGB Parser
-for MAP in $(echo $(find maps -type f -name 'test_invalid_rgb*.cub') \
+PREFIX="test_rgb_"
+for MAP in $(echo $(find maps -type f -name "$PREFIX*.cub") \
 | xargs -n1 | sort | xargs)
 do
-	execute_test $MAP
+	PREFIX="maps/test_rgb_"
+	execute_test $MAP ${#PREFIX} ${#SUFFIX}
 done
 
 echo Testing Map Tile Parser
-for MAP in $(echo $(find maps -type f -name 'test_invalid_tiles*.cub') \
+PREFIX="test_tiles_"
+for MAP in $(echo $(find maps -type f -name "$PREFIX*.cub") \
 | xargs -n1 | sort | xargs)
 do
-	execute_test $MAP
+	PREFIX="maps/test_tiles_"
+	execute_test $MAP ${#PREFIX} ${#SUFFIX}
 done
 
 rm -rf tester.log
