@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 12:06:04 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/28 16:40:45 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/28 18:39:12 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static t_initialiser	*validate_map_tiles(bool player_spawn,
 	t_map **data, t_initialiser *init)
 {
 	t_v2st	cell;
-	
+
 	if (!player_spawn)
 		add_validation_error(&init->validation,
 			ERR_INIT_MAP" : "ERR_PARSE_MAP" : no spawn location was detected " \
