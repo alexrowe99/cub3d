@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 15:54:13 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/26 23:11:18 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/28 00:34:31 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static t_initialiser	*initialise_map_data(const char *filepath, t_map **data,
 	{
 		free_file_data(&map_file);
 		init->error = &(add_validation_error(&init->validation,
-			ERR_INIT_MAP" : "MEM_ALLOC)->caught_error);
+					ERR_INIT_MAP" : "MEM_ALLOC)->caught_error);
 		return (init);
 	}
 	return (parse_map_data(map_file, data, init));
@@ -63,16 +63,12 @@ void	initialise_cub3d(t_cub3d *app, const char *map_filepath)
 	t_initialiser	init;
 
 	validate_file_extension(map_filepath);
-
 	ft_bzero(&init, sizeof(t_initialiser));
 	if (*initialise_map_data(map_filepath, &app->map_data, &init)->error)
 		validation_exit(&init.validation, &app->map_data);
 	free_validator(&init.validation);
-	
-	
 	if (!initialise_mlx(&app->mlx, app))
 		exit_free(&app->map_data);
-	
 	if (DEBUG)
 		printf("CUB3D INTIALISED SUCCESSFULLY!\n");
 }

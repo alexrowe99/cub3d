@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d_map_file.c                                   :+:      :+:    :+:   */
+/*   cub3d_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 11:53:50 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/25 12:50:04 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/28 12:14:53 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static t_file	*populate_file_contents(t_file *file, int map_fd,
 			{
 				close(map_fd);
 				init->error = &(add_validation_error(&init->validation,
-				ERR_INIT_MAP" : "MEM_ALLOC)->caught_error);
+							ERR_INIT_MAP" : "MEM_ALLOC)->caught_error);
 				return (free_file_data(&file));
 			}
 		}
@@ -66,14 +66,15 @@ t_file	*get_map_file_contents(const char *filepath, t_initialiser *init)
 	if (map_fd < 0)
 	{
 		init->error = &(add_validation_error(&init->validation,
-			"Could not open file : invalid file descriptor.")->caught_error);
+					ERR_INIT_MAP" : Could not open file : invalid file "\
+					"descriptor.")->caught_error);
 		return (NULL);
 	}
 	file = ft_calloc(1, sizeof(t_file));
 	if (!file)
 	{
 		init->error = &(add_validation_error(&init->validation,
-			ERR_INIT_MAP" : "MEM_ALLOC)->caught_error);
+					ERR_INIT_MAP" : "MEM_ALLOC)->caught_error);
 		return (NULL);
 	}
 	return (populate_file_contents(file, map_fd, init));

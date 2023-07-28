@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:25:16 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/26 22:05:13 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/28 00:36:27 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	exit_free(t_map **data)
 {
+	size_t	i;
+
 	if (*data)
 	{
 		if ((*data)->tiles)
@@ -23,7 +25,7 @@ void	exit_free(t_map **data)
 					free((*data)->tiles[(*data)->map_height]);
 			free((*data)->tiles);
 		}
-		size_t i = COUNT_TEXTURE_TYPES;
+		i = COUNT_TEXTURE_TYPES;
 		while (i--)
 			if ((*data)->texture_paths[i])
 				free((*data)->texture_paths[i]);

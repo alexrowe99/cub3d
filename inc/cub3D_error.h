@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 12:57:09 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/26 23:23:31 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/28 00:32:58 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,9 @@
 # define INVALID_MAP_TILES "invalid map tiles are present."
 
 # define ERR_RGB_PARSE "Could not save rgb colour"
-# define RGB_DEFINE_HELP "\nHelp for defining floor & ceiling rgb values in map\
- file!\n  -  The line must start with a single character ('F' for floor, 'C' \
-for ceiling).\n  -  Seperate the rgb colour values using whitespace (space or \
-tab).\n  -  Each value (r - red, g - green, b - blue) must be in the range of \
-0-255 and seperated with ','.\n\n  Example:\n\tF 25,54,220\n"
-# define UNKOWN_CHAR "un-recognisable character...\n" RGB_DEFINE_HELP
-# define MISSING_VALUES "missing rgb values...\n" RGB_DEFINE_HELP
-
-
+# define UNKOWN_CHAR "un-recognisable character."
+# define MISSING_VALUES "missing rgb values."
+# define VALUE_OUT_OF_RANGE "rgb value is out of range."
 
 void	*print_error(const char *message);
 

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 13:53:04 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/25 12:29:09 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/28 00:39:58 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	free_validator(t_validation *validator)
 		free(validator->error_messages);
 }
 
-t_validation	*add_validation_error(t_validation *validator, const char *message)
+t_validation	*add_validation_error(t_validation *validator,
+	const char *message)
 {
 	const char	*add_message_fail;
 

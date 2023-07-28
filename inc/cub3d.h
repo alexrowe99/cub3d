@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:23:39 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/26 23:26:33 by lmells           ###   ########.fr       */
+/*   Updated: 2023/07/28 18:00:48 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,18 +136,31 @@ typedef struct s_map_tile
 
 typedef struct s_rgb
 {
-	int				r;
-	int				g;
-	int				b;
+	int16_t			r;
+	int16_t			g;
+	int16_t			b;
 }	t_rgb;
+
+typedef struct s_vec_2_size_t
+{
+	size_t			x;
+	size_t			y;
+}	t_v2st;
+
+typedef struct s_vec_2_ssize_t
+{
+	ssize_t			x;
+	ssize_t			y;
+}	t_v2sst;
 
 typedef struct s_cub3D_map_data
 {
 	size_t			map_width;
 	size_t			map_height;
-	t_map_tile		**tiles;
 	char			*texture_paths[COUNT_TEXTURE_TYPES];
 	t_rgb			rgb[COUNT_RGB_PARSE];
+	t_map_tile		**tiles;
+	t_v2st			spawn_coords;
 }	t_map;
 
 typedef struct s_initialiser
@@ -192,7 +205,8 @@ t_initialiser	*parse_map_data(t_file *map_file, t_map **data,
 					t_initialiser *init);
 void			parse_wall_texture_path(char **info, size_t *row_offset,
 					t_map **data, t_initialiser *init);
-t_texture_type	texture_type(char c);
+void			save_texture_path(const char *info, char **texture_paths,
+					t_initialiser *init);
 bool			has_texture_header(const char *s);
 bool			*validate_texture_paths(size_t *row_offset, t_map **data,
 					t_validation *validation);
@@ -201,16 +215,15 @@ void			parse_floor_ceiling_rgb_values(char **info, size_t *row_offset,
 size_t			rgb_store_index(char c);
 t_initialiser	*parse_rgb_value(char *parse_line, t_rgb *colour,
 					t_initialiser *init);
-
-// Parse textures.
-
-// void			parse_wall_texture_path(char **info, size_t *row_offset,
-// 					t_map **data, t_initialiser *init);
-
-// Parse floor and ceiling rgb values.
-
-// void			parse_floor_ceiling_rgb_values(char **info, size_t *row_offset,
-// 					t_map **data, t_initialiser *init);
+t_initialiser	*validate_rgb_range(t_rgb *colours, t_initialiser *init);
+void			parse_map_tiles(char **info, size_t *row_offset, t_map **data,
+					t_initialiser *init);
+t_initialiser	*get_map_dimensions(char **info, size_t row_offset,
+					t_map **data, t_initialiser *init);
+t_map_tile		**alloc_map_tiles(size_t map_width, size_t map_height);
+t_initialiser	*populate_map_tiles(char **info, size_t *row_offset,
+					t_map **data, t_initialiser *init);
+void			floodfill_map_validation(t_map **data, t_initialiser *init);
 
 // Validator.
 
