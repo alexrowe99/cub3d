@@ -51,7 +51,7 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Additional Ignores...
+cub3d
 .DS_Store
-
-# VS Code
 *.vscode/

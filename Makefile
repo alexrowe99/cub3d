@@ -2,21 +2,22 @@
 # 	- COMPILES AND ARCHIVE GNL OBJECTS
 SHELL := bash
 
-SRC = src/*.c
+SRC = $(shell find src -type file -name '*.c')
 INC = inc
 LIB = lib
 
 LIBFT_DIR = $(LIB)/libft
+PRINTF_DIR = $(LIB)/ft_printf
 GNL_DIR = $(LIB)/get_next_line
 MLX_DIR = $(LIB)/mlx
 
 GNL_SRC = $(shell find $(GNL_DIR) -type f -name 'get_next_line*.c')
 GNL_OBJ = $(GNL_SRC:.c=.o)
 
-LIBS = $(LIBFT)/libft.a $(MLX_DIR)/libmlx.a
-LINK_LIBS = -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx
+LIBS = $(LIBFT)/libft.a $(MLX_DIR)/libmlx.a $(PRINTF_DIR)/libftprintf.a
+LINK_LIBS = -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -L$(PRINTF_DIR) -lftprintf
 
-HEADERS = -I$(INC) -I$(LIBFT_DIR) -I$(GNL_DIR) -I$(MLX_DIR)
+HEADERS = -I$(INC) -I$(LIBFT_DIR) -I$(GNL_DIR) -I$(MLX_DIR) -I$(PRINTF_DIR)
 
 DEBUG = 0
 ifeq ($(DEBUG), 1)
@@ -44,6 +45,7 @@ $(LIBS):
 	@clear
 ifeq ($(DEBUG), 1)
 	@make -C $(LIBFT_DIR) DEBUG=1
+	@make -s -C $(PRINTF_DIR) DEBUG=1
 	@-for i in $(GNL_SRC:%.c=%); do\
 		echo "cc $$i.c $(GNL_COMP_FLAGS) -c -o $$i.o";\
 		cc $$i.c $(GNL_COMP_FLAGS) -c -o $$i.o;\
@@ -53,6 +55,9 @@ ifeq ($(DEBUG), 1)
 else
 	@printf "Compiling libft\t\t\t"
 	@make -s -C $(LIBFT_DIR)
+	@printf "\e[0;92mDONE!\e[0m\n"
+	@printf "Compiling printf\t\t"
+	@make -s -C $(PRINTF_DIR)
 	@printf "\e[0;92mDONE!\e[0m\n"
 	@printf "Compiling get next line\t\t"
 	@-for i in $(GNL_SRC:%.c=%); do\
@@ -71,6 +76,7 @@ clean:
 	@rm -f cub3d
 	@rm -f $(GNL_DIR)/*.o
 	@make fclean -s -C $(LIBFT_DIR)
+	@make fclean -s -C $(PRINTF_DIR)
 	@make clean -s -C $(MLX_DIR)
 	@echo nothing here anymore, well, except .c
 
