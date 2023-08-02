@@ -6,16 +6,17 @@ libmlx=$(find . -type f -name "libmlx.a")
 mlx_h=$(find . -type f -name "mlx.h")
 if [[ -z ${libmlx} || -z ${mlx_h} ]]; then
 	if [[ -z ${libmlx} ]]; then
-		mlxcopy=$(find ../lib/mlx -type f -name "libmlx.a")
-		if [[ -z ${mlxcopy} ]]; then
+		if [[ -z $(find ../lib/mlx -type f -name "libmlx.a") ]]; then
 			make -C ../lib/mlx
 		fi
-		printf "Copying '$mlxcopy' to '$PWD'\n"
-		cp $mlxcopy .
+		mlxcopy=$(find ../lib/mlx -type f -name "libmlx.a")
+		printf "Copying '${mlxcopy}' to '$PWD'\n"
+		cp ${mlxcopy} ${PWD}
 	fi
 	if [[ -z ${mlx_h} ]]; then
-		printf "Copying '../lib/mlx/mlx.h' to '$PWD'\n"
-		cp ../lib/mlx/mlx.h .
+		mlx_h=$(find ../lib/mlx -type f -name "mlx.h")
+		printf "Copying '${mlx_h}' to '${PWD}'\n"
+		cp ${mlx_h} ${PWD}
 	fi
 fi
 
