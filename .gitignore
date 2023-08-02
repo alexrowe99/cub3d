@@ -42,6 +42,9 @@
 *.idb
 *.pdb
 
+# Sawp Files
+*.swp
+
 # Kernel Module Compile Results
 *.mod*
 *.cmd
@@ -55,3 +58,10 @@ dkms.conf
 cub3d
 .DS_Store
 *.vscode/
+
+# MLX Test Bench
+mlx_test_bench/**
+!mlx_test_bench/start.sh
+!mlx_test_bench/bench.h
+!mlx_test_bench/chong_sketch/
+
