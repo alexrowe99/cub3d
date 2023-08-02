@@ -274,4 +274,5 @@ void	csketch_clear(void)
 	pixel_count = csketch->c_width * csketch->c_height;
 	while (pixel_count--)
 		csketch->image->pixels[pixel_count] = 0;
+	// mlx_destroy_image(csketch->mlx_instance, csketch->image->img);
 }
