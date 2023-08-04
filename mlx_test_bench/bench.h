@@ -70,9 +70,17 @@ typedef struct s_vertex
 	uint32_t		colour;
 }	t_vertex;
 
+typedef struct s_entity
+{
+	t_vertex		vertex;
+	float			mass;
+	float			velocity;
+}	t_entity;
+
 typedef struct s_world
 {
-	t_vertex		player;
+	float			gravity;
+	t_entity		player;
 }	t_world;
 
 typedef struct s_test_bench

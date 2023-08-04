@@ -13,31 +13,33 @@ int	exit_test_bench(void)
 	return (0);
 }
 
-int	player_movement_up(void)
+// int	player_movement_up(t_entity *player)
+// {
+// 	player->vertex.position.y -= 5;
+// 	player->vertex.colour = 0x00FFFF;
+// 	return (0);
+// }
+
+// int	player_movement_down(t_entity *player)
+// {
+// 	player->vertex.position.y += 5;
+// 	player->vertex.colour = 0xDA552B;
+// 	return (0);
+// }
+
+int	player_movement_left(t_entity *player, float dt)
 {
-	world.player.position.y -= 5;
-	world.player.colour = 0x00FFFF;
+	player->velocity += (world.gravity/player->mass) * dt;
+	player->vertex.position.x -= player->velocity * dt;
+	player->vertex.colour = 0x40EB34;
 	return (0);
 }
 
-int	player_movement_down(void)
+int	player_movement_right(t_entity *player, float dt)
 {
-	world.player.position.y += 5;
-	world.player.colour = 0xDA552B;
-	return (0);
-}
-
-int	player_movement_left(void)
-{
-	world.player.position.x -= 5;
-	world.player.colour = 0x40EB34;
-	return (0);
-}
-
-int	player_movement_right(void)
-{
-	world.player.position.x += 5;
-	world.player.colour = 0xEBCC34;
+	player->velocity += (world.gravity/player->mass) * dt;
+	player->vertex.position.x += player->velocity * dt;
+	player->vertex.colour = 0xEBCC34;
 	return (0);
 }
 
@@ -67,7 +69,6 @@ int	key_is_down(int keycode)
 
 static int	key_release(int keycode)
 {
-	world.player.colour = 0xFFFFFF;
 	for (size_t i = 0; i < SUPPORTED_KEYCODE_COUNT; i++)
 	{
 		if (keycode == bench.events.key_press[i].code)
@@ -76,27 +77,50 @@ static int	key_release(int keycode)
 	return (keycode);
 }
 
-#include <time.h>
+void	draw_player(t_entity *player)
+{
+	t_vertex	v;
 
+	v = player->vertex;
+	csketch_circle(v.position.x, v.position.y, 10, v.colour);
+}
+
+void	game_loop(float dt)
+{
+	// if (key_is_down(KEY_W))
+	// 	player_movement_up(&world.player, dt);
+	// if (key_is_down(KEY_S))
+	// 	player_movement_down(&world.player, dt);
+	if (key_is_down(KEY_A))
+		player_movement_left(&world.player, dt);
+	else if (key_is_down(KEY_D))
+		player_movement_right(&world.player, dt);
+	else
+		world.player.velocity = 100.0f;
+}
+
+// #define FPS_LIMIT 60
+
+#include <time.h>
+// double time = 0.0f;
+// double delta_time = 1 / FPS_LIMIT;
+
+clock_t	cltimer;
 static int	update(void)
 {
-	clock_t	t = clock();
+	double dt = clock() - cltimer;
+	fprintf(stderr, "Time since last frame: %fseconds\n", dt/CLOCKS_PER_SEC);
+	cltimer = clock();
+	game_loop(dt/CLOCKS_PER_SEC);
 
-	if (key_is_down(KEY_W))
-		player_movement_up();
-	if (key_is_down(KEY_S))
-		player_movement_down();
-	if (key_is_down(KEY_A))
-		player_movement_left();
-	if (key_is_down(KEY_D))
-		player_movement_right();
-	csketch_circle(world.player.position.x, world.player.position.y, 5, world.player.colour);
-	mlx_put_image_to_window(bench.mlx.mlx_ptr, bench.mlx.win_ptr, final_csketch(), 0, 0);
 	csketch_clear();
+	draw_player(&world.player);
 
-	t = clock() - t;
-	double elapsed_ms = (((double)t)/CLOCKS_PER_SEC*1000);
-	fprintf(stdout, "Elapsed Time: %.3fms\n", elapsed_ms);
+	mlx_put_image_to_window(bench.mlx.mlx_ptr, bench.mlx.win_ptr, final_csketch(), 0, 0);
+
+	// t = clock() - t;
+	// double elapsed_ms = (((double)t)/CLOCKS_PER_SEC*1000);
+	// fprintf(stdout, "Elapsed Time: %.3fms | FPS: %d\n", elapsed_ms, (int)(1000/elapsed_ms));
 	
 	return (0);
 }
@@ -104,7 +128,7 @@ static int	update(void)
 int	main(void)
 {
 	t_mlx	*mlx;
-
+	
 	mlx = &bench.mlx;
 	mlx->mlx_ptr = mlx_init();
 	if (!mlx->mlx_ptr)
@@ -141,10 +165,17 @@ int	main(void)
 		return ((int)err);
 	}
 
-	world.player.position.x = 200;
-	world.player.position.y = 500;
-	world.player.colour = 0xFFFFFF;
+	world.gravity = 600.0f;
 
+	t_entity	*player = &world.player;
+
+	player->velocity = 100.0f;
+	player->mass = 5.0f;
+	player->vertex.colour = 0xFFFFFF;
+	player->vertex.position.x = WIN_WIDTH/2;
+	player->vertex.position.y = WIN_HEIGHT/2;
+
+	cltimer = clock();
 	mlx_loop_hook(mlx->mlx_ptr, update, NULL);
 	mlx_loop(mlx->mlx_ptr);
 	return (0);

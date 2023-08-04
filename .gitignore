@@ -64,4 +64,5 @@ mlx_test_bench/**
 !mlx_test_bench/start.sh
 !mlx_test_bench/bench.h
 !mlx_test_bench/chong_sketch/
+!mlx_test_bench/cherno_3d/**
 
