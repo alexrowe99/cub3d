@@ -1,37 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/28 22:04:58 by lmells           ###   ########.fr       */
+/*   Created: 2023/08/13 15:26:33 by lmells            #+#    #+#             */
+/*   Updated: 2023/08/13 15:29:12 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#include <libftall.h>
 
-# include <libftall.h>
-# include <stdbool.h>
-
-typedef struct s_vec2_int
+char	*ft_strndup(const char *s, size_t n)
 {
-	int	x;
-	int	y;
-}	t_v2i;
+	size_t	s_len;
+	char	*dup;
 
-typedef struct s_cub3d
-{
-	t_v2i	m_dim;
-}	t_cub3d;
-
-typedef struct	s_file_contents
-{
-	int		fd;
-	char	**contents;
-	size_t	line_count;
-}	t_fcontent;
-
-#endif
+	s_len = ft_strlen(s);
+	if (n > s_len)
+		n = s_len;
+	dup = malloc(n + 1);
+	if (!dup)
+		return (NULL);
+	dup[n] = '\0';
+	while (n--)
+		dup[n] = s[n];
+	return (dup);
+}

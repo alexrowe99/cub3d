@@ -1,37 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/28 22:04:58 by lmells           ###   ########.fr       */
+/*   Created: 2023/07/12 15:32:22 by lmells            #+#    #+#             */
+/*   Updated: 2023/08/13 15:09:47 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#include "libftall.h"
+#include <unistd.h>
 
-# include <libftall.h>
-# include <stdbool.h>
-
-typedef struct s_vec2_int
+void	ft_putnbr_fd(int n, int fd)
 {
-	int	x;
-	int	y;
-}	t_v2i;
-
-typedef struct s_cub3d
-{
-	t_v2i	m_dim;
-}	t_cub3d;
-
-typedef struct	s_file_contents
-{
-	int		fd;
-	char	**contents;
-	size_t	line_count;
-}	t_fcontent;
-
-#endif
+	if ((long int)n == INT32_MIN)
+	{
+		ft_putstr_fd("-2147483648", fd);
+		return ;
+	}
+	if (n < 0)
+	{
+		n *= -1;
+		ft_putchar_fd('-', fd);
+	}
+	if (n < 10)
+		ft_putchar_fd(n + '0', fd);
+	else
+	{
+		ft_putnbr_fd(n / 10, fd);
+		ft_putnbr_fd(n % 10, fd);
+	}
+}

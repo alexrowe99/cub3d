@@ -1,37 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/28 22:04:58 by lmells           ###   ########.fr       */
+/*   Created: 2023/07/09 16:40:32 by lmells            #+#    #+#             */
+/*   Updated: 2023/08/13 15:09:47 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#include "libftall.h"
 
-# include <libftall.h>
-# include <stdbool.h>
-
-typedef struct s_vec2_int
+char	*ft_substr(const char *s, size_t start, size_t len)
 {
-	int	x;
-	int	y;
-}	t_v2i;
+	const char	*p;
+	char		*sub;
 
-typedef struct s_cub3d
-{
-	t_v2i	m_dim;
-}	t_cub3d;
-
-typedef struct	s_file_contents
-{
-	int		fd;
-	char	**contents;
-	size_t	line_count;
-}	t_fcontent;
-
-#endif
+	if (start >= ft_strlen(s))
+		return (ft_strdup(""));
+	p = &s[start];
+	while (*p != '\0' && len--)
+		p++;
+	len = p - (s + start);
+	sub = malloc(len + 1);
+	if (!sub)
+		return ((void *)0);
+	sub[len] = '\0';
+	return (ft_memcpy(sub, s + start, len));
+}

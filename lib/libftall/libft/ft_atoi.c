@@ -1,37 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/28 22:04:58 by lmells           ###   ########.fr       */
+/*   Created: 2023/07/09 15:45:50 by lmells            #+#    #+#             */
+/*   Updated: 2023/08/13 15:09:47 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#include "libftall.h"
 
-# include <libftall.h>
-# include <stdbool.h>
-
-typedef struct s_vec2_int
+int	ft_atoi(const char *str)
 {
-	int	x;
-	int	y;
-}	t_v2i;
+	int	result;
+	int	sign;
 
-typedef struct s_cub3d
-{
-	t_v2i	m_dim;
-}	t_cub3d;
-
-typedef struct	s_file_contents
-{
-	int		fd;
-	char	**contents;
-	size_t	line_count;
-}	t_fcontent;
-
-#endif
+	while (*str == ' ' || (*str >= 9 && *str <= 13))
+		str++;
+	sign = 1;
+	if (*str == '-' || *str == '+')
+	{
+		if (*str == '-')
+			sign = -1;
+		str++;
+	}
+	result = 0;
+	while (ft_isdigit(*str))
+		result = result * 10 + (*str++ - '0');
+	return (result * sign);
+}

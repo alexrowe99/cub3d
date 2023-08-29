@@ -1,37 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/28 22:04:58 by lmells           ###   ########.fr       */
+/*   Created: 2023/07/08 23:03:03 by lmells            #+#    #+#             */
+/*   Updated: 2023/08/13 15:09:47 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#include "libftall.h"
 
-# include <libftall.h>
-# include <stdbool.h>
-
-typedef struct s_vec2_int
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	int	x;
-	int	y;
-}	t_v2i;
+	unsigned char	*p;
 
-typedef struct s_cub3d
-{
-	t_v2i	m_dim;
-}	t_cub3d;
-
-typedef struct	s_file_contents
-{
-	int		fd;
-	char	**contents;
-	size_t	line_count;
-}	t_fcontent;
-
-#endif
+	if (!dst && !src)
+		return (dst);
+	p = (unsigned char *)dst;
+	if (src < dst)
+	{
+		while (len--)
+			p[len] = ((unsigned char *)src)[len];
+	}
+	else
+	{
+		while (len--)
+			*p++ = *(unsigned char *)src++;
+	}
+	return (dst);
+}

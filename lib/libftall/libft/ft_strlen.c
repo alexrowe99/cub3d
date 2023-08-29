@@ -1,37 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/28 22:04:58 by lmells           ###   ########.fr       */
+/*   Created: 2023/07/08 22:51:50 by lmells            #+#    #+#             */
+/*   Updated: 2023/08/13 16:37:27 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#include <unistd.h>
 
-# include <libftall.h>
-# include <stdbool.h>
-
-typedef struct s_vec2_int
+size_t	ft_strlen(const char *s)
 {
-	int	x;
-	int	y;
-}	t_v2i;
+	size_t	i;
 
-typedef struct s_cub3d
-{
-	t_v2i	m_dim;
-}	t_cub3d;
-
-typedef struct	s_file_contents
-{
-	int		fd;
-	char	**contents;
-	size_t	line_count;
-}	t_fcontent;
-
-#endif
+	i = 0;
+	if (s)
+	{
+		while (s[i] != '\0')
+			i++;
+	}
+	return (i);
+}
