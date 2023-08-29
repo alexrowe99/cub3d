@@ -1,6 +1,5 @@
 NO ./hello.xpm
 SO ./hello.xpm
-EA ./
 WE ./hello.xpm
 
 F 255,30,60
