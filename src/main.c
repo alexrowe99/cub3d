@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/29 16:08:35 by lmells           ###   ########.fr       */
+/*   Updated: 2023/08/29 23:25:47 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,91 +44,112 @@ static bool	validate_args(int ac, char **av)
 	return (true);
 }
 
-static void	read_file_contents(const char *filepath, t_fcontent *file)
+static bool	read_file_contents(const char *filepath, t_fcontent *file)
 {
+	bool	error;
 	char	*line;
-	// char	*data;
+	char	*info;
 
 	file->fd = open(filepath, O_RDONLY);
 	if (file->fd < 0)
-	{
-		cub3d_error("Could not open file \"%s\"", filepath);
-		exit(1);
-	}
+		return (!cub3d_error("Could not open file \"%s\"", filepath));
+	error = false;
 	line = get_next_line(file->fd);
-	while (line)
+	while (line && !error)
 	{
-		// data = ft_strtrim(line, "\n");
-		// if (!*data)
-		// {
-		// 	ft_vfree(2, &data, &line);
-		// 	exit(1);
-		// }
-
-		file->line_count++;
-		file->contents = ft_append_str_2d(file->contents, line);
-		if (!file->contents)
+		info = ft_strtrim(line, "\r\n");
+		if (*info)
 		{
-			cub3d_error("Could not read map file \"%s\"", filepath);
-			exit(1);
+			file->line_count++;
+			file->contents = ft_append_str_2d(file->contents, info);
+			if (!file->contents)
+				error = cub3d_error("Could not read map file \"%s\"",
+						filepath);
 		}
-		free(line);
+		ft_vfree(2, &line, &info);
 		line = get_next_line(file->fd);
 	}
 	close(file->fd);
+	return (!error);
 }
 
-int	get_texture_id(const char *texture_info)
+int	get_texture_path_id(const char *texture_info)
 {
+	int	texture_id;
+
+	texture_id = -2;
 	if (!ft_strncmp(texture_info, "NO", 2))
-		return (0);
-	if (!ft_strncmp(texture_info, "SO", 2))
-		return (1);
-	if (!ft_strncmp(texture_info, "EA", 2))
-		return (2);
-	if (!ft_strncmp(texture_info, "WE", 2))
-		return (3);
-	return (-1);
+		texture_id = 0;
+	else if (!ft_strncmp(texture_info, "SO", 2))
+		texture_id = 1;
+	else if (!ft_strncmp(texture_info, "EA", 2))
+		texture_id = 2;
+	else if (!ft_strncmp(texture_info, "WE", 2))
+		texture_id = 3;
+	else
+		texture_id = -1;
+	return (texture_id);
 }
 
-// bool	is_rgb_value(const char *data)
-// {
-// 	return (!(ft_strncmp(data, "F", 1) || ft_strncmp(data, "C", 1)));
-// }
-
-// bool	is_map_data(const char *data)
-// {
-	
-// }
-
-char	*validate_tetxure_file(char *path)
+bool	store_texture_path(char **store, const char *texture_path)
 {
 	char	*xpm;
+	int		test_texture_fd;
 
-	xpm = ft_strrchr(path, '.');
+	xpm = ft_strrchr(texture_path, '.');
 	if (!xpm || ft_strncmp(xpm, ".xpm", 4))
-		return (NULL);
-	return (ft_strdup(path));
+		return (!cub3d_error("Invalid parse: Texture is not xpm file \"%s\"",
+				texture_path));
+	test_texture_fd = open(texture_path, O_RDONLY);
+	if (test_texture_fd < 0)
+		return (!cub3d_error("Invalid parse: Texture path invalid \"%s\"",
+				texture_path));
+	close(test_texture_fd);
+	*store = ft_strdup(texture_path);
+	if (!*store)
+		return (!cub3d_error("Something unexpected"));
+	return (true);
 }
 
-bool	store_texture_paths(t_cub3d *app, char **data, size_t *index)
+bool	parse_textures_paths(t_cub3d *app, char **data, size_t *index)
 {
-	(void)app;
-	size_t	i;
+	char	*check_path;
 	int		texture_id;
 
-	i = 0;
-	while (i < 4)
+	while (*index < 4)
 	{
-		texture_id = get_texture_id(data[*index]);
-		if (texture_id == -1)
+		texture_id = get_texture_path_id(data[*index]);
+		if (texture_id < 0)
+		{
+			if (texture_id == -1)
+				break ;
 			return (!cub3d_error("Invalid parse: "\
 					"Line \"%s\" could not be recognised", data[*index]));
-		i++;
+		}
+		check_path = ft_strchr(data[*index], '.');
+		if (!check_path)
+			return (!cub3d_error("Invalid parse: No texture path found: \"%s\"",
+					data[*index]));
+		if (!store_texture_path(&app->texture_paths[texture_id], check_path))
+			return (false);
+		(*index)++;
 	}
-	if (i != 4)
-		return (!cub3d_error("Invalid parse: Missing required textures in map file"));
+	if (*index != 4)
+		return (!cub3d_error("Invalid parse: Required textures are missing"));
 	return (true);
+}
+
+static void	destory_cub3d(t_cub3d *app)
+{
+	size_t	i;
+
+	i = 4;
+	while (i--)
+	{
+		if (app->texture_paths[i])
+			free(app->texture_paths[i]);
+		app->texture_paths[i] = NULL;
+	}
 }
 
 void	initialise(t_cub3d *app, const char *filepath)
@@ -138,20 +159,32 @@ void	initialise(t_cub3d *app, const char *filepath)
 	bool		success;
 	t_fcontent	map_file;
 
-	ft_bzero(&map_file, sizeof(t_fcontent));
-	read_file_contents(filepath, &map_file);
-
-	ft_printf("------------------------------------------------------------\n");
-	for (size_t i = 0; i < map_file.line_count && map_file.contents[i]; i++)
-		ft_printf("%s", map_file.contents[i]);
-	ft_printf("------------------------------------------------------------\n");
-
 	i = 0;
-	success = store_texture_paths(app, map_file.contents, &i);
+	ft_bzero(&map_file, sizeof(t_fcontent));
+	success = read_file_contents(filepath, &map_file);
+	success = success && parse_textures_paths(app, map_file.contents, &i);
+
+	if (success)
+	{
+		ft_printf("------------------------------------------------------------\n");
+		for (size_t j = 0; j < map_file.line_count && map_file.contents[j]; j++)
+			ft_printf("%s\n", map_file.contents[j]);
+		ft_printf("------------------------------------------------------------\n");
+
+		ft_printf("------------------------------------------------------------\n");
+		for (size_t j = 0; j < 4; j++)
+			ft_printf("%s\n", app->texture_paths[j]);
+		ft_printf("------------------------------------------------------------\n");
+	}
 
 	ft_free_str_2d(map_file.contents, map_file.line_count);
+
+	destory_cub3d(app);
+	
 	if (!success)
 		exit(1);
+
+	ft_printf("Yay!!! You made it, well done!\n");
 }
 
 int	main(int ac, char **av)

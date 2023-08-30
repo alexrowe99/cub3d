@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 15:07:45 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/28 22:35:35 by lmells           ###   ########.fr       */
+/*   Updated: 2023/08/29 18:10:33 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,6 @@ int		ft_resize_str(char **s, size_t n);
 char	**ft_append_str_2d(char **array, char *str);
 size_t	ft_2d_array_len(char **array);
 void	ft_free_str_2d(char **array, size_t len);
+void	*ft_vfree(size_t count, ...);
 
 #endif

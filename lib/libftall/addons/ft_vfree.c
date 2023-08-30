@@ -1,38 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   ft_vfree.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/29 18:24:12 by lmells           ###   ########.fr       */
+/*   Created: 2023/08/29 18:07:10 by lmells            #+#    #+#             */
+/*   Updated: 2023/08/29 18:13:10 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#include <stdlib.h>
+#include <stdarg.h>
 
-# include <libftall.h>
-# include <stdbool.h>
-
-typedef struct s_file_contents
+void	*ft_vfree(size_t count, ...)
 {
-	int		fd;
-	char	**contents;
-	size_t	line_count;
-}	t_fcontent;
+	va_list	argp;
+	void	**addr;
 
-typedef struct s_vec2_int
-{
-	int	x;
-	int	y;
-}	t_v2i;
-
-typedef struct s_cub3d
-{
-	char	*texture_paths[4];
-	t_v2i	m_dim;
-}	t_cub3d;
-
-#endif
+	va_start(argp, count);
+	while (count--)
+	{
+		addr = va_arg(argp, void **);
+		if (*addr)
+			free(*addr);
+		*addr = NULL;
+	}
+	va_end(argp);
+	return (NULL);
+}
