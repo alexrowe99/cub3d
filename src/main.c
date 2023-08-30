@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/29 23:25:47 by lmells           ###   ########.fr       */
+/*   Updated: 2023/08/30 14:54:55 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <errno.h>
 
 bool	cub3d_error(const char *format_message, ...)
 {
@@ -44,7 +41,7 @@ static bool	validate_args(int ac, char **av)
 	return (true);
 }
 
-static bool	read_file_contents(const char *filepath, t_fcontent *file)
+static bool	read_file_contents(const char *filepath, t_file *file)
 {
 	bool	error;
 	char	*line;
@@ -73,72 +70,6 @@ static bool	read_file_contents(const char *filepath, t_fcontent *file)
 	return (!error);
 }
 
-int	get_texture_path_id(const char *texture_info)
-{
-	int	texture_id;
-
-	texture_id = -2;
-	if (!ft_strncmp(texture_info, "NO", 2))
-		texture_id = 0;
-	else if (!ft_strncmp(texture_info, "SO", 2))
-		texture_id = 1;
-	else if (!ft_strncmp(texture_info, "EA", 2))
-		texture_id = 2;
-	else if (!ft_strncmp(texture_info, "WE", 2))
-		texture_id = 3;
-	else
-		texture_id = -1;
-	return (texture_id);
-}
-
-bool	store_texture_path(char **store, const char *texture_path)
-{
-	char	*xpm;
-	int		test_texture_fd;
-
-	xpm = ft_strrchr(texture_path, '.');
-	if (!xpm || ft_strncmp(xpm, ".xpm", 4))
-		return (!cub3d_error("Invalid parse: Texture is not xpm file \"%s\"",
-				texture_path));
-	test_texture_fd = open(texture_path, O_RDONLY);
-	if (test_texture_fd < 0)
-		return (!cub3d_error("Invalid parse: Texture path invalid \"%s\"",
-				texture_path));
-	close(test_texture_fd);
-	*store = ft_strdup(texture_path);
-	if (!*store)
-		return (!cub3d_error("Something unexpected"));
-	return (true);
-}
-
-bool	parse_textures_paths(t_cub3d *app, char **data, size_t *index)
-{
-	char	*check_path;
-	int		texture_id;
-
-	while (*index < 4)
-	{
-		texture_id = get_texture_path_id(data[*index]);
-		if (texture_id < 0)
-		{
-			if (texture_id == -1)
-				break ;
-			return (!cub3d_error("Invalid parse: "\
-					"Line \"%s\" could not be recognised", data[*index]));
-		}
-		check_path = ft_strchr(data[*index], '.');
-		if (!check_path)
-			return (!cub3d_error("Invalid parse: No texture path found: \"%s\"",
-					data[*index]));
-		if (!store_texture_path(&app->texture_paths[texture_id], check_path))
-			return (false);
-		(*index)++;
-	}
-	if (*index != 4)
-		return (!cub3d_error("Invalid parse: Required textures are missing"));
-	return (true);
-}
-
 static void	destory_cub3d(t_cub3d *app)
 {
 	size_t	i;
@@ -154,23 +85,23 @@ static void	destory_cub3d(t_cub3d *app)
 
 void	initialise(t_cub3d *app, const char *filepath)
 {
-	// (void)app;
-	size_t		i;
-	bool		success;
-	t_fcontent	map_file;
+	bool	success;
+	t_file	map_file;
 
-	i = 0;
-	ft_bzero(&map_file, sizeof(t_fcontent));
+	ft_bzero(&map_file, sizeof(t_file));
 	success = read_file_contents(filepath, &map_file);
-	success = success && parse_textures_paths(app, map_file.contents, &i);
-
 	if (success)
 	{
 		ft_printf("------------------------------------------------------------\n");
 		for (size_t j = 0; j < map_file.line_count && map_file.contents[j]; j++)
 			ft_printf("%s\n", map_file.contents[j]);
 		ft_printf("------------------------------------------------------------\n");
+	}
+	
+	success = success && parse_textures_paths(app, &map_file, TEXTURE_COUNT);
 
+	if (success)
+	{
 		ft_printf("------------------------------------------------------------\n");
 		for (size_t j = 0; j < 4; j++)
 			ft_printf("%s\n", app->texture_paths[j]);
