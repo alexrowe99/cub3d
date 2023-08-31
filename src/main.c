@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/30 14:54:55 by lmells           ###   ########.fr       */
+/*   Updated: 2023/08/31 19:07:41 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,12 @@ static void	destory_cub3d(t_cub3d *app)
 	}
 }
 
+uint64_t	rgb_to_uint64(uint8_t r, uint8_t g, uint8_t b)
+{
+	return (r << 16 | g << 8 | b);
+}
+
+
 void	initialise(t_cub3d *app, const char *filepath)
 {
 	bool	success;
@@ -93,29 +99,31 @@ void	initialise(t_cub3d *app, const char *filepath)
 	if (success)
 	{
 		ft_printf("------------------------------------------------------------\n");
-		for (size_t j = 0; j < map_file.line_count && map_file.contents[j]; j++)
-			ft_printf("%s\n", map_file.contents[j]);
+		for (size_t i = 0; i < map_file.line_count && map_file.contents[i]; i++)
+			ft_printf("%s\n", map_file.contents[i]);
 		ft_printf("------------------------------------------------------------\n");
 	}
-	
-	success = success && parse_textures_paths(app, &map_file, TEXTURE_COUNT);
-
+	success = success && parse_textures_paths(&map_file, app, TEXTURE_COUNT);
 	if (success)
 	{
 		ft_printf("------------------------------------------------------------\n");
-		for (size_t j = 0; j < 4; j++)
-			ft_printf("%s\n", app->texture_paths[j]);
+		for (size_t i = 0; i < TEXTURE_COUNT; i++)
+			ft_printf("%s\n", app->texture_paths[i]);
 		ft_printf("------------------------------------------------------------\n");
 	}
-
+	success = success && parse_rgb(&map_file, app, RGB_COUNT);
+	if (success)
+	{
+		ft_printf("------------------------------------------------------------\n");
+		for (size_t i = 0; i < RGB_COUNT; i++)
+			ft_printf("0x00%X\n", app->rgb_floor_ceiling[i]);
+		ft_printf("------------------------------------------------------------\n");
+	}
 	ft_free_str_2d(map_file.contents, map_file.line_count);
-
 	destory_cub3d(app);
-	
 	if (!success)
 		exit(1);
-
-	ft_printf("Yay!!! You made it, well done!\n");
+	ft_printf("Map is valid!\n");
 }
 
 int	main(int ac, char **av)

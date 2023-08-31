@@ -8,7 +8,7 @@ LIBFTALL_DIR = $(LIB_DIR)/libftall
 LIBS = $(LIBFTALL_DIR)/libftall.a
 
 SRC = $(addprefix $(SRC_DIR)/, $(addsuffix .c, \
-main ))
+main parse_textures parse_rgb))
 
 LINK = -L$(LIBFTALL_DIR) -lftall
 INC = -I$(INC_DIR) -I$(LIBFTALL_DIR)

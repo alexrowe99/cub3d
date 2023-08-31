@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_textures.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 14:52:57 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/30 14:53:45 by lmells           ###   ########.fr       */
+/*   Updated: 2023/08/31 19:06:21 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-int	get_texture_path_id(const char *texture_info)
+static int	get_texture_path_id(const char *texture_info)
 {
 	int	texture_id;
 
@@ -28,7 +28,7 @@ int	get_texture_path_id(const char *texture_info)
 	return (texture_id);
 }
 
-char	*validate_texture_path(const char *line)
+static char	*validate_texture_path(const char *line)
 {
 	char	*texture_path;
 	char	*xpm;
@@ -56,7 +56,7 @@ char	*validate_texture_path(const char *line)
 	return (texture_path);
 }
 
-bool	store_texture_path(char **store, const char *texture_path)
+static bool	store_texture_path(char **store, const char *texture_path)
 {
 	if (!texture_path)
 		return (false);
@@ -66,7 +66,7 @@ bool	store_texture_path(char **store, const char *texture_path)
 	return (true);
 }
 
-bool	parse_textures_paths(t_cub3d *app, t_file *map, size_t texture_count)
+bool	parse_textures_paths(t_file *map, t_cub3d *app, size_t texture_count)
 {
 	int		texture_id;
 
@@ -74,8 +74,8 @@ bool	parse_textures_paths(t_cub3d *app, t_file *map, size_t texture_count)
 	{
 		texture_id = get_texture_path_id(map->contents[map->it]);
 		if (texture_id < 0)
-			return (!cub3d_error("Invalid parse: Un-recognised texture setting "\
-					"\"%s\"", map->contents[map->it]));
+			return (!cub3d_error("Invalid parse: Unrecognisable texture "\
+					"setting \"%s\"", map->contents[map->it]));
 		if (app->texture_paths[texture_id])
 			return (!cub3d_error("Invalid parse: Duplicate texture found "\
 					"\"%s\"", map->contents[map->it]));

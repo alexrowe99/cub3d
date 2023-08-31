@@ -1,9 +1,9 @@
-NO ./hello.xpm
-SO ./hello.xpm
-EA ./hello.xpm
-WE ./hello.xpm
+NO ./assets/textures/test.xpm
+SO ./assets/textures/test.xpm
+EA ./assets/textures/test.xpm
+WE ./assets/textures/test.xpm
 
-R 210,210,30
+F 210,210
 C 210,210,30
 
     111111111
