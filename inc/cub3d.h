@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/04 18:32:28 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/05 16:24:11 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,19 @@ typedef struct s_vec2_int
 	int	y;
 }	t_v2i;
 
+typedef struct s_cub3d_map_tiles
+{
+	char		tile;
+	bool		visited;
+}	t_tile;
+
 typedef struct s_cub3d
 {
 	t_v2i		m_dim;
-	char		**map_tiles;
+	t_tile		**map;
 	uint64_t	rgb_floor_ceiling[RGB_COUNT];
 	char		*texture_paths[TEXTURE_COUNT];
+	t_v2i		player_spawn;
 }	t_cub3d;
 
 bool		cub3d_error(const char *format_message, ...);
