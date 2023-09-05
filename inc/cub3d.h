@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/31 19:05:35 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/04 18:32:28 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_vec2_int
 typedef struct s_cub3d
 {
 	t_v2i		m_dim;
+	char		**map_tiles;
 	uint64_t	rgb_floor_ceiling[RGB_COUNT];
 	char		*texture_paths[TEXTURE_COUNT];
 }	t_cub3d;

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/31 19:07:41 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/04 19:10:08 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,47 @@ uint64_t	rgb_to_uint64(uint8_t r, uint8_t g, uint8_t b)
 	return (r << 16 | g << 8 | b);
 }
 
+bool	valid_character(int c)
+{
+	return (c == ' ' || c == '0' || c == '1' || c == 'N' || c == 'S'
+		|| c == 'E' || c == 'W');
+}
+
+size_t	validate_map_tiles(const char *line)
+{
+	size_t	i;
+
+	i = 0;
+	while (line[i] != '\0')
+	{
+		if (!valid_character(line[i]))
+			return (!cub3d_error("Invalid parse: Line \"%s\" contains invalid "\
+					"characters", line));
+		i++;
+	}
+	return (i);
+}
+
+bool	parse_map_tiles(t_file *map_file, t_cub3d *app)
+{
+	size_t	m_width;
+	size_t	eof;
+
+	eof = ft_2d_array_len(&map_file->contents[map_file->it]);
+	if (eof)
+		return (!cub3d_error("Invalid parse: There are no map tiles present"));
+	eof += map_file->it;
+	while (map_file->it != eof)
+	{
+		m_width = validate_map_tiles(map_file->contents[map_file->it]);
+		if (!m_width)
+			return (false);
+		if (app->m_dim.x < m_width)
+			app->m_dim.x = m_width;
+		map_file->it++;
+	}
+	return (true);
+}
 
 void	initialise(t_cub3d *app, const char *filepath)
 {
@@ -119,6 +160,19 @@ void	initialise(t_cub3d *app, const char *filepath)
 			ft_printf("0x00%X\n", app->rgb_floor_ceiling[i]);
 		ft_printf("------------------------------------------------------------\n");
 	}
+	success = success && parse_map_tiles(&map_file, app);
+	if (success)
+	{
+		ft_printf("------------------------------------------------------------\n");
+		for (size_t y = 0; y < app->m_dim.y; y++)
+		{
+			for (size_t x = 0; x < app->m_dim.x; x++)
+				ft_printf("%c", app->map_tiles[y][x]);
+			ft_printf("\n");
+		}
+		ft_printf("------------------------------------------------------------\n");
+	}
+
 	ft_free_str_2d(map_file.contents, map_file.line_count);
 	destory_cub3d(app);
 	if (!success)
