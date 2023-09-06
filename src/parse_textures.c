@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   parse_textures.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 14:52:57 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/31 19:06:21 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/06 14:40:43 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-static int	get_texture_path_id(const char *texture_info)
+int	get_texture_id(const char *element)
 {
 	int	texture_id;
 
 	texture_id = -1;
-	if (!ft_strncmp(texture_info, "NO", 2))
+	if (!ft_strncmp(element, "NO", 2))
 		texture_id = 0;
-	else if (!ft_strncmp(texture_info, "SO", 2))
+	else if (!ft_strncmp(element, "SO", 2))
 		texture_id = 1;
-	else if (!ft_strncmp(texture_info, "EA", 2))
+	else if (!ft_strncmp(element, "EA", 2))
 		texture_id = 2;
-	else if (!ft_strncmp(texture_info, "WE", 2))
+	else if (!ft_strncmp(element, "WE", 2))
 		texture_id = 3;
 	return (texture_id);
 }
@@ -56,38 +56,33 @@ static char	*validate_texture_path(const char *line)
 	return (texture_path);
 }
 
-static bool	store_texture_path(char **store, const char *texture_path)
+bool	parse_texture_element(const char *element, size_t elem_id, t_cub3d *app)
 {
-	if (!texture_path)
-		return (false);
-	*store = ft_strdup(texture_path);
-	if (!*store)
-		return (!cub3d_error("Something unexpected happened"));
-	return (true);
-}
-
-bool	parse_textures_paths(t_file *map, t_cub3d *app, size_t texture_count)
-{
-	int		texture_id;
-
-	while (map->it < TEXTURE_COUNT && map->contents[map->it])
+	char	*path;
+	char	*valid_xpm_path;
+	
+	if (app->texture_paths[elem_id])
+		return (!cub3d_error("Invalid parse: Duplicate texture found "\
+				"\"%s\"", element));
+	path = ft_strtrim(&element[2], " \t");
+	if (!*path)
 	{
-		texture_id = get_texture_path_id(map->contents[map->it]);
-		if (texture_id < 0)
-			return (!cub3d_error("Invalid parse: Unrecognisable texture "\
-					"setting \"%s\"", map->contents[map->it]));
-		if (app->texture_paths[texture_id])
-			return (!cub3d_error("Invalid parse: Duplicate texture found "\
-					"\"%s\"", map->contents[map->it]));
-		if (!store_texture_path(&app->texture_paths[texture_id],
-				validate_texture_path(map->contents[map->it])))
-			return (false);
-		map->it++;
+		free(path);
+		return (!cub3d_error("Invalid parse: No texture path found: \"%s\"",
+				element));
 	}
-	while (map->it--)
-		if (!app->texture_paths[map->it])
-			return (!cub3d_error("Invalid parse: Required textures are "\
-					"missing"));
-	map->it = texture_count;
+	valid_xpm_path = validate_texture_path(path);
+	if (!valid_xpm_path)
+	{
+		free(path);
+		return (false);
+	}
+	app->texture_paths[elem_id] = ft_strdup(valid_xpm_path);
+	if (!app->texture_paths[elem_id])
+	{
+		free(path);
+		return (!cub3d_error("Something unexpected happened"));
+	}
+	ft_vfree(1, &path);
 	return (true);
 }

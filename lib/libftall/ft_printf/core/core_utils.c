@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:27:48 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/25 09:50:20 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/06 12:03:56 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ size_t	get_unsigned_len_base(uint64_t n, size_t base)
 {
 	size_t	i;
 
+	if (!n)
+		return (1);
 	i = 0;
 	while (n)
 	{

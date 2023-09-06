@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/05 20:10:19 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/06 17:13:13 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,11 @@ static void	destory_cub3d(t_cub3d *app)
 
 	i = TEXTURE_COUNT;
 	while (--i)
+	{
 		ft_vfree(1, &app->texture_paths[i]);
+		if (i < RGB_COUNT)
+			ft_vfree(1, &app->rgb_floor_ceiling[i]);
+	}
 	if (app->map_tiles)
 	{
 		while (--app->m_dim.y)
@@ -107,7 +111,7 @@ bool	validate_map_tiles(const char *line)
 	{
 		if (!valid_character(*line))
 			return (!cub3d_error("Invalid parse: Line \"%s\" contains invalid "\
-					"character '%i'", line, *line));
+					"character - ASCII '%i'", line, *line));
 		line++;
 	}
 	return (true);
@@ -265,8 +269,58 @@ bool	parse_map_tiles(t_file *m_file, t_cub3d *app)
 	offset = m_file->it - app->m_dim.y;
 	app->map_tiles = populate_map_tiles(&m_file->contents[offset], app->m_dim);
 	valid = app->map_tiles && validate_store_player_spawn(app);
-	valid &= validate_map_enclosed(app);
-	return (valid);
+	return (valid && validate_map_enclosed(app));
+}
+
+bool	check_data_populated(t_cub3d *app)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < TEXTURE_COUNT)
+	{
+		if (app->texture_paths[i++] == NULL)
+			return (!cub3d_error("Invalid parse: Required texture paths are "\
+					"missing"));
+	}
+	i = 0;
+	while (i < RGB_COUNT)
+	{
+		if (app->rgb_floor_ceiling[i++] == NULL)
+			return (!cub3d_error("Invalid parse: Required RGB values are "\
+					"missing"));
+	}
+	return (true);
+}
+
+bool	parse_map_elements(t_file *m_file, t_cub3d *app)
+{
+	int		id;
+	bool	valid;
+
+	valid = true;
+	while (valid && m_file->it != m_file->line_count)
+	{
+		id = get_texture_id(m_file->contents[m_file->it]);
+		if (id != -1)
+		{
+			valid = parse_texture_element(m_file->contents[m_file->it], id, app);
+			m_file->it++;
+			continue ;
+		}
+		id = get_rgb_id(m_file->contents[m_file->it]);
+		if (id != -1)
+		{
+			valid = parse_rgb_element(m_file->contents[m_file->it], id, app);
+			m_file->it++;
+			continue ;
+		}
+		break ;
+	}
+	if (m_file->it != COUNT_ELEMENTS && id == -1 && m_file->it != m_file->line_count)
+		return (!cub3d_error("Invalid parse: Line \"%s\" is not recognisable",
+				m_file->contents[m_file->it]));
+	return (valid && check_data_populated(app));
 }
 
 void	initialise(t_cub3d *app, const char *filepath)
@@ -275,6 +329,7 @@ void	initialise(t_cub3d *app, const char *filepath)
 	t_file	map_file;
 
 	ft_bzero(&map_file, sizeof(t_file));
+	
 	success = read_file_contents(filepath, &map_file);
 	if (success)
 	{
@@ -283,25 +338,19 @@ void	initialise(t_cub3d *app, const char *filepath)
 			ft_printf("%s\n", map_file.contents[i]);
 		ft_printf("------------------------------------------------------------\n");
 	}
-	success = success && parse_textures_paths(&map_file, app, TEXTURE_COUNT);
+
+	success = success && parse_map_elements(&map_file, app);
+	success = success && parse_map_tiles(&map_file, app);
 	if (success)
 	{
 		ft_printf("---- Texture Paths -----------------------------------------\n");
 		for (size_t i = 0; i < TEXTURE_COUNT; i++)
 			ft_printf("%s\n", app->texture_paths[i]);
 		ft_printf("------------------------------------------------------------\n");
-	}
-	success = success && parse_rgb(&map_file, app, RGB_COUNT);
-	if (success)
-	{
 		ft_printf("---- RGB Values Hex ----------------------------------------\n");
 		for (size_t i = 0; i < RGB_COUNT; i++)
-			ft_printf("0x00%X\n", app->rgb_floor_ceiling[i]);
+			ft_printf("0x00%X\n", *app->rgb_floor_ceiling[i]);
 		ft_printf("------------------------------------------------------------\n");
-	}
-	success = success && parse_map_tiles(&map_file, app);
-	if (success)
-	{
 		ft_printf("---- Map Tiles ---------------------------------------------\n");
 		for (size_t y = 0; y < (size_t)app->m_dim.y; y++)
 		{
