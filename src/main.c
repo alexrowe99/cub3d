@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/05 16:25:09 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/05 20:10:19 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,18 +143,18 @@ char	**populate_map_tiles(char **data, t_v2i dimensions)
 	return (tiles);
 }
 
-bool	get_player_spawn(t_cub3d *app)
+bool	validate_store_player_spawn(t_cub3d *app)
 {
 	t_v2i	pos;
 	bool	has_spawn;
 	bool	spawn_found;
 
 	has_spawn = false;
-	pos.y = 0;
-	while (pos.y < app->m_dim.y)
+	pos.y = -1;
+	while (++pos.y < app->m_dim.y)
 	{
-		pos.x = 0;
-		while (pos.x < app->m_dim.x)
+		pos.x = -1;
+		while (++pos.x < app->m_dim.x)
 		{
 			spawn_found = is_spawn_tile(app->map_tiles[pos.y][pos.x]);
 			if (spawn_found && has_spawn)
@@ -165,9 +165,7 @@ bool	get_player_spawn(t_cub3d *app)
 				app->player_spawn = pos;
 				has_spawn = true;
 			}
-			pos.x++;
 		}
-		pos.y++;
 	}
 	if (!has_spawn)
 		return (!cub3d_error("Invalid parse: No spawn point detected in map "\
@@ -175,24 +173,81 @@ bool	get_player_spawn(t_cub3d *app)
 	return (true);
 }
 
-// bool	validate_map_floodfill(t_cub3d *app, t_v2i pos, int check_c, int replace_c)
-// {
-// 	bool	enclosed;
+void	print_2d_array(char **array)
+{
+	int		max;
+	t_v2i	it;
 
-// 	if (pos.x < 0 || app->m_dim.x < pos.x || pos.y < 0 || app->m_dim.y < pos.y)
-// 		return (-1);
-// 	if (app->map_tiles[pos.y][pos.x] == check_c)
-// 		return (0);
-// 	app->map_tiles[pos.y][pos.x] = replace_c;
-// 	enclosed = true;
-// 	pos.x += 1;
-// 	enclosed &= floodfill(app, pos, check_c, replace_c);
-// }
+	max = ft_2d_array_len(array);
+	it.y = -1;
+	while (++it.y < max)
+	{
+		it.x = -1;
+		while (array[it.y][++it.x])
+			ft_printf("%c, ", array[it.y][it.x]);
+		ft_printf("\n");
+	}
+	ft_printf("\n");
+}
+
+typedef struct s_floodfill_map_validation
+{
+	t_v2i	dimensions;
+	char	**grid;
+	bool	*visited;
+}	t_ffill;
+
+bool	validate_map_floodfill(t_ffill *check, t_v2i pos, int replace_c)
+{
+	bool	enclosed;
+
+	if (pos.x < 0 || check->dimensions.x <= pos.x
+		|| pos.y < 0 || check->dimensions.y <= pos.y)
+		return (false);
+	if (check->grid[pos.y][pos.x] == replace_c
+		|| check->visited[pos.x + pos.y * check->dimensions.x])
+		return (true);
+	check->visited[pos.x + pos.y * check->dimensions.x] = true;
+	check->grid[pos.y][pos.x] = replace_c;
+	enclosed = true;
+	pos.y += 1;
+	enclosed &= validate_map_floodfill(check, pos, replace_c);
+	pos.y -= 2;
+	enclosed &= validate_map_floodfill(check, pos, replace_c);
+	pos.y += 1;
+	pos.x += 1;
+	enclosed &= validate_map_floodfill(check, pos, replace_c);
+	pos.x -= 2;
+	enclosed &= validate_map_floodfill(check, pos, replace_c);
+	return (enclosed);
+}
+
+bool	validate_map_enclosed(t_cub3d *app)
+{
+	bool	valid;
+	t_ffill	check;
+
+	check.grid = ft_strdup_2d(app->map_tiles);
+	if (!check.grid)
+		return (!cub3d_error("Something unexpected happened"));
+	valid = false;
+	check.dimensions = app->m_dim;
+	check.visited = ft_calloc(app->m_dim.y * app->m_dim.x + 1, sizeof(bool));
+	if (check.visited)
+	{
+		valid = validate_map_floodfill(&check, app->player_spawn, '1');
+		if (!valid)
+			cub3d_error("Invalid parse: Map is not enclosed by wall tiles");
+		free(check.visited);
+	}
+	ft_free_str_2d(check.grid, check.dimensions.y);
+	return (valid);
+}
 
 bool	parse_map_tiles(t_file *m_file, t_cub3d *app)
 {
 	size_t	offset;
-	size_t	m_width;
+	int		m_width;
 	bool	valid;
 
 	app->m_dim.y = m_file->line_count - m_file->it;
@@ -203,15 +258,14 @@ bool	parse_map_tiles(t_file *m_file, t_cub3d *app)
 		if (!validate_map_tiles(m_file->contents[m_file->it]))
 			return (false);
 		m_width = ft_strlen(m_file->contents[m_file->it]);
-		if ((size_t)app->m_dim.x < m_width)
+		if (app->m_dim.x < m_width)
 			app->m_dim.x = m_width;
 		m_file->it++;
 	}
 	offset = m_file->it - app->m_dim.y;
-	app->map = populate_map_tiles(&m_file->contents[offset], app->m_dim);
-	valid = app->map && get_player_spawn(app);
-	// if (valid && !validate_map_floodfill())
-	// 	cub3d_error("Invalid parse: Map is not enclosed by wall tiles");
+	app->map_tiles = populate_map_tiles(&m_file->contents[offset], app->m_dim);
+	valid = app->map_tiles && validate_store_player_spawn(app);
+	valid &= validate_map_enclosed(app);
 	return (valid);
 }
 
@@ -224,35 +278,35 @@ void	initialise(t_cub3d *app, const char *filepath)
 	success = read_file_contents(filepath, &map_file);
 	if (success)
 	{
-		ft_printf("------------------------------------------------------------\n");
+		ft_printf("---- File Contents -----------------------------------------\n");
 		for (size_t i = 0; i < map_file.line_count && map_file.contents[i]; i++)
 			ft_printf("%s\n", map_file.contents[i]);
 		ft_printf("------------------------------------------------------------\n");
 	}
-	success &= parse_textures_paths(&map_file, app, TEXTURE_COUNT);
+	success = success && parse_textures_paths(&map_file, app, TEXTURE_COUNT);
 	if (success)
 	{
-		ft_printf("------------------------------------------------------------\n");
+		ft_printf("---- Texture Paths -----------------------------------------\n");
 		for (size_t i = 0; i < TEXTURE_COUNT; i++)
 			ft_printf("%s\n", app->texture_paths[i]);
 		ft_printf("------------------------------------------------------------\n");
 	}
-	success &= parse_rgb(&map_file, app, RGB_COUNT);
+	success = success && parse_rgb(&map_file, app, RGB_COUNT);
 	if (success)
 	{
-		ft_printf("------------------------------------------------------------\n");
+		ft_printf("---- RGB Values Hex ----------------------------------------\n");
 		for (size_t i = 0; i < RGB_COUNT; i++)
 			ft_printf("0x00%X\n", app->rgb_floor_ceiling[i]);
 		ft_printf("------------------------------------------------------------\n");
 	}
-	success &= parse_map_tiles(&map_file, app);
+	success = success && parse_map_tiles(&map_file, app);
 	if (success)
 	{
-		ft_printf("------------------------------------------------------------\n");
+		ft_printf("---- Map Tiles ---------------------------------------------\n");
 		for (size_t y = 0; y < (size_t)app->m_dim.y; y++)
 		{
 			for (size_t x = 0; x < (size_t)app->m_dim.x; x++)
-				ft_printf("%c, ", app->map[y][x].tile);
+				ft_printf("%c, ", app->map_tiles[y][x]);
 			ft_printf("\n");
 		}
 		ft_printf("------------------------------------------------------------\n");
