@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/06 16:43:46 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/07 12:42:15 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,23 @@ typedef struct s_cub3d
 }	t_cub3d;
 
 bool		cub3d_error(const char *format_message, ...);
+void		destory_cub3d(t_cub3d *app);
 
 // Parser
+void		parse_map_file(t_cub3d *app, const char *filepath);
 int			get_texture_id(const char *element);
 bool		parse_texture_element(const char *element, size_t id,
 				t_cub3d *app);
 int			get_rgb_id(const char *element);
 bool		parse_rgb_element(const char *element, size_t id, t_cub3d *app);
+bool		parse_map_tiles(t_file *m_file, t_cub3d *app);
 
-// Utils
+// Parser Utils
+bool		validate_map_tiles(const char *line);
+bool		is_valid_character(int c);
+bool		is_spawn_tile(int c);
+
+// Colour
 uint64_t	rgb_to_uint64(uint8_t r, uint8_t g, uint8_t b);
 
 #endif

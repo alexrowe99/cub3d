@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_textures.c                                   :+:      :+:    :+:   */
+/*   parser_textures.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 14:52:57 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/06 14:40:43 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/07 13:52:00 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,21 @@ static char	*validate_texture_path(const char *line)
 	return (texture_path);
 }
 
+bool	store_xpm_path(char **store_path, const char *valid_path)
+{
+	if (!valid_path)
+		return (false);
+	*store_path = ft_strdup(valid_path);
+	if (!*store_path)
+		return (!cub3d_error("Something unexpected happened"));
+	return (true);
+}
+
 bool	parse_texture_element(const char *element, size_t elem_id, t_cub3d *app)
 {
+	bool	valid;
 	char	*path;
-	char	*valid_xpm_path;
-	
+
 	if (app->texture_paths[elem_id])
 		return (!cub3d_error("Invalid parse: Duplicate texture found "\
 				"\"%s\"", element));
@@ -71,18 +81,8 @@ bool	parse_texture_element(const char *element, size_t elem_id, t_cub3d *app)
 		return (!cub3d_error("Invalid parse: No texture path found: \"%s\"",
 				element));
 	}
-	valid_xpm_path = validate_texture_path(path);
-	if (!valid_xpm_path)
-	{
-		free(path);
-		return (false);
-	}
-	app->texture_paths[elem_id] = ft_strdup(valid_xpm_path);
-	if (!app->texture_paths[elem_id])
-	{
-		free(path);
-		return (!cub3d_error("Something unexpected happened"));
-	}
-	ft_vfree(1, &path);
-	return (true);
+	valid = store_xpm_path(&app->texture_paths[elem_id],
+			validate_texture_path(path));
+	free(path);
+	return (valid);
 }

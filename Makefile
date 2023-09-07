@@ -11,14 +11,13 @@ LINK = -L$(LIBFTALL_DIR) -lftall
 INC = -I$(INC_DIR) -I$(LIBFTALL_DIR)
 
 MANDATORY_SRC = $(addprefix $(SRC_DIR)/, $(addsuffix .c, \
-main parse_textures parse_rgb))
+main parser parser_textures parser_rgb parser_map parser_utils colour))
 
 CFLAGS = -Wall -Werror -Wextra
 DEBUG = ""
 ifeq ($(DEBUG),1)
 	CFLAGS += -g
 endif
-
 
 all: $(NAME)
 
