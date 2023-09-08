@@ -3,23 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:32:26 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/07 12:33:57 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/08 12:26:06 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-bool	is_spawn_tile(int c)
+bool	is_spawn_tile(int c, t_entity *entity)
 {
-	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
+	bool	is_spawn;
+
+	is_spawn = c == 'N' || c == 'S' || c == 'E' || c == 'W';
+	if (entity && is_spawn)
+	{
+		if (c == 'N')
+			entity->spawn_direction.y = -1;
+		else if (c == 'S')
+			entity->spawn_direction.y = 1;
+		else if (c == 'E')
+			entity->spawn_direction.x = 1;
+		else if (c == 'W')
+			entity->spawn_direction.x = -1;
+	}
+	return (is_spawn);
 }
 
 bool	is_valid_character(int c)
 {
-	return (c == ' ' || c == '0' || c == '1' || is_spawn_tile(c));
+	return (c == ' ' || c == '0' || c == '1' || is_spawn_tile(c, NULL));
 }
 
 bool	validate_map_tiles(const char *line)

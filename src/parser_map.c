@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:19:55 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/07 14:20:21 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/08 12:55:57 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static bool	check_map_enclosed(t_cub3d *app)
 	check.visited = ft_calloc(app->m_dim.y * app->m_dim.x + 1, sizeof(bool));
 	if (check.visited)
 	{
-		valid = validate_map_floodfill(&check, app->player_spawn, '1');
+		valid = validate_map_floodfill(&check, app->player.spawn, '1');
 		if (!valid)
 			cub3d_error("Invalid parse: Map is not enclosed by wall tiles");
 		free(check.visited);
@@ -100,19 +100,20 @@ static bool	validate_store_player_spawn(t_cub3d *app, t_v2i pos)
 	bool	has_spawn;
 	bool	spawn_found;
 
-	has_spawn = false;
+	has_spawn = false; 
 	while (--pos.y)
 	{
 		pos.x = -1;
 		while (++pos.x < app->m_dim.x)
 		{
-			spawn_found = is_spawn_tile(app->map_tiles[pos.y][pos.x]);
+			spawn_found = is_spawn_tile(app->map_tiles[pos.y][pos.x],
+					&app->player);
 			if (spawn_found && has_spawn)
 				return (!cub3d_error("Invalid parse: Multiple spawn points "\
 						"detected in map file"));
 			else if (spawn_found && !has_spawn)
 			{
-				app->player_spawn = pos;
+				app->player.spawn = pos;
 				has_spawn = true;
 			}
 		}

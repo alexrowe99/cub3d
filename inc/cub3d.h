@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/07 12:42:15 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/08 12:23:53 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,19 @@ typedef struct s_vec2_int
 	int			y;
 }	t_v2i;
 
+typedef struct s_entity
+{
+	t_v2i		spawn;
+	t_v2i		spawn_direction;
+}	t_entity;
+
 typedef struct s_cub3d
 {
 	t_v2i		m_dim;
 	char		**map_tiles;
 	uint64_t	*rgb_floor_ceiling[RGB_COUNT];
 	char		*texture_paths[TEXTURE_COUNT];
-	t_v2i		player_spawn;
+	t_entity	player;
 }	t_cub3d;
 
 bool		cub3d_error(const char *format_message, ...);
@@ -67,7 +73,7 @@ bool		parse_map_tiles(t_file *m_file, t_cub3d *app);
 // Parser Utils
 bool		validate_map_tiles(const char *line);
 bool		is_valid_character(int c);
-bool		is_spawn_tile(int c);
+bool		is_spawn_tile(int c, t_entity *player);
 
 // Colour
 uint64_t	rgb_to_uint64(uint8_t r, uint8_t g, uint8_t b);
