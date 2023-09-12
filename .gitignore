@@ -42,6 +42,9 @@
 *.idb
 *.pdb
 
+# Swap Files
+*.swp
+
 # Kernel Module Compile Results
 *.mod*
 *.cmd
@@ -55,3 +58,4 @@ dkms.conf
 cub3d
 .DS_Store
 *.vscode/
+

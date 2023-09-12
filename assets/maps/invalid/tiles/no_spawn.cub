@@ -1,0 +1,17 @@
+NO ./assets/textures/test.xpm
+SO ./assets/textures/test.xpm
+EA ./assets/textures/test.xpm
+WE ./assets/textures/test.xpm
+
+F 255,30,60
+C 210,210,30
+
+    111111111
+    100000001
+    11111000111
+    10001000001
+111110001000001
+100000001000001
+100111000011111
+1001 100001
+1111 111111

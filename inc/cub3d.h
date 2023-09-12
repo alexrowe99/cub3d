@@ -5,246 +5,99 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/20 11:23:39 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/28 18:00:48 by lmells           ###   ########.fr       */
+/*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
+/*   Updated: 2023/09/12 14:08:44 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-/* ===========================================================
-	!! Cub3D header file !!
-=========================================================== */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-/* ===========================================================
-	Includes.
-=========================================================== */
-
-# ifndef MACOS
-#  define MACOS 1
-# endif
-# ifdef MACOS
-#  include "macos_keycodes.h"
-# endif
-
-# include "mlx.h"
-# include "get_next_line.h"
-# include "libft.h"
-
-# include "cub3d_error.h"
-
-# include <stdio.h>
+# include <libftall.h>
 # include <stdbool.h>
-# include <stdarg.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <stdio.h>
 
-/* ===========================================================
-	Debug definition to avoid intellisense errors.
-=========================================================== */
+// ----- Window Definitions -----------------------------------------
 
-# ifndef DEBUG
-#  define DEBUG 0
+# define WIDTH 1184
+# define HEIGHT 740
+# define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
+
+// ----- Parser Definitions -----------------------------------------
+
+# define RGB_COUNT 2
+# define TEXTURE_COUNT 4
+
+// ----- Build Requirements For Parsrer ------------------------------
+
+# ifndef BUILD_MANDATORY
+#  define BUILD_MANDATORY
+# endif
+# ifdef BUILD_MANDATORY
+#  define COUNT_ELEMENTS 6
 # endif
 
-/* ===========================================================
-	Definitions for MLX window properties.
-=========================================================== */
-
-# ifndef WIN_TITLE
-#  define WIN_TITLE "cub3D - Alex & Leighton"
-# endif
-# ifndef WIN_WIDTH
-#  define WIN_WIDTH 1280
-# endif
-# ifndef WIN_HEIGHT
-#  define WIN_HEIGHT 720
-# endif
-
-/* ===========================================================
-	Enumerations definitions.
-=========================================================== */
-
-enum e_map_tile_types
+typedef struct s_file_contents
 {
-	MAP_TILE_NONE = 0,
-	MAP_TILE_EMPTY = ' ',
-	MAP_TILE_FLOOR = '0',
-	MAP_TILE_WALL = '1',
-	MAP_TILE_SPAWN_NORTH = 'N',
-	MAP_TILE_SPAWN_SOUTH = 'S',
-	MAP_TILE_SPAWN_EAST = 'E',
-	MAP_TILE_SPAWN_WEST = 'W',
-	MAP_TILE_VALIDATE_FLOOR = '#'
-};
-
-enum e_data_index
-{
-	DATA_TEXTURE,
-	DATA_RGB,
-	DATA_MAP,
-	COUNT_DATA_INDEX
-};
-
-typedef enum e_map_texture_type
-{
-	NORTH_WALL,
-	SOUTH_WALL,
-	EAST_WALL,
-	WEST_WALL,
-	COUNT_TEXTURE_TYPES
-}	t_texture_type;
-
-// FC - Floor & Ceiling.
-
-typedef enum e_parser_functions
-{
-	TEXTURE_PATHS,
-	FC_RGB_VALUES,
-	MAP_TILES,
-	COUNT_PARSER_FUNCTIONS
-}	t_parse;
-
-enum e_store_rgb_values
-{
-	FLOOR_RGB,
-	CEILING_RGB,
-	COUNT_RGB_PARSE
-};
-
-/* ===========================================================
-	Struct definitions.
-=========================================================== */
-
-typedef struct s_map_file
-{
-	char			**data;
-	size_t			line_count;
+	int			fd;
+	char		**contents;
+	size_t		line_count;
+	size_t		it;
 }	t_file;
 
-typedef struct s_validation
+typedef struct s_vec2_int
 {
-	bool			caught_error;
-	size_t			error_count;
-	char			**error_messages;
-}	t_validation;
+	int			x;
+	int			y;
+}	t_v2i;
 
-typedef struct s_map_tile
+typedef struct s_vec2_double
 {
-	char			type;
-	bool			visited;
-}	t_map_tile;
+	double		x;
+	double		y;
+}	t_v2d;
 
-typedef struct s_rgb
+typedef struct s_entity
 {
-	int16_t			r;
-	int16_t			g;
-	int16_t			b;
-}	t_rgb;
-
-typedef struct s_vec_2_size_t
-{
-	size_t			x;
-	size_t			y;
-}	t_v2st;
-
-typedef struct s_vec_2_ssize_t
-{
-	ssize_t			x;
-	ssize_t			y;
-}	t_v2sst;
-
-typedef struct s_cub3D_map_data
-{
-	size_t			map_width;
-	size_t			map_height;
-	char			*texture_paths[COUNT_TEXTURE_TYPES];
-	t_rgb			rgb[COUNT_RGB_PARSE];
-	t_map_tile		**tiles;
-	t_v2st			spawn_coords;
-}	t_map;
-
-typedef struct s_initialiser
-{
-	bool			*error;
-	t_validation	validation;
-}	t_initialiser;
-
-typedef struct s_mlx_data
-{
-	void			*data;
-	void			*window;
-}	t_mlx;
+	t_v2i		spawn;
+	t_v2i		spawn_direction;
+}	t_entity;
 
 typedef struct s_cub3d
 {
-	t_mlx			mlx;
-	t_map			*map_data;
+	t_v2i		m_dim;
+	char		**map_tiles;
+	uint32_t	*rgb_floor_ceiling[RGB_COUNT];
+	char		*texture_paths[TEXTURE_COUNT];
+	t_entity	player;
 }	t_cub3d;
 
-/* ===========================================================
-	Function prototypes.
-=========================================================== */
+bool		cub3d_error(const char *format_message, ...);
+void		destory_cub3d(t_cub3d *app);
 
-// Exit cub3D.
+// Parser
+void		parse_map_file(t_cub3d *app, const char *filepath);
+int			get_texture_id(const char *element);
+bool		parse_texture_element(const char *element, size_t id,
+				t_cub3d *app);
+int			get_rgb_id(const char *element);
+bool		parse_rgb_element(const char *element, size_t id, t_cub3d *app);
+bool		parse_map_tiles(t_file *m_file, t_cub3d *app);
 
-void			exit_free(t_map **data);
+// Parser Utils
+bool		validate_map_tiles(const char *line);
+bool		is_valid_character(int c);
+bool		is_spawn_tile(int c, t_entity *player);
 
-// Initialiser.
+// Colour
+uint32_t	rgb_to_uint32(uint8_t r, uint8_t g, uint8_t b);
 
-void			initialise_cub3d(t_cub3d *app, const char *map_filepath);
-
-// Map File.
-
-void			*free_file_data(t_file **file);
-t_file			*get_map_file_contents(const char *filepath,
-					t_initialiser *init);
-
-// Map Parser.
-
-t_initialiser	*parse_map_data(t_file *map_file, t_map **data,
-					t_initialiser *init);
-void			parse_wall_texture_path(char **info, size_t *row_offset,
-					t_map **data, t_initialiser *init);
-void			save_texture_path(const char *info, char **texture_paths,
-					t_initialiser *init);
-bool			has_texture_header(const char *s);
-bool			*validate_texture_paths(size_t *row_offset, t_map **data,
-					t_validation *validation);
-void			parse_floor_ceiling_rgb_values(char **info, size_t *row_offset,
-					t_map **data, t_initialiser *init);
-size_t			rgb_store_index(char c);
-t_initialiser	*parse_rgb_value(char *parse_line, t_rgb *colour,
-					t_initialiser *init);
-t_initialiser	*validate_rgb_range(t_rgb *colours, t_initialiser *init);
-void			parse_map_tiles(char **info, size_t *row_offset, t_map **data,
-					t_initialiser *init);
-t_initialiser	*get_map_dimensions(char **info, size_t row_offset,
-					t_map **data, t_initialiser *init);
-t_map_tile		**alloc_map_tiles(size_t map_width, size_t map_height);
-t_initialiser	*populate_map_tiles(char **info, size_t *row_offset,
-					t_map **data, t_initialiser *init);
-void			floodfill_map_validation(t_map **data, t_initialiser *init);
-
-// Validator.
-
-t_validation	new_validator(void);
-t_validation	*add_validation_error(t_validation *validator,
-					const char *message);
-void			free_validator(t_validation *validator);
-void			validation_exit(t_validation *validation, t_map **data);
-
-// Events.
-
-int				key_press(int keycode, t_cub3d *app);
-int				close_mlx_window(t_cub3d *app);
-
-// Utils.
-
-void			vfree(size_t count, ...);
-char			**str_append2d(char **array, const char *s);
-
-/* ===========================================================
-	!! End of file !!
-=========================================================== */
+// Vector
+t_v2i		v2i(int x, int y);
+t_v2i		v2d_to_v2i(t_v2d e);
+t_v2d		v2d(double x, double y);
+t_v2d		v2i_to_v2d(t_v2i e);
 
 #endif

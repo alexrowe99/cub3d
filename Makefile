@@ -1,85 +1,49 @@
-# BASH EXECUTION FOR PATTERN MATCHING WITH FOR LOOP
-# 	- COMPILES AND ARCHIVE GNL OBJECTS
-SHELL := bash
+NAME = cub3d
 
-SRC = $(shell find src -type file -name '*.c')
-INC = inc
-LIB = lib
+LIB_DIR = lib
+SRC_DIR = src
+INC_DIR = inc
 
-LIBFT_DIR = $(LIB)/libft
-PRINTF_DIR = $(LIB)/ft_printf
-GNL_DIR = $(LIB)/get_next_line
-MLX_DIR = $(LIB)/mlx
+LIBFTALL_DIR = $(LIB_DIR)/libftall
+LIBMLX_DIR = $(LIB_DIR)/mlx
+LIBS = $(LIBFTALL_DIR)/libftall.a $(LIBMLX_DIR)/libmlx.a
 
-GNL_SRC = $(shell find $(GNL_DIR) -type f -name 'get_next_line*.c')
-GNL_OBJ = $(GNL_SRC:.c=.o)
+LINK = -L$(LIBFTALL_DIR) -lftall -L$(LIBMLX_DIR) -lmlx
+INC = -I$(INC_DIR) -I$(LIBFTALL_DIR) -I$(LIBMLX_DIR)
 
-LIBS = $(LIBFT)/libft.a $(MLX_DIR)/libmlx.a $(PRINTF_DIR)/libftprintf.a
-LINK_LIBS = -L$(LIBFT_DIR) -lft -L$(MLX_DIR) -lmlx -L$(PRINTF_DIR) -lftprintf
+MANDATORY_SRC = $(ENGINE_SRC) $(addprefix $(SRC_DIR)/, $(addsuffix .c, \
+main parser parser_textures parser_rgb parser_map parser_utils colour vector \
+))
 
-HEADERS = -I$(INC) -I$(LIBFT_DIR) -I$(GNL_DIR) -I$(MLX_DIR) -I$(PRINTF_DIR)
-
-DEBUG = 0
-ifeq ($(DEBUG), 1)
-	FLAGS = -DDEBUG=1 -g
-	GNL_COMP_FLAGS = -g
+CFLAGS = -Wall -Werror -Wextra
+LINK += -framework OpenGL -framework AppKit
+DEBUG = ""
+ifeq ($(DEBUG),1)
+	CFLAGS += -g
 endif
 
-FLAGS += -Wall -Werror -Wextra $(LINK_LIBS) $(HEADERS) -framework OpenGL -framework AppKit
-GNL_COMP_FLAGS += -Wall -Werror -Wextra -I$(GNL_DIR) -DBUFFER_SIZE=64
+all: $(NAME)
 
-DEFINE_OS = ""
-ifeq ($(shell uname), Darwin)
-	DEFINE_OS = -DMACOS=1
-endif
+mandatory: $(LIBS)
+	cc $(CFLAGS) -DBUILD_MANDATORY $(INC) $(LINK) -o $(NAME) $(MANDATORY_SRC)
 
-all: $(LIBS)
-ifeq ($(DEBUG), 1)
-	cc $(DEFINE_OS) $(FLAGS) $(SRC) -o cub3d
-else
-	@cc $(DEFINE_OS) $(FLAGS) $(SRC) -o cub3d
-	@echo Good to go
-endif
-	
+$(NAME): $(LIBS)
+	cc $(CFLAGS) $(INC) $(LINK) -o $@ $(MANDATORY_SRC)
+
 $(LIBS):
-	@clear
 ifeq ($(DEBUG), 1)
-	@make -C $(LIBFT_DIR) DEBUG=1
-	@make -s -C $(PRINTF_DIR) DEBUG=1
-	@-for i in $(GNL_SRC:%.c=%); do\
-		echo "cc $$i.c $(GNL_COMP_FLAGS) -c -o $$i.o";\
-		cc $$i.c $(GNL_COMP_FLAGS) -c -o $$i.o;\
-	done
-	ar -rcsv $(LIBFT_DIR)/libft.a $(GNL_OBJ)
-	@make -C $(MLX_DIR) DEBUG=1
+	make DEBUG=1 -C $(LIBFTALL_DIR)
+	make DEBUG=1 -C $(LIBMLX_DIR)
 else
-	@printf "Compiling libft\t\t\t"
-	@make -s -C $(LIBFT_DIR)
-	@printf "\e[0;92mDONE!\e[0m\n"
-	@printf "Compiling printf\t\t"
-	@make -s -C $(PRINTF_DIR)
-	@printf "\e[0;92mDONE!\e[0m\n"
-	@printf "Compiling get next line\t\t"
-	@-for i in $(GNL_SRC:%.c=%); do\
-		cc $$i.c $(GNL_COMP_FLAGS) -c -o $$i.o;\
-	done
-	@ar -rcs $(LIBFT_DIR)/libft.a $(GNL_OBJ)
-	@printf "\e[0;92mDONE!\e[0m\n"
-	@printf "Compiling mlx\t\t\t"
-	@make -s -C $(MLX_DIR)
-	@printf "\e[0;92mDONE!\e[0m\n"
+	make -C $(LIBFTALL_DIR)
+	make -C $(LIBMLX_DIR)
 endif
 
 clean:
-	@clear
-	@rm -rf *.dSYM
-	@rm -f cub3d
-	@rm -f $(GNL_DIR)/*.o
-	@make fclean -s -C $(LIBFT_DIR)
-	@make fclean -s -C $(PRINTF_DIR)
-	@make clean -s -C $(MLX_DIR)
-	@echo nothing here anymore, well, except .c
+	rm -rf $(NAME) $(OBJS) *.dSYM
 
 fclean: clean
+	make fclean -C $(LIBFTALL_DIR)
+	make clean -C $(LIBMLX_DIR)
 
-re: clean all
+re: fclean mandatory
