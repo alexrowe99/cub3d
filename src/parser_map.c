@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:19:55 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/08 12:55:57 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/11 16:49:40 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ static bool	validate_store_player_spawn(t_cub3d *app, t_v2i pos)
 			{
 				app->player.spawn = pos;
 				has_spawn = true;
+				app->player.spawn_direction = v2i(pos.x, pos.y);
 			}
 		}
 	}

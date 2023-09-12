@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_rgb.c                                        :+:      :+:    :+:   */
+/*   parser_rgb.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 19:02:15 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/06 16:51:17 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/11 16:49:02 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	get_rgb_id(const char *element)
 	return (rgb_id);
 }
 
-static char	**validate_rgb(const char *data_str, uint64_t *store)
+static char	**validate_rgb(const char *data_str, uint32_t *store)
 {
 	char	**value_strs;
 
@@ -64,10 +64,10 @@ bool	parse_rgb_element(const char *element, size_t id, t_cub3d *app)
 	ft_free_str_2d(rgb_values, 0);
 	if (!error)
 	{
-		app->rgb_floor_ceiling[id] = malloc(sizeof(uint64_t));
+		app->rgb_floor_ceiling[id] = malloc(sizeof(uint32_t));
 		if (!app->rgb_floor_ceiling[id])
 			return (!cub3d_error("something unexpected happened"));
-		*app->rgb_floor_ceiling[id] = rgb_to_uint64(rgb[0], rgb[1], rgb[2]);
+		*app->rgb_floor_ceiling[id] = rgb_to_uint32(rgb[0], rgb[1], rgb[2]);
 	}
 	return (!error);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:37:07 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/07 14:10:39 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/08 14:11:40 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void	parse_map_file(t_cub3d *app, const char *filepath)
 	bool	success;
 	t_file	map_file;
 
+	errno = 0;
 	ft_bzero(&map_file, sizeof(t_file));
 	success = read_file_contents(filepath, &map_file);
 	success = success && parse_map_settings(&map_file, app);

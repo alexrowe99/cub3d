@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/07 12:58:29 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/12 13:21:37 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	destory_cub3d(t_cub3d *app)
 	}
 	if (app->map_tiles)
 	{
-		while (--app->m_dim.y)
-			ft_vfree(1, &app->map_tiles[app->m_dim.y]);
+		while (app->m_dim.y)
+			ft_vfree(1, &app->map_tiles[--app->m_dim.y]);
 		free(app->map_tiles);
 	}
 	app->map_tiles = NULL;
@@ -69,6 +69,11 @@ int	main(int ac, char **av)
 		return (1);
 	ft_bzero(&app, sizeof(t_cub3d));
 	parse_map_file(&app, av[1]);
-	ft_printf("Map data loaded!\n");
+	ft_printf("Cub3d: Map was parsed successfully!\n");
+	
+	// Remove me when mlx window is displayed and can be closed properly.
+	destory_cub3d(&app);
+	// --------------------------------------------------------------
+	
 	return (0);
 }

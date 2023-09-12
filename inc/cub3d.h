@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/08 12:23:53 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/12 14:08:44 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,18 @@
 # include <errno.h>
 # include <stdio.h>
 
+// ----- Window Definitions -----------------------------------------
+
+# define WIDTH 1184
+# define HEIGHT 740
+# define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
+
+// ----- Parser Definitions -----------------------------------------
+
 # define RGB_COUNT 2
 # define TEXTURE_COUNT 4
+
+// ----- Build Requirements For Parsrer ------------------------------
 
 # ifndef BUILD_MANDATORY
 #  define BUILD_MANDATORY
@@ -43,6 +53,12 @@ typedef struct s_vec2_int
 	int			y;
 }	t_v2i;
 
+typedef struct s_vec2_double
+{
+	double		x;
+	double		y;
+}	t_v2d;
+
 typedef struct s_entity
 {
 	t_v2i		spawn;
@@ -53,7 +69,7 @@ typedef struct s_cub3d
 {
 	t_v2i		m_dim;
 	char		**map_tiles;
-	uint64_t	*rgb_floor_ceiling[RGB_COUNT];
+	uint32_t	*rgb_floor_ceiling[RGB_COUNT];
 	char		*texture_paths[TEXTURE_COUNT];
 	t_entity	player;
 }	t_cub3d;
@@ -76,6 +92,12 @@ bool		is_valid_character(int c);
 bool		is_spawn_tile(int c, t_entity *player);
 
 // Colour
-uint64_t	rgb_to_uint64(uint8_t r, uint8_t g, uint8_t b);
+uint32_t	rgb_to_uint32(uint8_t r, uint8_t g, uint8_t b);
+
+// Vector
+t_v2i		v2i(int x, int y);
+t_v2i		v2d_to_v2i(t_v2d e);
+t_v2d		v2d(double x, double y);
+t_v2d		v2i_to_v2d(t_v2i e);
 
 #endif
