@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/12 13:21:37 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/12 14:19:55 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	destory_cub3d(t_cub3d *app)
 	size_t	i;
 
 	i = TEXTURE_COUNT;
-	while (--i)
+	while (i--)
 	{
 		ft_vfree(1, &app->texture_paths[i]);
 		if (i < RGB_COUNT)
