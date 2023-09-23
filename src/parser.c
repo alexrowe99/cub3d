@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:37:07 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/08 14:11:40 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/17 16:25:20 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static bool	parse_map_settings(t_file *m_file, t_cub3d *app)
 	return (check_data_populated(app, valid || m_file->it == COUNT_ELEMENTS));
 }
 
-void	parse_map_file(t_cub3d *app, const char *filepath)
+bool	parse_map_file(t_cub3d *app, const char *filepath)
 {
 	bool	success;
 	t_file	map_file;
@@ -103,9 +103,5 @@ void	parse_map_file(t_cub3d *app, const char *filepath)
 	success = success && parse_map_settings(&map_file, app);
 	success = success && parse_map_tiles(&map_file, app);
 	ft_free_str_2d(map_file.contents, map_file.line_count);
-	if (!success)
-	{
-		destory_cub3d(app);
-		exit(1);
-	}
+	return (success);
 }

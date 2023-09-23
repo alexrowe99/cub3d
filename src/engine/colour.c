@@ -1,49 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector.c                                           :+:      :+:    :+:   */
+/*   colour.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/08 19:09:12 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/11 16:50:48 by lmells           ###   ########.fr       */
+/*   Created: 2023/09/07 12:35:00 by lmells            #+#    #+#             */
+/*   Updated: 2023/09/12 15:26:29 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-t_v2d	v2i_to_v2d(t_v2i e)
+uint32_t	rgb_to_uint32(uint8_t r, uint8_t g, uint8_t b)
 {
-	t_v2d	v;
-
-	v.x = e.x;
-	v.y = e.y;
-	return (v);
-}
-
-t_v2i	v2d_to_v2i(t_v2d e)
-{
-	t_v2i	v;
-
-	v.x = e.x;
-	v.y = e.y;
-	return (v);
-}
-
-t_v2i	v2i(int x, int y)
-{
-	t_v2i	v;
-
-	v.x = x;
-	v.y = y;
-	return (v);
-}
-
-t_v2d	v2d(double x, double y)
-{
-	t_v2d	v;
-
-	v.x = x;
-	v.y = y;
-	return (v);
+	return (r << 16 | g << 8 | b);
 }
