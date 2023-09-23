@@ -6,31 +6,37 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/12 14:08:44 by lmells           ###   ########.fr       */
+/*   Updated: 2023/09/21 20:45:22 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <libftall.h>
+// ----- C standard library headers ---------------------------------
+
 # include <stdbool.h>
 # include <fcntl.h>
 # include <errno.h>
 # include <stdio.h>
 
-// ----- Window Definitions -----------------------------------------
+// ----- External library headers -----------------------------------
 
-# define WIDTH 1184
-# define HEIGHT 740
+# include <libftall.h>
+# include <engine.h>
+
+// ----- Window definitions -----------------------------------------
+
+# define WIDTH 600
+# define HEIGHT 400
 # define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
 
-// ----- Parser Definitions -----------------------------------------
+// ----- Parser definitions -----------------------------------------
 
 # define RGB_COUNT 2
 # define TEXTURE_COUNT 4
 
-// ----- Build Requirements For Parsrer ------------------------------
+// ----- Build requirements for parsrer ------------------------------
 
 # ifndef BUILD_MANDATORY
 #  define BUILD_MANDATORY
@@ -46,18 +52,6 @@ typedef struct s_file_contents
 	size_t		line_count;
 	size_t		it;
 }	t_file;
-
-typedef struct s_vec2_int
-{
-	int			x;
-	int			y;
-}	t_v2i;
-
-typedef struct s_vec2_double
-{
-	double		x;
-	double		y;
-}	t_v2d;
 
 typedef struct s_entity
 {
@@ -75,10 +69,10 @@ typedef struct s_cub3d
 }	t_cub3d;
 
 bool		cub3d_error(const char *format_message, ...);
-void		destory_cub3d(t_cub3d *app);
+int			destroy_cub3d(void *app_ptr);
 
 // Parser
-void		parse_map_file(t_cub3d *app, const char *filepath);
+bool		parse_map_file(t_cub3d *app, const char *filepath);
 int			get_texture_id(const char *element);
 bool		parse_texture_element(const char *element, size_t id,
 				t_cub3d *app);
@@ -93,11 +87,5 @@ bool		is_spawn_tile(int c, t_entity *player);
 
 // Colour
 uint32_t	rgb_to_uint32(uint8_t r, uint8_t g, uint8_t b);
-
-// Vector
-t_v2i		v2i(int x, int y);
-t_v2i		v2d_to_v2i(t_v2d e);
-t_v2d		v2d(double x, double y);
-t_v2d		v2i_to_v2d(t_v2i e);
 
 #endif
