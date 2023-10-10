@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 14:23:01 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/12 15:01:44 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/10 14:09:26 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ char	*ft_itoa(int n)
 	char			*s;
 	unsigned int	un;
 
-	if ((long int)n < (long int)INT32_MIN - 1 || (long int)n > INT32_MAX)
-		return (NULL);
+	// if ((long int)n < (long int)INT32_MIN - 1 || (long int)n > INT32_MAX)
+	// 	return (NULL);
 	sign = 0;
 	un = convert_to_unsigned(n, &sign);
 	n_len = get_uint_len(un);

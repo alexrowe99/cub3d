@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printf_core.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:13:08 by lmells            #+#    #+#             */
-/*   Updated: 2023/08/25 10:29:56 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/10 14:10:26 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdarg.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdint.h>
 
 typedef unsigned int	t_uint;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libftall.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: alex <alex@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 15:07:45 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/05 18:07:52 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/10 14:09:41 by alex             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdarg.h>
+# include <stdint.h>
 
 // libft
 int		ft_isalpha(int c);
