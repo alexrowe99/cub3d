@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/31 19:02:15 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/11 16:49:02 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/12 10:18:03 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ bool	parse_rgb_element(const char *element, size_t id, t_cub3d *app)
 		app->rgb_floor_ceiling[id] = malloc(sizeof(uint32_t));
 		if (!app->rgb_floor_ceiling[id])
 			return (!cub3d_error("something unexpected happened"));
-		*app->rgb_floor_ceiling[id] = rgb_to_uint32(rgb[0], rgb[1], rgb[2]);
+		*app->rgb_floor_ceiling[id] = (rgb[0] << 16 | rgb[1] << 8 | rgb[2]);
 	}
 	return (!error);
 }

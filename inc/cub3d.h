@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/21 20:45:22 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/12 09:25:01 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,20 @@
 
 // ----- External library headers -----------------------------------
 
-# include <libftall.h>
-# include <engine.h>
+# include <mlxge.h>
 
 // ----- Window definitions -----------------------------------------
 
-# define WIDTH 600
-# define HEIGHT 400
 # define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
+
+# define VIEWP_SPLIT_BRDR_W 2
+# define RAYC_VIEWP_W 800
+# define DBG_VIEWP_W 480
+
+# define WIN_W DBG_VIEWP_W + VIEWP_SPLIT_BRDR_W + RAYC_VIEWP_W
+# define WIN_H 600
+
+# define VIEWP_BG_COLOUR 0x00434343
 
 // ----- Parser definitions -----------------------------------------
 
