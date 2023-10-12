@@ -1,0 +1,134 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   core.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/03 10:39:11 by lmells            #+#    #+#             */
+/*   Updated: 2023/10/11 16:32:28 by lmells           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include <core.h>
+
+static void	core_init_mlx(struct s_mlxge *core)
+{
+	core->mlx = mlx_init();
+	if (!core->mlx)
+	{
+		mlxge_log(ERROR, ERR_FAIL_INIT" : Could not initialise MiniLibX");
+		free(core);
+		exit(1);
+	}
+	/* 
+		Seems to be a bug with the API - Modified mlx window constructor to setKeyRepeat:0 (OFF)
+		mlx_do_key_autorepeatoff(core->mlx);
+ 	*/
+}
+
+struct s_mlxge	*get_mlxge_core(void)
+{
+	static struct s_mlxge	*core;
+
+	if (!core)
+	{
+		core = ft_calloc(1, sizeof(struct s_mlxge));
+		if (!core)
+		{
+			mlxge_log(ERROR, ERR_FAIL_INIT" : Cannot allocate memory");
+			exit(1);
+		}
+		core_init_mlx(core);
+	}
+	return (core);
+}
+
+// #include <time.h>
+
+// struct s_mlxge_clock
+// {
+// 	clock_t	now;
+// 	double	last_frame_time;
+// 	double	timestep_sec;
+// };
+
+// struct s_mlxge_clock	g_clock;
+// const double			target = 1.0f/60;
+
+// #include <stdio.h>
+int	mlxge_update(void)
+{
+	t_layer	**layers_list;
+	t_layer	*layers;
+
+	// g_clock.now = clock();
+	// g_clock.timestep_sec = ((double)(g_clock.now)/CLOCKS_PER_SEC) - g_clock.last_frame_time;
+	// g_clock.last_frame_time = (double)(g_clock.now)/CLOCKS_PER_SEC;
+
+	// printf("Delta Seconds: %f\n", g_clock.timestep_sec);
+
+	// while (g_clock.timestep_sec > 0)
+	// {
+	// 	double	delta_time;
+	// 	if (g_clock.timestep_sec < target)
+	// 		delta_time = g_clock.timestep_sec;
+	// 	else
+	// 		delta_time = target;
+
+		layers_list = &((t_layer *)get_mlxge_core()->layers)->next;
+		layers = *layers_list;
+		while (layers)
+		{
+			layers->on_update(layers);
+			layers = layers->next;
+		}
+
+	// 	g_clock.timestep_sec -= delta_time;
+	// }
+	mlxge_render(*layers_list);
+
+	return (0);
+}
+
+// ----- API -------------------------------------------------------------------
+
+// Exits the program if initialisation fails.
+void	mlxge_init(void)
+{
+	mlxge_log(INFO, "Initialising MLXGE...");
+	get_mlxge_core();
+}
+
+int	mlxge_run(void)
+{
+	mlxge_log(INFO, "Starting MLXGE application...");
+
+	struct s_mlxge	*core = get_mlxge_core();
+	
+	mlxge_log(DEBUG, "Binding MiniLibX update loop to run MLXGE window on update");
+	mlx_loop_hook(core->mlx, ((t_layer *)core->layers)->on_update, 0);
+	mlxge_log(INFO, "Loading MLXGE events...");
+	core->event_layer = mlxge_load_events_layers((t_layer **)&core->layers);
+	if (!core->event_layer)
+	{
+		mlxge_log(ERROR, "Failed to start MLXGE application because : "\
+			"Couldn't load MLXGE events");
+		return (mlxge_destroy());
+	}
+	mlxge_set_mlx_event_hooks(core->win->id_ptr, core->event_layer);
+	return (mlx_loop(core->mlx));
+}
+
+int	mlxge_destroy(void)
+{
+	struct s_mlxge	*core;
+
+	core = get_mlxge_core();
+	if (core->win)
+		mlxge_destroy_window(core->mlx, core->win);
+	free(core);
+	mlxge_log(INFO, "MLXGE has been destroyed... Exiting!");
+	exit(0);
+	return (0);
+}
