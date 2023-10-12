@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 11:55:47 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/10 14:31:48 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/13 09:03:57 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,11 @@ static struct s_mlxge_window	mlxge_window(void *mlx_ptr, int w, int h, char *tit
 	window =  (struct s_mlxge_window){
 		.dim = dimensions(w, h),
 		.id_ptr = mlx_new_window(mlx_ptr, w, h, title),
-		.img = mlx_new_image(mlx_ptr, w, h)
+		.img = (void *)0
 	};
+	mlxge_get_window_dimensions(window.id_ptr,
+			&window.dim.width, &window.dim.height);
+	window.img = mlx_new_image(mlx_ptr, window.dim.width, window.dim.height);
 	if (!window.id_ptr || !window.img)
 		mlxge_log(ERROR, ERR_WIN_FAIL" : "MLX_MEM_FAIL);
 	return (window);
@@ -44,7 +47,7 @@ static struct s_mlxge_window	*mlxge_new_window(void *mlx_ptr, int w, int h,
 	return (win);
 };
 
-int	mlxge_create_window(int width, int height, char *title)
+int	mlxge_create_window(int width, int height, char *title, bool centered)
 {
 	void			*close_event;
 	struct s_mlxge	*core;
@@ -54,13 +57,14 @@ int	mlxge_create_window(int width, int height, char *title)
 	core->win = mlxge_new_window(core->mlx, width, height, title);
 	if (!core->win)
 		return (-1);
+	if (centered)
+		mlxge_center_window(core->win->id_ptr);
 	mlxge_log(DEBUG, "MLXGE window (%p) properties {", core->win);
 	mlxge_log(DEBUG, "\tTitle\t\t: %s", title);
-	mlxge_log(DEBUG, "\tDimensions\t: %ix%i", width, height);
+	mlxge_log(DEBUG, "\tDimensions\t: %ix%i", core->win->dim.width, core->win->dim.height);
 	mlxge_log(DEBUG, "}");
 	mlxge_log(INFO, "Creating MLXGE window layer...");
-	core->layers = mlxge_window_layer(core->win->dim.width, core->win->dim.height,
-					mlxge_update, core->win->img);
+	core->layers = mlxge_window_layer(mlxge_update, core->win->img);
 	if (!core->layers)
 	{
 		mlxge_log(ERROR, ERR_WIN_FAIL" : Couldn't create MLXGE window layer");

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 10:39:11 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/11 16:32:28 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/12 12:45:20 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,25 @@ int	mlxge_update(void)
 // ----- API -------------------------------------------------------------------
 
 // Exits the program if initialisation fails.
-void	mlxge_init(void)
+#define ERR_BIND_APP "Failed to bind application because"
+void	mlxge_init(void *app_ptr, int (*app_destructor)(void *app_ptr))
 {
+	struct s_mlxge	*core;
+
 	mlxge_log(INFO, "Initialising MLXGE...");
-	get_mlxge_core();
+	core = get_mlxge_core();
+	if (!app_ptr || !app_destructor)
+	{
+		if (!app_ptr)
+			mlxge_log(ERROR, ERR_BIND_APP" : application pointer is NULL reference");
+		if (!app_destructor)
+			mlxge_log(ERROR, ERR_BIND_APP" : application destructor is NULL reference");
+		mlxge_log(WARNING, "Heap memory allocated by application may cause leaks...");
+	}
+	if (app_ptr)
+		core->app_ptr = app_ptr;
+	if (app_destructor)
+		core->app_destructor = app_destructor;
 }
 
 int	mlxge_run(void)
@@ -125,10 +140,15 @@ int	mlxge_destroy(void)
 	struct s_mlxge	*core;
 
 	core = get_mlxge_core();
+	mlxge_log(DEBUG, "Destroying MLXGE Window...");
 	if (core->win)
 		mlxge_destroy_window(core->mlx, core->win);
+	mlxge_log(DEBUG, "Destroying application...");
+	if (core->app_destructor)
+		core->app_destructor(core->app_ptr);
 	free(core);
-	mlxge_log(INFO, "MLXGE has been destroyed... Exiting!");
+	mlxge_log(DEBUG, "MLXGE destroy success!");
+	mlxge_log(INFO, "Exiting!");
 	exit(0);
 	return (0);
 }

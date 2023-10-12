@@ -36,7 +36,7 @@ CC=cc -Wall -Werror -Wextra
 DEBUG=
 MODE=
 ifeq ($(DEBUG), 1)
-	CC=cc -Wall -Werror -Wextra -g
+	CC=cc -Wall -Werror -Wextra -g -fsanitize=address
 	MODE=DEBUG=1
 endif
 
@@ -55,16 +55,16 @@ shared_lib: $(EXTERN_LIBS)
 
 $(EXTERN_LIBS):
 	make -C lib/$(LIBALL_DIR) $(MODE)
-	cp -rf lib/$(LIBALL_DIR)/libftall.h core/.
+# cp -rf lib/$(LIBALL_DIR)/libftall.h core/.
 	make -C lib/$(MLX_BUILD_DIR) $(MODE)
-	cp -rf lib/$(MLX_BUILD_DIR)/mlx.h core/.
+# cp -rf lib/$(MLX_BUILD_DIR)/mlx.h core/.
 
 $(CORE_C_OBJS): %.o: %.c
-	$(CC) -O3 -c $< -I$(CORE_DIR) $(BUILD_OS) -o $@
+	$(CC) -c $< -I$(CORE_DIR) $(BUILD_OS) -o $@
 
 clean:
 	rm -rf **/*.o $(NAME)
-	rm -rf core/mlx.h core/libftall.h
+# rm -rf core/mlx.h core/libftall.h
 
 fclean: clean
 	rm -rf lib/shared

@@ -79,7 +79,6 @@ int get_mouse_button(NSEventType eventtype)
   return (self);
 }
 
-
 - (void) setEvent:(int)event andFunc:(func_t)func andParam:(void *)param
 {
   event_funct[event] = func;
@@ -333,6 +332,12 @@ int get_mouse_button(NSEventType eventtype)
   //    event_funct[??](event_param[??]);
   [self exposeNotification:note];
 }
+
+- (void) setFrame:(NSRect)rect
+{
+  [self setFrame:rect display:YES];
+}
+
 @end
 
 
@@ -355,11 +360,13 @@ int get_mouse_button(NSEventType eventtype)
       [win setKeyRepeat:0];
       [win makeKeyAndOrderFront:self];
 
+
       //      printf("init ctx: current %p ", [NSOpenGLContext currentContext]);
 
       //      ctx = [[NSOpenGLContext alloc] initWithFormat:pixFmt shareContext:[NSOpenGLContext currentContext]]; //other_context];
       //      [ctx setView:self];
       //      [ctx makeCurrentContext];
+
 
       [[self openGLContext] makeCurrentContext];
       [[self openGLContext] setView:self];
@@ -639,11 +646,65 @@ int get_mouse_button(NSEventType eventtype)
   
 }
 
+// --------------------------------------------------
+
+// Added by lmells (42 Adelaide)
+
+- (int) titleBarHeight
+{
+  return (int)(self.window.frame.size.height - self.window.contentView.frame.size.height);
+}
+
+- (void) centerWindowVisibleFrame
+{
+  NSRect frameRect = self.window.frame;
+  NSRect visibleFrameRect = [[NSScreen mainScreen] visibleFrame];
+
+  int heightDiff = (int)([[NSScreen mainScreen] frame].size.height - visibleFrameRect.size.height - [self titleBarHeight]);
+
+  NSRect centerRect = NSMakeRect(visibleFrameRect.size.width/2-frameRect.size.width/2, heightDiff+(visibleFrameRect.size.height/2-frameRect.size.height/2), frameRect.size.width, frameRect.size.height);
+  [win setFrame:centerRect];
+}
+
+- (int) getMaxWidth
+{
+  return (int)[[NSScreen mainScreen] visibleFrame].size.width;
+}
+
+- (int) getMaxHeight
+{
+  return (int)([[NSScreen mainScreen] visibleFrame].size.height - [self titleBarHeight]);
+}
+
+- (NSRect) getDimensions
+{
+  return (self.window.contentView.frame);
+}
+
+// --------------------------------------------------
+
 @end
 
 
 // mlx API
- 
+
+// --------------------------------------------------
+// Added by lmells (42 Adelaide)
+
+void mlxge_center_window(mlx_win_list_t *win_ptr)
+{
+  [(id)(win_ptr->winid) centerWindowVisibleFrame];
+}
+
+void	mlxge_get_window_dimensions(mlx_win_list_t *win_ptr, int *win_w, int *win_h)
+{
+  NSRect win_dim = [(id)(win_ptr->winid) getDimensions];
+
+  *win_w = (int)win_dim.size.width;
+  *win_h = (int)win_dim.size.height;
+}
+
+int mlx_destroy_window(mlx_ptr_t *mlx_ptr, mlx_win_list_t *win_to_del);
 
 void *mlx_new_window(mlx_ptr_t *mlx_ptr, int size_x, int size_y, char *title)
 {
@@ -658,15 +719,40 @@ void *mlx_new_window(mlx_ptr_t *mlx_ptr, int size_x, int size_y, char *title)
   newwin->pixmgt = 1;
   mlx_ptr->win_list = newwin;
 
-  NSRect windowRect = NSMakeRect(100, 100, size_x, size_y);
+  NSRect windowRect;
+  // --------------------------------------------------
+  // Added by lmells (42 Adelaide)
+  if (size_x >= 0 && size_y >= 0)
+    windowRect = NSMakeRect(0, 0, size_x, size_y);
+  else
+    windowRect = NSMakeRect(0, 0, 100, 100);
+  // --------------------------------------------------
   str = [NSString stringWithCString:title encoding:NSASCIIStringEncoding];
   newwin->winid = [[MlxWin alloc] initWithRect:windowRect andTitle:str pfaAttrs:pfa_attrs];
   if (newwin->winid)
+  {
+    // --------------------------------------------------
+    // Added by lmells (42 Adelaide)
+    if (size_x < 0 && size_y < 0)
+    {
+      size_x = [(id)(newwin->winid) getMaxWidth];
+      size_y = [(id)(newwin->winid) getMaxHeight];
+      windowRect = NSMakeRect(0, 0, size_x, size_y);
+      // mlx_destroy_window(mlx_ptr, newwin);
+      [(id)(newwin->winid) destroyMe];
+      newwin->winid = [[MlxWin alloc] initWithRect:windowRect andTitle:str pfaAttrs:pfa_attrs];
+      if (!newwin->winid)
+        return ((void *)newwin);
+      mlx_ptr->win_list = newwin;
+    }
+    // --------------------------------------------------
+
     if (![(id)(newwin->winid) pixel_management])
-      {
-	[(id)(newwin->winid) destroyPixelManagement];
-	[(id)(newwin->winid) destroyMe];
-      }
+    {
+      [(id)(newwin->winid) destroyPixelManagement];
+      [(id)(newwin->winid) destroyMe];
+    }
+  }
   return ((void *)newwin);
 }
 

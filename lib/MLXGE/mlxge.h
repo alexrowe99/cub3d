@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 10:31:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/11 16:33:47 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/12 22:37:44 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@
 #  endif
 # endif
 
-void	mlxge_init(void);
+void	mlxge_init(void *app_ptr, int (*app_destructor)(void *app_ptr));
 
-int		mlxge_create_window(int width, int height, char *title);
+// Pass -width & -height for fullscreen titled window.
+int		mlxge_create_window(int width, int height, char *title, bool centered);
 
 void	*mlxge_new_layer(int frame_width, int frame_height, void *on_update);
 void	mlxge_push_layer(t_layer *layer);

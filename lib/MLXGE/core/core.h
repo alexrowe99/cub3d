@@ -6,30 +6,36 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 11:10:17 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/11 14:13:40 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/12 22:50:31 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CORE_H
 # define CORE_H
 
-# include "mlx.h"
-# include <libftall.h>
 # include <stdio.h>
 # include <stdbool.h>
+# include <../lib/libftall/libftall.h>
 
 # include <events.h>
 # include <layers.h>
 # include <input.h>
 # include <dimensions.h>
 
+# ifndef BUILD_OS
+#  define BUILD_OS 1
+# endif
 # ifdef BUILD_OS
 #  if BUILD_OS == 1
-#   define OS_MacOS
+#   define OS_MacOS 1
 # 	include <macos_keycodes.h>
+# 	include <../lib/mlx/macos/mlx.h>
+void	mlxge_center_window(void *win_ptr);
+void	mlxge_get_window_dimensions(void *win_ptr, int *win_w, int *win_h);
 #  elif BUILD_OS == 2
-#   define OS_Linux
+#   define OS_Linux 1
 # 	include <linux_keycodes.h>
+# 	include <../lib/mlx/linux/mlx.h>
 #  else
 #   error "OS not yet supported..."
 #  endif
@@ -40,16 +46,16 @@
 # define ERR_EVNT_FAIL "Failed to create MLXGE event because"
 # define ERR_LAYER_FAIL "Failed to create MLXGE layer because"
 
-#define MLX_MEM_FAIL "MiniLibX couldn't allocate memory"
+# define MLX_MEM_FAIL "MiniLibX couldn't allocate memory"
 
 // ----- Logging System --------------------------------------------------------
 
-#define PREF_FATAL "\e[0;91m[ MLXGE_FATAL_ERROR ]"
-#define PREF_ERR "\e[0;91m[ MLXGE_ERROR ]\e[0m"
-#define PREF_WARN "\e[0;93m[ MLXGE_WARNING ]\e[0m"
-#define PREF_DBG "\e[0;96m[ MLXGE_DEBUG ]\e[0m"
-#define PREF_INFO "\e[0;92m[ MLXGE_INFO ]\e[0m"
-#define NL "\n\e[0m"
+# define PREF_FATAL "\e[0;91m[ MLXGE_FATAL_ERROR ]"
+# define PREF_ERR "\e[0;91m[ MLXGE_ERROR ]\e[0m"
+# define PREF_WARN "\e[0;93m[ MLXGE_WARNING ]\e[0m"
+# define PREF_DBG "\e[0;96m[ MLXGE_DEBUG ]\e[0m"
+# define PREF_INFO "\e[0;92m[ MLXGE_INFO ]\e[0m"
+# define NL "\n\e[0m"
 
 enum e_log_levels
 {
@@ -77,6 +83,8 @@ struct s_mlxge
 	struct s_mlxge_window	*win;
 	void					*layers;
 	void					*event_layer;
+	int						(*app_destructor)(void *app_ptr);
+	void					*app_ptr;
 };
 
 struct s_mlxge	*get_mlxge_core(void);
@@ -92,9 +100,8 @@ struct s_mlxge_window
 	void			*layer;
 };
 
-int				mlxge_create_window(int width, int height, char *title);
-void			*mlxge_window_layer(int frame_width, int frame_height,
-					void *on_update, void *mlx_img_ptr);
+int				mlxge_create_window(int width, int height, char *title, bool centered);
+void			*mlxge_window_layer(void *on_update, void *mlx_img_ptr);
 void			mlxge_destroy_window(void *mlx_ptr, void *win_ptr);
 int				mlxge_update(void);
 

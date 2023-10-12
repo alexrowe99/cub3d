@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:01:00 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/09 23:59:31 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/12 22:42:02 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,13 @@ static void	*mlxge_create_new_layer(int frame_width, int frame_height, void *on_
 	return ((void *)layer);
 }
 
-void	*mlxge_window_layer(int frame_width, int frame_height, void *on_update,
-			void *mlx_img_ptr)
+void	*mlxge_window_layer(void *on_update, void *mlx_img_ptr)
 {
-	return (mlxge_create_new_layer(frame_width, frame_height, on_update,
-			mlx_img_ptr));
+	t_dimensions	win;
+
+	win = get_mlxge_core()->win->dim;
+	return (mlxge_create_new_layer(win.width, win.height, on_update,
+		mlx_img_ptr));
 }
 
 void	mlxge_push_layer_list_front(t_list_type type, void *layer, void **list)
@@ -103,8 +105,13 @@ void	mlxge_push_layer_list_front(t_list_type type, void *layer, void **list)
 
 // ----- API -------------------------------------------------------------------
 
+// Pass -frame_width & -frame_height to set the size to match the window
 void	*mlxge_new_layer(int frame_width, int frame_height, void *on_update)
 {
+	if (frame_width < 0)
+		frame_width = get_mlxge_core()->win->dim.width;
+	if (frame_height < 0)
+		frame_height = get_mlxge_core()->win->dim.height;
 	return (mlxge_create_new_layer(frame_width, frame_height, on_update,
 			(void *)0));
 }
