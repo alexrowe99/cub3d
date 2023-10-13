@@ -738,7 +738,6 @@ void *mlx_new_window(mlx_ptr_t *mlx_ptr, int size_x, int size_y, char *title)
       size_x = [(id)(newwin->winid) getMaxWidth];
       size_y = [(id)(newwin->winid) getMaxHeight];
       windowRect = NSMakeRect(0, 0, size_x, size_y);
-      // mlx_destroy_window(mlx_ptr, newwin);
       [(id)(newwin->winid) destroyMe];
       newwin->winid = [[MlxWin alloc] initWithRect:windowRect andTitle:str pfaAttrs:pfa_attrs];
       if (!newwin->winid)

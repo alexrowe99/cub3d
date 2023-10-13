@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:01:00 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/12 22:42:02 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/13 12:11:52 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	mlxge_destroy_layers(t_list_type type, void *layers)
 		wlist[1] = wlist[0]->next;
 		if (wlist[0]->event_list)
 			mlxge_destroy_events((t_event_list **)wlist[0]->event_list);
+		if (wlist[0]->image_list)
+			mlxge_destroy_images(wlist[0]->image_list);
 		free(wlist[0]);
 		wlist[0] = wlist[1];
 	}
@@ -71,6 +73,7 @@ static void	*mlxge_create_new_layer(int frame_width, int frame_height, void *on_
 			.frame = mlxge_new_frame(0, 0, frame_width, frame_height, mlx_img_ptr),
 			.event_list = mlxge_new_event_list(),
 			.on_update = (t_on_update)on_update,
+			.image_list = (void *)0,
 			.next = (void *)0,
 		};
 		if (!layer->event_list)

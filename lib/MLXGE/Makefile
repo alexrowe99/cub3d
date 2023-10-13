@@ -2,7 +2,7 @@ NAME=libmlxge.a
 
 CORE_DIR=core
 CORE_C_SRC=$(addprefix $(CORE_DIR)/, $(addsuffix .c, \
- log vector dimensions core window layers events frame key_input render \
+ log vector dimensions core window layers images events frame key_input render \
 ))
 
 SET_OS=
@@ -55,16 +55,13 @@ shared_lib: $(EXTERN_LIBS)
 
 $(EXTERN_LIBS):
 	make -C lib/$(LIBALL_DIR) $(MODE)
-# cp -rf lib/$(LIBALL_DIR)/libftall.h core/.
 	make -C lib/$(MLX_BUILD_DIR) $(MODE)
-# cp -rf lib/$(MLX_BUILD_DIR)/mlx.h core/.
 
 $(CORE_C_OBJS): %.o: %.c
 	$(CC) -c $< -I$(CORE_DIR) $(BUILD_OS) -o $@
 
 clean:
 	rm -rf **/*.o $(NAME)
-# rm -rf core/mlx.h core/libftall.h
 
 fclean: clean
 	rm -rf lib/shared

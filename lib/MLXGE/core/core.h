@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 11:10:17 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/12 22:50:31 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/13 11:58:33 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <layers.h>
 # include <input.h>
 # include <dimensions.h>
+# include <images.h>
 
 # ifndef BUILD_OS
 #  define BUILD_OS 1
@@ -107,11 +108,18 @@ int				mlxge_update(void);
 
 // -----------------------------------------------------------------------------
 
+// ----- Images ----------------------------------------------------------------
+
+
+
+// -----------------------------------------------------------------------------
+
 // ----- Typedefs --------------------------------------------------------------
 
 typedef int(*t_on_update)(struct s_layer_list *);
 typedef struct s_layer_list	t_layer;
 typedef t_event_list		t_event;
+typedef t_image				t_frame;
 
 void			*mlxge_new_key_event(int type, int code, int (*funct)(),
 						void *param);
