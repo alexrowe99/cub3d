@@ -11,7 +11,7 @@ OBJ=$(OBJ1:.m=.o)
 CFLAGS+=-O2 -w
 
 ifeq ($(DEBUG), 1)
-	CFLAGS+=-g
+	CFLAGS=-w -g -fsanitize=address
 	AR= ar -rv
 else
 	AR=ar -rc

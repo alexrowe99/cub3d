@@ -31,7 +31,7 @@ cflags = -Wall -Werror -Wextra
 
 DEBUG=""
 ifeq ($(DEBUG), 1)
-	cflags += -g
+	cflags += -g -fsanitize=address
 endif
 
 all: $(NAME)

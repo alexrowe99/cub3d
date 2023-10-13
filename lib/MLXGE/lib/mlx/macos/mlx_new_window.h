@@ -17,12 +17,19 @@
   int		keyflag;
   int		size_x;
   int		size_y;
+  NSRect  frameRect;
+  NSRect  contentRect;
 }
 - (NSWindowEvent *) initWithContentRect:(NSRect)rect styleMask:(NSUInteger)winstyle backing:(NSBackingStoreType)bck defer:(BOOL) dfr;
 - (void) setEvent:(int)event andFunc:(func_t)func andParam:(void *)param;
 - (void) setKeyRepeat:(int)mode;
 - (void) exposeNotification:(NSNotification *)note;
 - (void) closeNotification:(NSNotification *)note;
+
+// Added by lmells (42 Adelaide)
+- (void) setFrame:(NSRect)rect;
+- (int) getFrameHeightDiff;
+
 @end
 
 
@@ -54,4 +61,12 @@
 - (void) setEvent:(int)event andFunc:(func_t)func andParam:(void *)param;
 - (void) setKeyRepeat:(int)mode;
 - (void) ctxNeedsUpdate;
+
+// Added in by lmells (42 Adelaide)
+- (void) centerWindowVisibleFrame;
+- (int) getMaxWidth;
+- (int) getMaxHeight;
+- (int) titleBarHeight;
+- (NSRect) getDimensions;
+
 @end
