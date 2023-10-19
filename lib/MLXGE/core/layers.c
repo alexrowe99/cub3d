@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   layers.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:01:00 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/13 12:11:52 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/19 17:48:37 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,15 @@ void	mlxge_destroy_layers(t_list_type type, void *layers)
 		if (wlist[0]->event_list)
 			mlxge_destroy_events((t_event_list **)wlist[0]->event_list);
 		if (wlist[0]->image_list)
+		{
+			mlxge_log(DEBUG, "Destroying layer's image list");
 			mlxge_destroy_images(wlist[0]->image_list);
+		}
+		if (wlist[0]->frame)
+		{
+			mlxge_log(DEBUG, "Destroying layer's frame");
+			mlxge_destroy_images(wlist[0]->frame);
+		}
 		free(wlist[0]);
 		wlist[0] = wlist[1];
 	}
@@ -74,6 +82,7 @@ static void	*mlxge_create_new_layer(int frame_width, int frame_height, void *on_
 			.event_list = mlxge_new_event_list(),
 			.on_update = (t_on_update)on_update,
 			.image_list = (void *)0,
+			.viewport = (void *)0,
 			.next = (void *)0,
 		};
 		if (!layer->event_list)
@@ -121,10 +130,15 @@ void	*mlxge_new_layer(int frame_width, int frame_height, void *on_update)
 
 void	mlxge_push_layer(t_layer *layer)
 {
-	t_layer	*layer_list;
+	t_layer	**layer_list;
 
-	layer_list = (t_layer *)get_mlxge_core()->layers;
-	while (layer_list->next)
-		layer_list = layer_list->next;
-	layer_list->next = layer;
+	layer_list = (t_layer **)&get_mlxge_core()->layers;
+	if (!*layer_list)
+	{
+		*layer_list = layer;
+		return ;
+	}
+	while ((*layer_list)->next)
+		*layer_list = (*layer_list)->next;
+	(*layer_list)->next = layer;
 }

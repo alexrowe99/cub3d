@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/13 09:16:38 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/17 14:49:39 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,6 @@
 // ----- Window definitions -----------------------------------------
 
 # define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
-
-// # define VIEWP_SPLIT_BRDR_W 2
-// # define RAYC_VIEWP_W 180*4
-// # define DBG_VIEWP_W 180*4
-
-// # define WIN_W DBG_VIEWP_W + VIEWP_SPLIT_BRDR_W + RAYC_VIEWP_W
-// # define WIN_H 180*3
-
-// # define VIEWP_BG_COLOUR 0x434343
 
 // ----- Parser definitions -----------------------------------------
 
@@ -61,23 +52,23 @@ typedef struct s_file_contents
 
 typedef struct s_entity
 {
-	t_v2i		spawn;
-	t_v2i		spawn_direction;
+	t_v2d		pos;
+	t_v2i		direction;
+	double		velocity;
+	bool		has_moved;
 }	t_entity;
 
 typedef struct s_cub3d
 {
-	t_dimensions	m_dim;
+	t_dimensions	map_dim;
 	char			**map_tiles;
+	size_t			tile_size;
 	uint32_t		*rgb_floor_ceiling[RGB_COUNT];
 	char			*texture_paths[TEXTURE_COUNT];
 	t_entity		player;
 }	t_cub3d;
 
-
-// typedef t_v2i 			t_d/imensions;
-// typedef struct s_dimensions	t_v2i;
-
+t_cub3d		*cub3d(void);
 void		initialise(t_cub3d *app, const char *map_filepath);
 bool		cub3d_error(const char *format_message, ...);
 int			destroy_cub3d(void *app_ptr);

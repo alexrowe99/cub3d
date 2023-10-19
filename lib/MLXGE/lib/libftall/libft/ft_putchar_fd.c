@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/12 15:32:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/07/12 15:33:18 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/18 11:54:08 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,7 @@
 
 void	ft_putchar_fd(char c, int fd)
 {
-	write(fd, &c, sizeof(c));
+	int	u __attribute__ ((unused));
+
+	u = write(fd, &c, sizeof(c));
 }

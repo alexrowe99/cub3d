@@ -3,46 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 20:52:17 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/13 12:10:42 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/19 18:16:25 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <core.h>
 #include <events.h>
-
-// typedef struct s_map_mlx_events
-// {
-// 	struct s_map_event_types	event[COUNT_EVENT_TYPES];
-// }	t_event_map;
-
-// static t_event_map	*event_map(void)
-// {
-// 	int						i;
-// 	int						*mlx_event_codes;
-// 	static t_event_map		*map;
-
-// 	if (!map)
-// 	{
-// 		map = ft_calloc(1, sizeof(t_event_map));
-// 		if (!map)
-// 		{
-// 			mlxge_log(FATAL, ERR_EVNT_FAIL" : Could not allocate memory for "
-// 				"event map");
-// 			exit(1);
-// 		}
-// 		mlx_event_codes = get_mlx_event_codes();
-// 		i = -1;
-// 		while (++i < COUNT_EVENT_TYPES)
-// 		{
-// 			map->event[i].gecode = i;
-// 			map->event[i].mlx_code = mlx_event_codes[i];
-// 		}
-// 	}
-// 	return (map);
-// }
 
 static int	*mlx_event_codes(void)
 {
@@ -90,7 +59,10 @@ static int	handle_events(int code, t_event_layer *list, int event_type)
 		while (event)
 		{
 			if (event->code == code)
+			{
+				mlxge_log(DEBUG, "Handling Event....");
 				event->handle_event(event->event_param);
+			}
 			event = event->next;
 		}
 		list = list->next;
@@ -115,7 +87,9 @@ int	mlxge_on_keyrelease_event(int keycode, void *param)
 
 int	mlxge_on_destroy_event(void *param)
 {
-	mlxge_log(DEBUG, "!! MLXGE ON DESTROY EVENT !!");
+	// mlxge_log(DEBUG, "!! MLXGE ON DESTROY EVENT !!");
+	if (!param)
+		param = get_mlxge_core()->event_layer;
 	mlxge_destroy_layers(EVENT_LAYER, (t_event_layer *)param);
 	return (mlxge_destroy());
 }
@@ -131,7 +105,7 @@ void	mlxge_set_mlx_event_hooks(void *mlx_win_ptr, t_event_layer *evnt_lst)
 	// mlx_hook(mlx_win_ptr, ON_MOUSE_RELEASE, 0, mlxge_on_mouse_event, NULL);
 	// mlx_hook(mlx_win_ptr, ON_MOUSE_MOVE, 0, mlxge_on_mouse_move_event, NULL);
 	// mlx_hook(mlx_win_ptr, ON_EXPOSE, 0, mlxge_on_expose_event, NULL);
-	mlx_hook(mlx_win_ptr, event[ON_DESTROY], 0, mlxge_on_destroy_event, evnt_lst);
+	mlx_hook(mlx_win_ptr, event[ON_DESTROY], 0L, mlxge_on_destroy_event, evnt_lst);
 }
 
 void	*mlxge_load_events_layers(t_layer **layers)
@@ -170,6 +144,7 @@ void	mlxge_destroy_events(t_event_list **events)
 		type++;
 	}
 	free(events);
+	events = (void *)0;
 }
 
 void	**mlxge_new_event_list(void)
