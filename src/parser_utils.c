@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:32:26 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/12 14:52:13 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/13 18:49:28 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ bool	is_spawn_tile(int c, t_entity *entity)
 	if (entity && is_spawn)
 	{
 		if (c == 'N')
-			entity->spawn_direction = v2i(0, -1);
+			entity->direction = v2i(0, -1);
 		else if (c == 'S')
-			entity->spawn_direction = v2i(0, 1);
+			entity->direction = v2i(0, 1);
 		else if (c == 'E')
-			entity->spawn_direction = v2i(1, 0);
+			entity->direction = v2i(1, 0);
 		else if (c == 'W')
-			entity->spawn_direction = v2i(-1, 0);
+			entity->direction = v2i(-1, 0);
 	}
 	return (is_spawn);
 }

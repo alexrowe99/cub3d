@@ -27,7 +27,7 @@ PRINTF_OBJS = $(PRINTF_SRC:.c=.o)
 OBJS = $(LIBFT_OBJS) $(PRINTF_OBJS) $(GNL_OBJS)
 
 cc = cc
-cflags = -Wall -Werror -Wextra
+cflags = -Wall -Werror -Wextra -O2
 
 DEBUG=""
 ifeq ($(DEBUG), 1)

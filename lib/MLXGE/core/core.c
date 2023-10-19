@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 10:39:11 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/13 12:10:20 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/19 14:22:07 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,16 @@ struct s_mlxge	*get_mlxge_core(void)
 	return (core);
 }
 
-// #include <time.h>
+#include <time.h>
 
-// struct s_mlxge_clock
-// {
-// 	clock_t	now;
-// 	double	last_frame_time;
-// 	double	timestep_sec;
-// };
+struct s_mlxge_clock
+{
+	clock_t	now;
+	double	last_frame_time;
+	double	timestep_sec;
+};
 
-// struct s_mlxge_clock	g_clock;
-// const double			target = 1.0f/60;
+struct s_mlxge_clock	g_clock;
 
 // #include <stdio.h>
 int	mlxge_update(void)
@@ -62,28 +61,21 @@ int	mlxge_update(void)
 	t_layer	**layers_list;
 	t_layer	*layers;
 
-	// g_clock.now = clock();
-	// g_clock.timestep_sec = ((double)(g_clock.now)/CLOCKS_PER_SEC) - g_clock.last_frame_time;
-	// g_clock.last_frame_time = (double)(g_clock.now)/CLOCKS_PER_SEC;
+	g_clock.now = clock();
+	g_clock.timestep_sec = ((double)(g_clock.now)/CLOCKS_PER_SEC) - g_clock.last_frame_time;
+	g_clock.last_frame_time = (double)(g_clock.now)/CLOCKS_PER_SEC;
 
 	// printf("Delta Seconds: %f\n", g_clock.timestep_sec);
 
-	// while (g_clock.timestep_sec > 0)
+	// while (g_clock.timestep_sec < target)
 	// {
-	// 	double	delta_time;
-	// 	if (g_clock.timestep_sec < target)
-	// 		delta_time = g_clock.timestep_sec;
-	// 	else
-	// 		delta_time = target;
-
 		layers_list = &((t_layer *)get_mlxge_core()->layers)->next;
 		layers = *layers_list;
 		while (layers)
 		{
-			layers->on_update(layers);
+			layers->on_update(layers, g_clock.timestep_sec);
 			layers = layers->next;
 		}
-
 	// 	g_clock.timestep_sec -= delta_time;
 	// }
 	mlxge_render(*layers_list);
@@ -142,7 +134,11 @@ int	mlxge_destroy(void)
 	core = get_mlxge_core();
 	mlxge_log(DEBUG, "Destroying MLXGE Window...");
 	if (core->win)
+	{
+		if (core->layers && ((t_layer *)core->layers)->next)
+			mlxge_destroy_layers(WINDOW_LAYER, ((t_layer *)core->layers)->next);
 		mlxge_destroy_window(core->mlx, core->win);
+	}
 	mlxge_log(DEBUG, "Destroying application...");
 	if (core->app_destructor)
 		core->app_destructor(core->app_ptr);
