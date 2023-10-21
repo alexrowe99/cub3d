@@ -6,6 +6,7 @@
 *.ko
 *.obj
 *.elf
+**/**.o
 
 # Linker output
 *.ilk
@@ -27,6 +28,7 @@
 *.so
 *.so.*
 *.dylib
+**shared**
 
 # Executables
 *.exe

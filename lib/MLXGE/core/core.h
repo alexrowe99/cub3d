@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 11:10:17 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/13 11:58:33 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/19 19:12:54 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,19 @@
 # include <dimensions.h>
 # include <images.h>
 
-# ifndef BUILD_OS
-#  define BUILD_OS 1
-# endif
+# define OS_MacOS 1
+# define OS_Linux 2
+
+// # ifndef BUILD_OS
+// #  define BUILD_OS OS_Linux
+// # endif
 # ifdef BUILD_OS
-#  if BUILD_OS == 1
-#   define OS_MacOS 1
+#  if BUILD_OS == OS_MacOS
 # 	include <macos_keycodes.h>
 # 	include <../lib/mlx/macos/mlx.h>
 void	mlxge_center_window(void *win_ptr);
 void	mlxge_get_window_dimensions(void *win_ptr, int *win_w, int *win_h);
-#  elif BUILD_OS == 2
-#   define OS_Linux 1
+#  elif BUILD_OS == OS_Linux
 # 	include <linux_keycodes.h>
 # 	include <../lib/mlx/linux/mlx.h>
 #  else
@@ -95,7 +96,7 @@ int				mlxge_destroy(void);
 
 struct s_mlxge_window
 {
-	void			*id_ptr; // Could potentiallly make a list of windows and implement a manager.
+	void			*id_ptr; // Could potentially make a list of windows and implement a manager.
 	t_dimensions	dim;
 	void			*img;
 	void			*layer;
@@ -105,26 +106,27 @@ int				mlxge_create_window(int width, int height, char *title, bool centered);
 void			*mlxge_window_layer(void *on_update, void *mlx_img_ptr);
 void			mlxge_destroy_window(void *mlx_ptr, void *win_ptr);
 int				mlxge_update(void);
+void			mlxge_push_layer(t_layer *layer);
 
 // -----------------------------------------------------------------------------
 
-// ----- Images ----------------------------------------------------------------
-
+// ----- Viewport --------------------------------------------------------------
 
 
 // -----------------------------------------------------------------------------
 
 // ----- Typedefs --------------------------------------------------------------
 
-typedef int(*t_on_update)(struct s_layer_list *);
+typedef int(*t_on_update)(struct s_layer_list *, double);
 typedef struct s_layer_list	t_layer;
 typedef t_event_list		t_event;
 typedef t_image				t_frame;
 
 void			*mlxge_new_key_event(int type, int code, int (*funct)(),
-						void *param);
+					void *param);
 void			*mlxge_load_events_layers(t_layer **layers);
 int				mlxge_render(t_layer *layers);
+void			mlxge_fill(void *img_ptr, uint32_t colour_rgb);
 
 // -----------------------------------------------------------------------------
 

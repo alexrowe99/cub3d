@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:19:55 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/13 11:50:52 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/16 09:41:56 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,12 @@ static bool	check_map_enclosed(t_cub3d *app)
 	if (!check.grid)
 		return (!cub3d_error("Something unexpected happened"));
 	valid = false;
-	check.dim = app->m_dim;
-	check.visited = ft_calloc(app->m_dim.height * app->m_dim.width + 1, sizeof(bool));
+	check.dim = app->map_dim;
+	check.visited = ft_calloc(app->map_dim.height * app->map_dim.width + 1, sizeof(bool));
 	if (check.visited)
 	{
-		valid = validate_map_floodfill(&check, app->player.spawn, '1');
+		valid = validate_map_floodfill(&check, v2d_to_v2i(app->player.pos),
+				'1');
 		if (!valid)
 			cub3d_error("Invalid parse: Map is not enclosed by wall tiles");
 		free(check.visited);
@@ -95,25 +96,25 @@ static char	**populate_map_tiles(char **data, t_dimensions dim)
 	return (tiles);
 }
 
-static bool	validate_store_player_spawn(t_cub3d *app, t_dimensions m_dim)
+static bool	validate_store_player_spawn(t_cub3d *app, t_dimensions map_dim)
 {
 	bool	has_spawn;
 	bool	spawn_found;
 
 	has_spawn = false;
-	while (--m_dim.height)
+	while (--map_dim.height)
 	{
-		m_dim.width = -1;
-		while (++m_dim.width < app->m_dim.width)
+		map_dim.width = -1;
+		while (++map_dim.width < app->map_dim.width)
 		{
-			spawn_found = is_spawn_tile(app->map_tiles[m_dim.height][m_dim.width],
+			spawn_found = is_spawn_tile(app->map_tiles[map_dim.height][map_dim.width],
 					&app->player);
 			if (spawn_found && has_spawn)
 				return (!cub3d_error("Invalid parse: Multiple spawn points "\
 						"detected in map file"));
 			else if (spawn_found && !has_spawn)
 			{
-				app->player.spawn = v2i(m_dim.width, m_dim.height);
+				app->player.pos = v2d(map_dim.width, map_dim.height);
 				has_spawn = true;
 			}
 		}
@@ -130,20 +131,20 @@ bool	parse_map_tiles(t_file *m_file, t_cub3d *app)
 	int		m_width;
 	bool	valid;
 
-	app->m_dim.height = m_file->line_count - m_file->it;
-	if (!app->m_dim.height)
+	app->map_dim.height = m_file->line_count - m_file->it;
+	if (!app->map_dim.height)
 		return (!cub3d_error("Invalid parse: There are no map tiles present"));
 	while (m_file->it != m_file->line_count)
 	{
 		if (!validate_map_tiles(m_file->contents[m_file->it]))
 			return (false);
 		m_width = ft_strlen(m_file->contents[m_file->it]);
-		if (app->m_dim.width < m_width)
-			app->m_dim.width = m_width;
+		if (app->map_dim.width < m_width)
+			app->map_dim.width = m_width;
 		m_file->it++;
 	}
-	offset = m_file->it - app->m_dim.height;
-	app->map_tiles = populate_map_tiles(&m_file->contents[offset], app->m_dim);
-	valid = app->map_tiles && validate_store_player_spawn(app, app->m_dim);
+	offset = m_file->it - app->map_dim.height;
+	app->map_tiles = populate_map_tiles(&m_file->contents[offset], app->map_dim);
+	valid = app->map_tiles && validate_store_player_spawn(app, app->map_dim);
 	return (valid && check_map_enclosed(app));
 }
