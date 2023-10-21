@@ -10,7 +10,7 @@ CORE_C_SRC = $(addprefix $(CORE_DIR)/, $(addsuffix .c, \
 SET_OS ?= $(shell uname)
 ifeq ($(SET_OS), Darwin)
 	BUILD_OS = -DBUILD_OS=1
-	MLX_BUILD_DIR = mlx/macos
+	MLX_BUILD_DIR = mlx/macos_swift
 else ifeq ($(SET_OS), Linux)
 	BUILD_OS = -DBUILD_OS=2
 	MLX_BUILD_DIR = mlx/linux

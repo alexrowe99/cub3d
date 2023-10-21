@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 10:39:11 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/19 14:22:07 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/21 15:59:43 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,42 +44,50 @@ struct s_mlxge	*get_mlxge_core(void)
 	return (core);
 }
 
-#include <time.h>
+#include <sys/time.h>
 
 struct s_mlxge_clock
 {
-	clock_t	now;
-	double	last_frame_time;
-	double	timestep_sec;
+	struct timeval	start;
+    struct timeval	end;
+	double			current_time;
+	double			new_time;
+	double			frame_time;
 };
 
-struct s_mlxge_clock	g_clock;
+struct s_mlxge_clock	g_clock = {{0}, {0}, 0.0f, 0.0f, 0.0f};
 
-// #include <stdio.h>
+double	t = 0.0f;
+double	dt = 1.0f/60.0f;
+
+static double	get_elapsed_sec(struct timeval s, struct timeval e)
+{
+	return ((e.tv_sec - s.tv_sec) + (e.tv_usec - s.tv_usec)/1000000.0);
+}
+
 int	mlxge_update(void)
 {
-	t_layer	**layers_list;
-	t_layer	*layers;
+	t_layer			**layers_list;
+	t_layer			*layers;
 
-	g_clock.now = clock();
-	g_clock.timestep_sec = ((double)(g_clock.now)/CLOCKS_PER_SEC) - g_clock.last_frame_time;
-	g_clock.last_frame_time = (double)(g_clock.now)/CLOCKS_PER_SEC;
-
-	// printf("Delta Seconds: %f\n", g_clock.timestep_sec);
-
-	// while (g_clock.timestep_sec < target)
-	// {
-		layers_list = &((t_layer *)get_mlxge_core()->layers)->next;
-		layers = *layers_list;
-		while (layers)
-		{
-			layers->on_update(layers, g_clock.timestep_sec);
-			layers = layers->next;
-		}
-	// 	g_clock.timestep_sec -= delta_time;
-	// }
+	gettimeofday(&g_clock.end, NULL);
+	g_clock.frame_time = get_elapsed_sec(g_clock.start, g_clock.end);
+	t += g_clock.frame_time;
+	if (t >= 1.0f)
+	{
+		fprintf(stdout, "\033[A\033[2K\rElapsed: %f | FPS: %i\n",
+			g_clock.frame_time, (int)(1.0f/g_clock.frame_time));
+		t = 0.0f;
+	}
+	gettimeofday(&g_clock.start, NULL);
+	layers_list = &((t_layer *)get_mlxge_core()->layers)->next;
+	layers = *layers_list;
+	while (layers)
+	{
+		layers->on_update(layers, g_clock.frame_time);
+		layers = layers->next;
+	}
 	mlxge_render(*layers_list);
-
 	return (0);
 }
 

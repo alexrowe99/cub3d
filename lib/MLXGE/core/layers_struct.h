@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 11:15:29 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/17 14:50:27 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/21 15:58:58 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ typedef struct s_layer_list
 {
 	bool				has_updated_images;
 	void				**event_list; // Point to the layer's event's - ?? Override polling for that input ??
-	int					(*on_update)(struct s_layer_list *, double timestep); // Will be passed a reference pointer to itself.
+	int					(*on_update)(struct s_layer_list *, double);//, double dt); // Will be passed a reference pointer to itself.
 	void				*frame;
 	void				*image_list;
 	struct s_layer_list	*next;

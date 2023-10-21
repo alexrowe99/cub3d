@@ -54,13 +54,13 @@ endif
 # ----- Build Rules ------------------------------------------------------------
 
 # 	all - Defaults to mandatory build.
-all: mandatory
+all: $(NAME)
+
+$(NAME): mandatory
 
 #	m - Builds the mandatory section.
-mandatory: $(NAME)
-
-$(NAME): $(MLXGE) $(MANDATORY_OBJ)
-	cc $(CFLAGS) $(MANDATORY_OBJ) $(DEF_OS) $(INC) $(LINK) -o $@ $(OSLINK)
+mandatory: $(MLXGE) $(MANDATORY_OBJ)
+	cc $(CFLAGS) $(MANDATORY_OBJ) $(DEF_OS) $(INC) $(LINK) -o $(NAME) $(OSLINK)
 
 $(MANDATORY_OBJ): %.o: %.c
 	cc $(CFLAGS) $(DEF_OS) $(INC) -o $@ -c $<

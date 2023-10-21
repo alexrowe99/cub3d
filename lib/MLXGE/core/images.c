@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   images.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 09:47:30 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/19 18:08:29 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/20 19:57:01 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,6 @@ void	mlxge_destroy_images(void *img_list_ptr)
 	while (img_list)
 	{
 		node = img_list;
-		mlxge_log(DEBUG, "------------------------------------------------------------");
-		mlxge_log(DEBUG, "IMAGE NODE = %p", node);
-		mlxge_log(DEBUG, "IMAGE Origin = (%i,%i)", node->orig.x, node->orig.y);
-		mlxge_log(DEBUG, "IMAGE Dimensions (%ix%i)", node->dim.width, node->dim.height);
-		mlxge_log(DEBUG, "IMAGE Mlx_ptr = %p", node->mlx_id);
-		mlxge_log(DEBUG, "IMAGE Buffer = %p", node->buff);
-		mlxge_log(DEBUG, "------------------------------------------------------------");
 		img_list = img_list->next;
 		if (!node->mlx_id)
 			free(node->buff);

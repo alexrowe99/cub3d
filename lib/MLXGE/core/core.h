@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 11:10:17 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/19 19:12:54 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/21 15:58:33 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@
 # ifdef BUILD_OS
 #  if BUILD_OS == OS_MacOS
 # 	include <macos_keycodes.h>
-# 	include <../lib/mlx/macos/mlx.h>
-void	mlxge_center_window(void *win_ptr);
-void	mlxge_get_window_dimensions(void *win_ptr, int *win_w, int *win_h);
+# 	include <../lib/mlx/macos_swift/mlx.h>
+// (SWIFT) REMOVE ME
+// # 	include <../lib/mlx/macos/mlx.h>
+// void	mlxge_center_window(void *win_ptr);
+// void	mlxge_get_window_dimensions(void *win_ptr, int *win_w, int *win_h);
 #  elif BUILD_OS == OS_Linux
 # 	include <linux_keycodes.h>
 # 	include <../lib/mlx/linux/mlx.h>
@@ -102,7 +104,9 @@ struct s_mlxge_window
 	void			*layer;
 };
 
-int				mlxge_create_window(int width, int height, char *title, bool centered);
+// (SWIFT) REMOVE ME
+// int				mlxge_create_window(int width, int height, char *title, bool centered);
+int				mlxge_create_window(int width, int height, char *title);
 void			*mlxge_window_layer(void *on_update, void *mlx_img_ptr);
 void			mlxge_destroy_window(void *mlx_ptr, void *win_ptr);
 int				mlxge_update(void);
@@ -117,7 +121,7 @@ void			mlxge_push_layer(t_layer *layer);
 
 // ----- Typedefs --------------------------------------------------------------
 
-typedef int(*t_on_update)(struct s_layer_list *, double);
+typedef int(*t_on_update)(struct s_layer_list *, double);//, double);
 typedef struct s_layer_list	t_layer;
 typedef t_event_list		t_event;
 typedef t_image				t_frame;
