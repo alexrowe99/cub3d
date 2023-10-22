@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 10:33:59 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/22 13:29:38 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/22 20:05:43 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <core.h>
 #include <render.h>
 
-static int	sign(int val)
+static inline int	sign(int val)
 {
 	return ((val > 0) - (val < 0));
 }
 
-static void	swap(int *v1, int *v2)
+static inline void	swap(int *v1, int *v2)
 {
 	int	tmp;
 
@@ -27,7 +27,7 @@ static void	swap(int *v1, int *v2)
 	*v2 = tmp;
 }
 
-static bool	mlxge_normalise_quad(t_v2i img_origin, t_dimensions img_size,
+static inline bool	mlxge_normalise_quad(t_v2i img_origin, t_dimensions img_size,
 						t_dimensions quad_size, t_normalised_quad *quad)
 {
 	if (!img_size.width || !img_size.height)
@@ -57,73 +57,35 @@ static bool	mlxge_normalise_quad(t_v2i img_origin, t_dimensions img_size,
 	return (true);
 }
 
-static uint32_t	*set_pixels(t_frame *frame, uint32_t *img_buff,
-					t_v2i img_origin, t_dimensions img_size)
+uint32_t	*set_pixels(t_frame *frame, uint32_t *img_buff, t_v2i img_origin,
+				t_dimensions img_size)
 {
-	int				colour;
-	t_v2i			offset;
-	int				x;
-	int				y;
-
+	int					colour;
+	t_v2i				offset;
+	t_v2i				p;
 	t_normalised_quad	render_quad;
 
 	if (!mlxge_normalise_quad(img_origin, img_size, frame->dim, &render_quad))
 		return ((void *)0);
-	// fprintf(stderr, "-------------------------------------------------------\n");
-	// fprintf(stderr, "Frame : %ix%i ; origin : (X = %i, Y = %i)\n", frame->dim.width, frame->dim.height, frame->orig.x, frame->orig.y);
-	// fprintf(stderr, "Image : %ix%i ; origin : (X = %i, Y = %i)\n", img_size.width, img_size.height, img_origin.x, img_origin.y);
-	// fprintf(stderr, "\n");
-	// fprintf(stderr, "RenderQuad : OrigStart (X = %i, Y = %i) ; OrigEnd : (X = %i, Y = %i)\n", render_quad.old_start.x, render_quad.old_start.y, render_quad.old_end.x, render_quad.old_end.y);
-	// fprintf(stderr, "RenderQuad : Start (X = %i, Y = %i) ; End : (X = %i, Y = %i)\n", render_quad.start.x, render_quad.start.y, render_quad.end.x, render_quad.end.y);
-	// fprintf(stderr, "\n");
-	y = render_quad.start.y - 1;
-	while (++y <= render_quad.end.y)
+	p.y = render_quad.start.y - 1;
+	while (++p.y <= render_quad.end.y)
 	{
-		x = render_quad.start.x - 1;
-		while (++x <= render_quad.end.x)
+		p.x = render_quad.start.x - 1;
+		while (++p.x <= render_quad.end.x)
 		{
 			offset = (t_v2i){
-				.x = x - render_quad.old_start.x,
-				.y = y - render_quad.old_start.y
+				.x = p.x - render_quad.old_start.x,
+				.y = p.y - render_quad.old_start.y
 			};
-			// if (offset.x == 0 && offset.y == 0)
-			// {
-			// 	fprintf(stderr, "Image Buff Index: (%i x %i + %i) = %i\n", offset.y, img_size.width, offset.x, offset.y * img_size.width + offset.x);
-			// 	fprintf(stderr, "Frame Buff Index: (%i x %i + %i) = %i\n", y, frame->dim.width, x, y * frame->dim.width + x);
-			// }
 			colour = (int)img_buff[offset.y * img_size.width + offset.x];
 			if (colour != (int)0xFF000000)
-				frame->buff[y * frame->dim.width + x] = colour;
+				frame->buff[p.y * frame->dim.width + p.x] = colour;
 		}
 	}
-	// fprintf(stderr, "\n");
-	// fprintf(stderr, "Image Buff Index: (%i x %i + %i) = %i\n", offset.y, img_size.width, offset.x, offset.y * img_size.width + offset.x);
-	// fprintf(stderr, "Frame Buff Index: (%i x %i + %i) = %i\n", y - 1, frame->dim.width, x - 1, (y - 1) * frame->dim.width + (x - 1));
-	// fprintf(stderr, "-------------------------------------------------------\n\n");
-	
-	// y = -1;
-	// while (++y < img_size.height)
-	// {
-	// 	offset.y = y + img_origin.y;
-	// 	if (offset.y >= 0 && offset.y < frame->dim.height)
-	// 	{
-	// 		x = -1;
-	// 		while (++x < img_size.width)
-	// 		{
-	// 			offset.x = x + img_origin.x;
-	// 			if (offset.x >= 0 && offset.x < frame->dim.width)
-	// 			{
-	// 				colour = (int)img_buff[y * img_size.width + x];
-	// 				if (colour != (int)0xFF000000)
-	// 					frame->buff[offset.y * frame->dim.width + offset.x] = colour;
-	// 			}
-	// 		}	
-	// 	}
-	// }
 	return (frame->buff);
 }
 
-static void	redraw_frame(t_frame *frame, t_image *img_list, t_viewport *viewport)
+void	redraw_frame(t_frame *frame, t_image *img_list, t_viewport *viewport)
 {
 	t_image	*img;
 	t_v2i	project;
@@ -144,49 +106,6 @@ static void	redraw_frame(t_frame *frame, t_image *img_list, t_viewport *viewport
 			return ;
 		img = img->next;
 	}
-}
-
-static inline t_frame	*clear_render_frame(void *mlx_ptr, struct s_mlxge_window *win)
-{
-	int		ctx[3];
-	t_frame	*render;
-
-	render = (t_frame *)((t_layer *)win->layer)->frame;
-	mlx_destroy_image(mlx_ptr, win->img);
-	win->img = mlx_new_image(mlx_ptr, win->dim.width, win->dim.height);
-	if (!win->img)
-	{
-		mlxge_log(ERROR, "Couldn't clear render frame beacause : "\
-			"MiniLibX couldn't create a new image");
-		mlxge_destroy();
-	}
-	render->mlx_id = win->img;
-	render->buff = (uint32_t *)mlx_get_data_addr(win->img, &ctx[0], &ctx[1],
-					&ctx[2]);
-	mlxge_fill(render->buff, 0xFF000000);
-	return (render);
-}
-
-int	mlxge_render(t_layer *layers)
-{
-	struct s_mlxge			*core;
-	struct s_mlxge_window	*win;
-	t_frame					*render;
-	t_frame					*layer_frame;
-
-	core = get_mlxge_core(); 
-	win = core->win;
-	render = clear_render_frame(core->mlx, win);
-	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, render->mlx_id);
-	while (layers)
-	{
-		layer_frame = (t_frame *)layers->frame;
-		redraw_frame(layer_frame, layers->image_list, 0);
-		set_pixels(render, layer_frame->buff, layer_frame->orig, layer_frame->dim);
-		layers = layers->next;
-	}
-	mlx_put_image_to_window(core->mlx, win->id_ptr, render->mlx_id, 0, 0);
-	return (mlx_sync(MLX_SYNC_WIN_FLUSH_CMD, win->id_ptr));
 }
 
 // ----- API -------------------------------------------------------------------
