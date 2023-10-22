@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 10:33:59 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/17 19:21:33 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/22 13:29:38 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ static void	redraw_frame(t_frame *frame, t_image *img_list, t_viewport *viewport
 	t_v2i	project;
 
 	img = img_list;
+	mlxge_fill(frame, frame->bg_colour);
 	while (img)
 	{
 		project = (t_v2i){.x = img->orig.x, .y = img->orig.y};
@@ -145,6 +146,27 @@ static void	redraw_frame(t_frame *frame, t_image *img_list, t_viewport *viewport
 	}
 }
 
+static inline t_frame	*clear_render_frame(void *mlx_ptr, struct s_mlxge_window *win)
+{
+	int		ctx[3];
+	t_frame	*render;
+
+	render = (t_frame *)((t_layer *)win->layer)->frame;
+	mlx_destroy_image(mlx_ptr, win->img);
+	win->img = mlx_new_image(mlx_ptr, win->dim.width, win->dim.height);
+	if (!win->img)
+	{
+		mlxge_log(ERROR, "Couldn't clear render frame beacause : "\
+			"MiniLibX couldn't create a new image");
+		mlxge_destroy();
+	}
+	render->mlx_id = win->img;
+	render->buff = (uint32_t *)mlx_get_data_addr(win->img, &ctx[0], &ctx[1],
+					&ctx[2]);
+	mlxge_fill(render->buff, 0xFF000000);
+	return (render);
+}
+
 int	mlxge_render(t_layer *layers)
 {
 	struct s_mlxge			*core;
@@ -154,23 +176,17 @@ int	mlxge_render(t_layer *layers)
 
 	core = get_mlxge_core(); 
 	win = core->win;
-	render = (t_frame *)((t_layer *)win->layer)->frame;
-	ft_bzero(render->buff, win->dim.width * win->dim.height * sizeof(uint32_t));
+	render = clear_render_frame(core->mlx, win);
+	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, render->mlx_id);
 	while (layers)
 	{
 		layer_frame = (t_frame *)layers->frame;
-		if (layers->has_updated_images)
-		{
-			ft_bzero(layer_frame->buff, layer_frame->dim.width * layer_frame->dim.height * sizeof(uint32_t));
-			redraw_frame(layer_frame, layers->image_list, layers->viewport);
-			layers->has_updated_images = false;
-		}
+		redraw_frame(layer_frame, layers->image_list, 0);
 		set_pixels(render, layer_frame->buff, layer_frame->orig, layer_frame->dim);
 		layers = layers->next;
 	}
-	// mlxge_log(INFO, "Image Rendered!");
-	// mlxge_destroy();
-	return (mlx_put_image_to_window(core->mlx, win->id_ptr, win->img, 0, 0));
+	mlx_put_image_to_window(core->mlx, win->id_ptr, render->mlx_id, 0, 0);
+	return (mlx_sync(MLX_SYNC_WIN_FLUSH_CMD, win->id_ptr));
 }
 
 // ----- API -------------------------------------------------------------------

@@ -2,7 +2,7 @@ NAME = libmlxge.a
 
 CORE_DIR = core
 CORE_C_SRC = $(addprefix $(CORE_DIR)/, $(addsuffix .c, \
- log vector dimensions core window layers images events frame key_input render \
+ log vector dimensions core window layers images events frame render \
 ))
 
 # BUILD_OS =

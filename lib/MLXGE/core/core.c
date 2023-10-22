@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 10:39:11 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/21 15:59:43 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/22 13:07:45 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,8 @@ static void	core_init_mlx(struct s_mlxge *core)
 		free(core);
 		exit(1);
 	}
-	/* 
-		Seems to be a bug with the API - Modified mlx window constructor to setKeyRepeat:0 (OFF)
-		mlx_do_key_autorepeatoff(core->mlx);
- 	*/
+	//	Seems to be a bug with the API - Modified mlx window constructor to setKeyRepeat:0 (OFF)
+	//		mlx_do_key_autorepeatoff(core->mlx);
 }
 
 struct s_mlxge	*get_mlxge_core(void)
@@ -53,12 +51,13 @@ struct s_mlxge_clock
 	double			current_time;
 	double			new_time;
 	double			frame_time;
+	double			accumulator;
 };
 
-struct s_mlxge_clock	g_clock = {{0}, {0}, 0.0f, 0.0f, 0.0f};
+struct s_mlxge_clock	g_clock = {{0}, {0}, 0.0f, 0.0f, 0.0f, 0.0f};
 
-double	t = 0.0f;
-double	dt = 1.0f/60.0f;
+double			t = 0.0f;
+const double	dt = 1.0f/60.0f;
 
 static double	get_elapsed_sec(struct timeval s, struct timeval e)
 {
@@ -72,7 +71,6 @@ int	mlxge_update(void)
 
 	gettimeofday(&g_clock.end, NULL);
 	g_clock.frame_time = get_elapsed_sec(g_clock.start, g_clock.end);
-	t += g_clock.frame_time;
 	if (t >= 1.0f)
 	{
 		fprintf(stdout, "\033[A\033[2K\rElapsed: %f | FPS: %i\n",
@@ -80,15 +78,23 @@ int	mlxge_update(void)
 		t = 0.0f;
 	}
 	gettimeofday(&g_clock.start, NULL);
-	layers_list = &((t_layer *)get_mlxge_core()->layers)->next;
-	layers = *layers_list;
-	while (layers)
-	{
-		layers->on_update(layers, g_clock.frame_time);
-		layers = layers->next;
-	}
+	// while (g_clock.frame_time > 0.0f)
+	// {
+		// double	delta_time = dt;
+		// if (g_clock.frame_time < delta_time)
+		// 	delta_time = g_clock.frame_time;
+		layers_list = &((t_layer *)get_mlxge_core()->layers)->next;
+		layers = *layers_list;
+		while (layers)
+		{
+			layers->on_update(layers);//, delta_time);
+			layers = layers->next;
+		}
+		// g_clock.frame_time -= delta_time;
+		t += g_clock.frame_time;
+	// }
 	mlxge_render(*layers_list);
-	return (0);
+	return (1);
 }
 
 // ----- API -------------------------------------------------------------------
@@ -132,6 +138,7 @@ int	mlxge_run(void)
 		return (mlxge_destroy());
 	}
 	mlxge_set_mlx_event_hooks(core->win->id_ptr, core->event_layer);
+	gettimeofday(&g_clock.start, NULL);
 	return (mlx_loop(core->mlx));
 }
 

@@ -38,6 +38,7 @@ public class MlxMain {
 	{
 		NSApp.setActivationPolicy(NSApplication.ActivationPolicy.regular)
 	}
+    NSApp.activate(ignoringOtherApps: true)
 
 	device = MTLCreateSystemDefaultDevice()!
 	loopParam = UnsafeMutableRawPointer(&inLoop)  /// dummy addr init

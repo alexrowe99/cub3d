@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 09:47:30 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/20 19:57:01 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/21 17:13:44 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,7 @@ void	*mlxge_new_image(void **img_list_ptr, int orig_x, int orig_y,
 			mlxge_destroy_images(img);
 			return ((void *)img);
 		}
-		img->buff[bytes] = 0;
-		while (bytes--)
-			img->buff[bytes] = (int)0xFF000000;
+		mlxge_set_bg_colour(img, 0xFF000000);
 		push_image_list_back(img, (t_image **)img_list_ptr);
 	}
 	return ((void *)img);
@@ -148,4 +146,10 @@ void	mlxge_image_translate(void *img_ptr, int offset_x, int offset_y)
 
 	img_orig = ((t_image *)img_ptr)->orig;
 	((t_image *)img_ptr)->orig = (t_v2i){.x=img_orig.x+offset_x, .y=img_orig.y+offset_y};
+}
+
+void	mlxge_set_bg_colour(void *img_ptr, int colour_rgb)
+{
+	((t_image *)img_ptr)->bg_colour = colour_rgb;
+	mlxge_fill(img_ptr, colour_rgb);
 }

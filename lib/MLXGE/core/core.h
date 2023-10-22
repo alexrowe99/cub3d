@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 11:10:17 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/21 15:58:33 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/22 13:08:15 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@
 # define OS_MacOS 1
 # define OS_Linux 2
 
-// # ifndef BUILD_OS
-// #  define BUILD_OS OS_Linux
-// # endif
+# ifndef BUILD_OS
+#  define BUILD_OS OS_MacOS
+# endif
 # ifdef BUILD_OS
 #  if BUILD_OS == OS_MacOS
 # 	include <macos_keycodes.h>
@@ -121,7 +121,7 @@ void			mlxge_push_layer(t_layer *layer);
 
 // ----- Typedefs --------------------------------------------------------------
 
-typedef int(*t_on_update)(struct s_layer_list *, double);//, double);
+typedef int(*t_on_update)(struct s_layer_list *);//, double);//, double);
 typedef struct s_layer_list	t_layer;
 typedef t_event_list		t_event;
 typedef t_image				t_frame;
