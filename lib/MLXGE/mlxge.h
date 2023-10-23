@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 10:31:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/19 19:12:40 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/21 17:15:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 
 # define OS_MacOS 1
 # define OS_Linux 2
-// # ifndef BUILD_OS
-// #  define BUILD_OS OS_Linux
-// # endif
+# ifndef BUILD_OS
+#  define BUILD_OS OS_MacOS
+# endif
 # ifdef BUILD_OS
 #  if BUILD_OS == OS_MacOS
 # 	include <core/macos_keycodes.h>
@@ -36,7 +36,7 @@
 void			mlxge_init(void *app_ptr, int (*app_destructor)(void *app_ptr));
 
 // Pass -width & -height for fullscreen titled window.
-int				mlxge_create_window(int width, int height, char *title, bool centered);
+int				mlxge_create_window(int width, int height, char *title);
 t_dimensions	mlxge_window_dimensions(void);
 
 void			*mlxge_new_layer(int frame_width, int frame_height, void *on_update);
@@ -49,6 +49,7 @@ void			mlxge_push_event(void *event_ptr, void **event_list_ptr);
 // Pushes image to front of image list.
 void			*mlxge_new_image(void **img_list_ptr, int orig_x, int orig_y,
 					int size_x, int size_y);
+void			mlxge_set_bg_colour(void *img_ptr, int colour_rgb);
 
 int				mlxge_key_down(int keycode);
 int				mlxge_key_up(int keycode);

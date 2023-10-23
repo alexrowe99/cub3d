@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   layers.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 11:01:00 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/19 17:48:37 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/21 16:31:03 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static void	*mlxge_create_new_layer(int frame_width, int frame_height, void *on_
 			.event_list = mlxge_new_event_list(),
 			.on_update = (t_on_update)on_update,
 			.image_list = (void *)0,
-			.viewport = (void *)0,
+			// .viewport = (void *)0,
 			.next = (void *)0,
 		};
 		if (!layer->event_list)

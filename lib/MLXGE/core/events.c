@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 20:52:17 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/19 18:16:25 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/21 17:21:43 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static int	handle_events(int code, t_event_layer *list, int event_type)
 		{
 			if (event->code == code)
 			{
-				mlxge_log(DEBUG, "Handling Event....");
+				// mlxge_log(DEBUG, "Handling Event....");
 				event->handle_event(event->event_param);
 			}
 			event = event->next;

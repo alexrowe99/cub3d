@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/13 09:22:27 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/19 19:13:02 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/21 17:09:49 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ struct s_mlxge_image_list
 	t_v2i						orig;
 	t_dimensions				dim;
 	uint32_t					*buff;
+	uint32_t					bg_colour;
 	// bool						updated;
 	// void						(*redraw_image)(struct s_mlxge_image_list *);
 	struct s_mlxge_image_list	*next;
