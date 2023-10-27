@@ -48,7 +48,7 @@ BUILD_OS = SET_OS=$(SET_OS)
 
 DEBUG =
 ifeq ($(DEBUG),1)
-	CFLAGS += -g -fsanitize=address
+	CFLAGS += -g #-fsanitize=address
 endif
 
 # ----- Build Rules ------------------------------------------------------------
@@ -90,3 +90,7 @@ fclean: clean
 	make -C lib/MLXGE fclean
 
 re: fclean all
+
+norm:
+	norminette src
+	make -C lib/MLXGE norm

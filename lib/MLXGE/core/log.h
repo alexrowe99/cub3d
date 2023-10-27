@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render.h                                           :+:      :+:    :+:   */
+/*   log.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 09:20:02 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 21:03:00 by lmells           ###   ########.fr       */
+/*   Created: 2023/10/25 10:00:24 by lmells            #+#    #+#             */
+/*   Updated: 2023/10/25 10:14:15 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RENDER_H
-# define RENDER_H
+#ifndef LOG_H
+# define LOG_H
 
-# include "layers.h"
+# define PREF_INFO "\e[0;92m"
+# define PREF_DEBUG "\e[0;96m"
+# define PREF_WARNING "\e[0;93m"
+# define PREF_ERROR "\e[0;91m"
 
-void		mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers);
-void		mlxge_fill(t_img_quad *image, uint32_t colour_argb);
-t_img_quad	*set_pixels(t_img_quad *frame, t_img_quad *image);
+enum e_log_levels
+{
+	INFO,
+	DEBUG,
+	WARNING,
+	ERROR,
+	COUNT_LOG_LEVELS
+};
+
+void	mlxge_log(enum e_log_levels lvl, const char *format, ...);
 
 #endif

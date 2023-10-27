@@ -5,37 +5,37 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/04 10:57:50 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/04 11:35:52 by lmells           ###   ########.fr       */
+/*   Created: 2023/10/25 09:57:48 by lmells            #+#    #+#             */
+/*   Updated: 2023/10/25 11:23:08 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <core.h>
 
-static struct s_mlxge_log	*logger(void)
+static inline void	get_log_prefix(int lvl, char **prefix)
 {
-	static struct s_mlxge_log	logger;
-
-	if (!logger.init)
-	{
-		logger = (struct s_mlxge_log){
-			.prefix = {PREF_INFO, PREF_DBG, PREF_WARN, PREF_ERR, PREF_FATAL},
-			.init = true
-		};
-	}
-	return (&logger);
+	if (lvl == INFO)
+		*prefix = PREF_INFO"{ MLXGE_INFO }";
+	else if (lvl == DEBUG)
+		*prefix = PREF_DEBUG"{ MLXGE_DEBUG }";
+	else if (lvl == WARNING)
+		*prefix = PREF_WARNING"{ MLXGE_WARNING }";
+	else if (lvl == ERROR)
+		*prefix = PREF_ERROR"{ MLXGE_ERROR }";
 }
 
-void	mlxge_log(int lvl, const char *fmt, ...)
+void	mlxge_log(enum e_log_levels lvl, const char *format, ...)
 {
-	char	*message;
-	va_list	vargs;
+	va_list	ap;
+	char	*fmt_output;
+	char	*log_prefix;
 
-	message = NULL;
-	va_start(vargs, fmt);
-	if (ft_vasprintf(&message, fmt, vargs) < 0)
-		exit(fprintf(stderr, PREF_FATAL" : LOG FAILURE... EXITING PROCESS!"NL));
-	va_end(vargs);
-	ft_printf("%s\t: %s"NL, logger()->prefix[lvl], message);
-	free(message);
+	fmt_output = 0;
+	log_prefix = 0;
+	va_start(ap, format);
+	ft_vasprintf(&fmt_output, format, ap);
+	va_end(ap);
+	get_log_prefix(lvl, &log_prefix);
+	ft_printf("%s\e[0m: %s.\n", log_prefix, fmt_output);
+	free(fmt_output);
 }

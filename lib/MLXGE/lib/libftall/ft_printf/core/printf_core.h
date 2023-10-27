@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   printf_core.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:13:08 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/11 09:37:56 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/27 21:09:59 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,12 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-# if defined(unix) || defined(__unix) || defined(__unix__)
-#  include <stdint.h>
+# define OS_LINUX 2
+
+# ifdef BUILD_OS
+#  if BUILD_OS == OS_LINUX
+#   include <stdint.h>
+#  endif
 # endif
 
 typedef unsigned int	t_uint;

@@ -3,55 +3,80 @@
 /*                                                        :::      ::::::::   */
 /*   render_mac.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/22 19:56:39 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/22 20:09:25 by lmells           ###   ########.fr       */
+/*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
+/*   Updated: 2023/10/27 20:38:32 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <core.h>
 #include <render.h>
 
-static inline t_frame	*clear_render_frame(void *mlx_ptr, struct s_mlxge_window *win)
+static inline t_img_quad	*clear_layer_frame(t_img_quad *frame,
+								bool is_mlx_object)
 {
-	int		ctx[3];
-	t_frame	*render;
+	void	*mlx_instance;
 
-	render = (t_frame *)((t_layer *)win->layer)->frame;
-	mlx_destroy_image(mlx_ptr, win->img);
-	win->img = mlx_new_image(mlx_ptr, win->dim.width, win->dim.height);
-	if (!win->img)
+	if (is_mlx_object)
 	{
-		mlxge_log(ERROR, "Couldn't clear render frame beacause : "\
-			"MiniLibX couldn't create a new image");
-		mlxge_destroy();
+		mlx_instance = get_core()->mlx_inst_ptr;
+		if (frame->mlx_ptr)
+			mlx_destroy_image(mlx_instance, frame->mlx_ptr);
+		frame->mlx_ptr = mlx_new_image(mlx_instance, frame->size.width,
+				frame->size.height);
+		frame->buff = (uint32_t *)mlx_get_data_addr(frame->mlx_ptr,
+				&frame->ctx[0], &frame->ctx[1], &frame->ctx[2]);
 	}
-	render->mlx_id = win->img;
-	render->buff = (uint32_t *)mlx_get_data_addr(win->img, &ctx[0], &ctx[1],
-					&ctx[2]);
-	mlxge_fill(render, 0xFF000000);
-	return (render);
+	mlxge_fill(frame, frame->bg_colour);
+	return (frame);
 }
 
-int	mlxge_render(t_layer *layers)
+static inline void	update_viewports(t_img_quad *update_frame,
+						t_viewport *viewports)
 {
-	struct s_mlxge			*core;
-	struct s_mlxge_window	*win;
-	t_frame					*render;
-	t_frame					*layer_frame;
+	t_img_quad	*image;
 
-	core = get_mlxge_core(); 
-	win = core->win;
-	render = clear_render_frame(core->mlx, win);
-	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, render->mlx_id);
-	while (layers)
+	while (viewports)
 	{
-		layer_frame = (t_frame *)layers->frame;
-		redraw_frame(layer_frame, layers->image_list, 0);
-		set_pixels(render, layer_frame->buff, layer_frame->orig, layer_frame->dim);
-		layers = layers->next;
+		viewports->frame = clear_layer_frame(viewports->frame,
+				viewports->frame->is_mlx_object);
+		image = viewports->images_to_render;
+		while (image)
+		{
+			viewports->frame = set_pixels(viewports->frame, image);
+			image = image->next;
+		}
+		update_frame = set_pixels(update_frame, viewports->frame);
+		viewports = viewports->next;
 	}
-	mlx_put_image_to_window(core->mlx, win->id_ptr, render->mlx_id, 0, 0);
-	return (mlx_sync(MLX_SYNC_WIN_FLUSH_CMD, win->id_ptr));
+}
+
+void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
+{
+	t_img_quad	*image;
+	t_img_quad	*win_frame;
+
+	win_frame = clear_layer_frame(layers->frame, layers->frame->is_mlx_object);
+	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, win_frame->mlx_ptr);
+	while (layers->next)
+	{
+		layers = layers->next;
+		layers->frame = clear_layer_frame(layers->frame,
+				layers->frame->is_mlx_object);
+		if (layers->viewport_list)
+			update_viewports(layers->frame, layers->viewport_list);
+		else
+		{
+			image = layers->images_to_render;
+			while (image)
+			{
+				layers->frame = set_pixels(layers->frame, image);
+				image = image->next;
+			}
+		}
+		set_pixels(win_frame, layers->frame);
+	}
+	mlx_put_image_to_window(mlx_inst, mlx_win, win_frame->mlx_ptr, 0, 0);
+	mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, mlx_win);
 }

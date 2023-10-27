@@ -5,15 +5,15 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/10 09:55:36 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/10 10:37:00 by lmells           ###   ########.fr       */
+/*   Created: 2023/10/25 09:26:47 by lmells            #+#    #+#             */
+/*   Updated: 2023/10/27 21:49:32 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MACOS_KEYCODES_H
 # define MACOS_KEYCODES_H
 
-enum e_macos_keycodes
+enum e_keycodes
 {
 	KEY_A = 0,
 	KEY_S = 1,
