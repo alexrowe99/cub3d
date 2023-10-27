@@ -5,140 +5,107 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/05 11:01:00 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/21 16:31:03 by lmells           ###   ########.fr       */
+/*   Created: 2023/10/25 14:33:54 by lmells            #+#    #+#             */
+/*   Updated: 2023/10/27 19:14:57 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <core.h>
+#include <layers.h>
 
-static void 	push_event_layer_list_front(t_event_layer *layer, t_event_layer **list)
+#define ERR_LAY_CREAT "Failed to create a new MLXGE layer because"
+
+void	mlxge_destroy_layers(t_layer *list)
 {
-	t_event_layer	*head;
+	int			i;
+	t_layer		*node;
+	t_img_quad	*image;
 
-	head = *list;
-	if (head)
-		layer->next = head;
-	*list = layer;
-}
-
-static void 	push_window_layer_list_front(t_window_layer *layer, t_window_layer **list)
-{
-	t_window_layer	*head;
-
-	head = *list;
-	if (head)
-		layer->next = head;
-	*list = layer;
-}
-
-void	mlxge_destroy_layers(t_list_type type, void *layers)
-{
-	t_window_layer	*wlist[2];
-	t_event_layer	*elist[2];
-
-	if (type == EVENT_LAYER)
+	node = list;
+	while (node)
 	{
-		elist[0] = (t_event_layer *)layers;
-		while (elist[0])
+		list = list->next;
+		i = -1;
+		while (++i < COUNT_EVENT_TYPES)
+			mlxge_destroy_events(node->events[i]);
+		while (node->images_to_render)
 		{
-			elist[1] = elist[0]->next;
-			free(elist[0]);
-			elist[0] = elist[1];
+			image = node->images_to_render;
+			node->images_to_render = node->images_to_render->next;
+			mlxge_destroy_image_quad(image);
 		}
-		return ;
-	}
-	wlist[0] = (t_window_layer *)layers;
-	while (wlist[0])
-	{
-		wlist[1] = wlist[0]->next;
-		if (wlist[0]->event_list)
-			mlxge_destroy_events((t_event_list **)wlist[0]->event_list);
-		if (wlist[0]->image_list)
-		{
-			mlxge_log(DEBUG, "Destroying layer's image list");
-			mlxge_destroy_images(wlist[0]->image_list);
-		}
-		if (wlist[0]->frame)
-		{
-			mlxge_log(DEBUG, "Destroying layer's frame");
-			mlxge_destroy_images(wlist[0]->frame);
-		}
-		free(wlist[0]);
-		wlist[0] = wlist[1];
+		if (node->frame)
+			mlxge_destroy_image_quad(node->frame);
+		free(node);
+		node = list;
 	}
 }
 
-static void	*mlxge_create_new_layer(int frame_width, int frame_height, void *on_update,
-			void *mlx_img_ptr)
+static inline t_layer	*new_layer(void)
 {
 	t_layer	*layer;
 
-	layer = malloc(1 * sizeof(t_layer));
-	if (layer)
+	layer = ft_calloc(1, sizeof(t_layer));
+	if (!layer)
 	{
-		*layer = (t_layer){
-			.frame = mlxge_new_frame(0, 0, frame_width, frame_height, mlx_img_ptr),
-			.event_list = mlxge_new_event_list(),
-			.on_update = (t_on_update)on_update,
-			.image_list = (void *)0,
-			// .viewport = (void *)0,
-			.next = (void *)0,
-		};
-		if (!layer->event_list)
-		{
-			mlxge_log(ERROR, ERR_LAYER_FAIL" : Couldn't allocate memory for "\
-					"the layer's event list");
-			free(layer);
-			layer = (void *)0;
-		}
+		mlxge_log(ERROR, ERR_LAY_CREAT" : Couldn't allocate memory");
+		return ((void *)0);
 	}
-	return ((void *)layer);
+	return (layer);
 }
 
-void	*mlxge_window_layer(void *on_update, void *mlx_img_ptr)
+t_layer	*create_window_layer(int width, int height)
 {
-	t_dimensions	win;
+	t_layer	*win_layer;
 
-	win = get_mlxge_core()->win->dim;
-	return (mlxge_create_new_layer(win.width, win.height, on_update,
-		mlx_img_ptr));
-}
-
-void	mlxge_push_layer_list_front(t_list_type type, void *layer, void **list)
-{
-	if (type == EVENT_LAYER)
-		return (push_event_layer_list_front((t_event_layer *)layer,
-				(t_event_layer **)list));
-	if (type == WINDOW_LAYER)
-		return (push_window_layer_list_front((t_window_layer *)layer,
-				(t_window_layer **)list));
+	win_layer = new_layer();
+	if (!win_layer)
+		return ((void *)0);
+	win_layer->frame = mlxge_new_frame(0, 0, width, height, true);
+	if (!win_layer->frame)
+	{
+		mlxge_log(ERROR, ERR_LAY_CREAT" : Couldn't create MLXGE frame");
+		free(win_layer);
+		return ((void *)0);
+	}
+	return (win_layer);
 }
 
 // ----- API -------------------------------------------------------------------
 
-// Pass -frame_width & -frame_height to set the size to match the window
-void	*mlxge_new_layer(int frame_width, int frame_height, void *on_update)
+t_layer	*mlxge_new_layer(int origin_x, int origin_y, int width, int height,
+			int (*on_update)(t_layer *))
 {
-	if (frame_width < 0)
-		frame_width = get_mlxge_core()->win->dim.width;
-	if (frame_height < 0)
-		frame_height = get_mlxge_core()->win->dim.height;
-	return (mlxge_create_new_layer(frame_width, frame_height, on_update,
-			(void *)0));
+	t_layer	*layer;
+
+	layer = new_layer();
+	if (!layer)
+		return ((void *)0);
+	layer->on_update = on_update;
+	layer->frame = mlxge_new_frame(origin_x, origin_y, width, height, false);
+	if (!layer->frame)
+	{
+		mlxge_log(ERROR, ERR_LAY_CREAT" : Couldn't create MLXGE frame");
+		free(layer);
+		return ((void *)0);
+	}
+	return (layer);
 }
 
-void	mlxge_push_layer(t_layer *layer)
+int	mlxge_push_layer(t_layer *layer)
 {
-	t_layer	**layer_list;
+	t_layer	*node;
+	t_layer	**list;
 
-	layer_list = (t_layer **)&get_mlxge_core()->layers;
-	if (!*layer_list)
+	list = &get_core()->render_layers;
+	node = *list;
+	if (!node)
 	{
-		*layer_list = layer;
-		return ;
+		*list = layer;
+		return (1);
 	}
-	while ((*layer_list)->next)
-		*layer_list = (*layer_list)->next;
-	(*layer_list)->next = layer;
+	while (node->next)
+		node = node->next;
+	node->next = layer;
+	return (1);
 }

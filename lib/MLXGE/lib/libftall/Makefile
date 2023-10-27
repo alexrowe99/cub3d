@@ -27,11 +27,11 @@ PRINTF_OBJS = $(PRINTF_SRC:.c=.o)
 OBJS = $(LIBFT_OBJS) $(PRINTF_OBJS) $(GNL_OBJS)
 
 cc = cc
-cflags = -Wall -Werror -Wextra -O2
+cflags = -Wall -Werror -Wextra #-O2
 
 DEBUG=""
 ifeq ($(DEBUG), 1)
-	cflags += -g -fsanitize=address
+	cflags += -g #-fsanitize=address
 endif
 
 all: $(NAME)
