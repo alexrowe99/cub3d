@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 11:42:57 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/25 17:16:07 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/27 21:17:53 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,24 @@ enum e_key_input_types
 	RELEASE = 1
 };
 
+// MOUSE_PRESS = 3,
+// MOUSE_RELEASE,
+// MOUSE_MOVE,
 enum e_event_types
 {
 	KEY_PRESS,
 	KEY_RELEASE,
-	// MOUSE_PRESS,
-	// MOUSE_RELEASE,
-	// MOUSE_MOVE,
 	DESTROY,
 	COUNT_EVENT_TYPES
 };
 
+// ON_MOUSE_PRESS_EVENT = ??, (Look at harms-smits mlx docs)
+// ON_MOUSE_RELEASE_EVENT = ,
+// ON_MOUSE_MOVE_EVENT = ,
 enum e_mlx_event_codes
 {
 	ON_KEY_PRESS_EVENT = 2,
 	ON_KEY_RELEASE_EVENT = 3,
-	// ON_MOUSE_PRESS_EVENT = ,
-	// ON_MOUSE_RELEASE_EVENT = ,
-	// ON_MOUSE_MOVE_EVENT = ,
 	ON_DESTROY_EVENT = 17
 };
 

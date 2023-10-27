@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:33:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 19:14:57 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/27 20:37:13 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,16 @@ static inline t_layer	*new_layer(void)
 	return (layer);
 }
 
-t_layer	*create_window_layer(int width, int height)
+t_layer	*create_window_layer(t_dimensions size)
 {
+	t_v2i	origin;
 	t_layer	*win_layer;
 
 	win_layer = new_layer();
 	if (!win_layer)
 		return ((void *)0);
-	win_layer->frame = mlxge_new_frame(0, 0, width, height, true);
+	origin = (t_v2i){0, 0};
+	win_layer->frame = mlxge_new_frame(origin, size, true);
 	if (!win_layer->frame)
 	{
 		mlxge_log(ERROR, ERR_LAY_CREAT" : Couldn't create MLXGE frame");
@@ -73,7 +75,7 @@ t_layer	*create_window_layer(int width, int height)
 
 // ----- API -------------------------------------------------------------------
 
-t_layer	*mlxge_new_layer(int origin_x, int origin_y, int width, int height,
+t_layer	*mlxge_new_layer(t_v2i origin, t_dimensions size,
 			int (*on_update)(t_layer *))
 {
 	t_layer	*layer;
@@ -82,7 +84,7 @@ t_layer	*mlxge_new_layer(int origin_x, int origin_y, int width, int height,
 	if (!layer)
 		return ((void *)0);
 	layer->on_update = on_update;
-	layer->frame = mlxge_new_frame(origin_x, origin_y, width, height, false);
+	layer->frame = mlxge_new_frame(origin, size, false);
 	if (!layer->frame)
 	{
 		mlxge_log(ERROR, ERR_LAY_CREAT" : Couldn't create MLXGE frame");

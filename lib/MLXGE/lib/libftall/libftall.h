@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libftall.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 15:07:45 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/11 09:27:37 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/27 21:12:49 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@
 # include <unistd.h>
 # include <stdarg.h>
 
-# if defined(__unix__) || defined(unix) || defined(__unix)
-#  include <stdint.h>
+# define OS_LINUX 2
+# ifdef BUILD_OS
+#  if BUILD_OS == OS_LINUX
+#   include <stdint.h>
+#  endif
 # endif
 
 // libft

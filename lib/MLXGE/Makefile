@@ -2,7 +2,8 @@ NAME = libmlxge.a
 
 CORE_DIR = core
 CORE_C_SRC = $(addprefix $(CORE_DIR)/, $(addsuffix .c, \
- log core window events layers viewport image_quad draw output_ppm \
+ $(addprefix events/, events event_layers hooks key_event) \
+ log core window layers update viewport image_quad draw output_ppm \
 ))
 
 SET_OS ?= $(shell uname)
@@ -28,10 +29,10 @@ MLXGE_OBJS = $(CORE_C_OBJS)
 CC=cc -Wall -Werror -Wextra #-O2
 
 DEBUG =
-MODE =
+MODE = SET_OS=$(SET_OS)
 ifeq ($(DEBUG), 1)
 	CC += -g #-fsanitize=address
-	MODE = DEBUG=1
+	MODE += DEBUG=1
 endif
 
 all: $(NAME)
@@ -58,7 +59,7 @@ $(CORE_C_OBJS): %.o: %.c
 
 clean:
 	@echo lib/$(MLX_BUILD_DIR) lib/$(LIBALL_DIR)
-	rm -rf **/*.o $(NAME)
+	rm -rf **/*.o **/**/*.o $(NAME)
 
 fclean: clean
 	rm -rf lib/shared
@@ -68,4 +69,4 @@ fclean: clean
 re: fclean all
 
 norm:
-	norminette *.h core lib/libftall/**
+	norminette *.h core lib/libftall/**/*.[ch]

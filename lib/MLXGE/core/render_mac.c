@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 18:25:19 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/27 20:38:32 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,10 @@ static inline t_img_quad	*clear_layer_frame(t_img_quad *frame,
 		mlx_instance = get_core()->mlx_inst_ptr;
 		if (frame->mlx_ptr)
 			mlx_destroy_image(mlx_instance, frame->mlx_ptr);
-		frame->mlx_ptr = mlx_new_image(mlx_instance,
-								frame->size.width,
-								frame->size.height);
+		frame->mlx_ptr = mlx_new_image(mlx_instance, frame->size.width,
+				frame->size.height);
 		frame->buff = (uint32_t *)mlx_get_data_addr(frame->mlx_ptr,
-								&frame->ctx[0], &frame->ctx[1], &frame->ctx[2]);
+				&frame->ctx[0], &frame->ctx[1], &frame->ctx[2]);
 	}
 	mlxge_fill(frame, frame->bg_colour);
 	return (frame);
@@ -41,7 +40,7 @@ static inline void	update_viewports(t_img_quad *update_frame,
 	while (viewports)
 	{
 		viewports->frame = clear_layer_frame(viewports->frame,
-						viewports->frame->is_mlx_object);
+				viewports->frame->is_mlx_object);
 		image = viewports->images_to_render;
 		while (image)
 		{
@@ -64,7 +63,7 @@ void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 	{
 		layers = layers->next;
 		layers->frame = clear_layer_frame(layers->frame,
-						layers->frame->is_mlx_object);
+				layers->frame->is_mlx_object);
 		if (layers->viewport_list)
 			update_viewports(layers->frame, layers->viewport_list);
 		else

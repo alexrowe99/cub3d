@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:06:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 19:17:54 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/27 21:21:14 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 #  endif
 # endif
 
-
 # include <sys/time.h> // REMOVE ME ILLEGAL! Debugging purposes only... ;)
 
 # include <stdio.h>
@@ -41,6 +40,7 @@
 # include <layers.h>
 # include <events.h>
 # include <render.h>
+# include <vector.h>
 
 typedef struct s_global_time
 {
@@ -68,25 +68,25 @@ typedef struct s_mlxge_core
 }	t_mlxge;
 
 t_mlxge			*get_core(void);
-int				mlxge_on_update(t_layer *layers);
 void			mlxge_destroy(void);
 
-t_layer			*create_window_layer(int width, int height);
-t_layer			*mlxge_new_layer(int origin_x, int origin_y, int width,
-					int height, int (*on_update)(t_layer *));
+t_layer			*create_window_layer(t_dimensions size);
+t_layer			*mlxge_new_layer(t_v2i origin, t_dimensions size,
+					int (*on_update)(t_layer *));
 int				mlxge_push_layer(t_layer *layer);
 void			mlxge_destroy_layers(t_layer *list);
 
-t_img_quad		*mlxge_new_frame(int origin_x, int origin_y, int width,
-					int height, bool is_mlx_object);
-t_img_quad		*mlxge_new_image(int origin_x, int origin_y, int width,
-					int height);
-// void			mlxge_set_bg_colour(t_render_layer *layer);
+t_img_quad		*mlxge_new_frame(t_v2i origin, t_dimensions size,
+					bool is_mlx_object);
+t_img_quad		*mlxge_new_image(t_v2i origin, t_dimensions size);
 
 t_event_layer	*mlxge_load_event_layers(t_layer *render_list);
 void			mlxge_load_mlx_event_hooks(void *mlx_win_ptr,
 					t_event_layer *event_layers);
 void			mlxge_destroy_event_layers(t_event_layer *list);
+
+int				mlxge_handle_event(int code, t_event_layer *event_layers,
+					enum e_event_types type);
 
 void			mlxge_output_ppm(t_img_quad *image);
 

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:39:05 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 19:23:30 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/27 21:30:53 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ t_img_quad	*set_pixels(t_img_quad *frame, t_img_quad *image)
 	y = -1;
 	while (++y < image->size.height)
 	{
-		oy = y + image->oy;
+		oy = y + image->origin.y;
 		if (0 < oy && oy <= frame->size.height)
 		{
 			x = -1;
 			while (++x < image->size.width)
 			{
-				ox = x + image->ox;
+				ox = x + image->origin.x;
 				if (0 <= ox && ox < frame->size.width)
 				{
 					colour = image->buff[y * image->size.width + x];

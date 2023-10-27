@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:42:06 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 12:38:12 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/27 20:56:06 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,16 @@
 # include <stdlib.h>
 # include <stdbool.h>
 # include "dimensions.h"
+# include "vector.h"
 
 typedef struct s_image_quad_list
 {
-	int							ox;
-	int							oy;
-	int							ctx[3];
-	uint32_t					bg_colour;
+	t_v2i						origin;
 	t_dimensions				size;
+	uint32_t					bg_colour;
 	bool						is_mlx_object;
 	void						*mlx_ptr;
+	int							ctx[3];
 	uint32_t					*buff;
 	struct s_image_quad_list	*next;
 }	t_img_quad;
