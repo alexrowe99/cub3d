@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 20:08:49 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/28 20:34:12 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/29 00:02:03 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,27 @@ static inline void	put_pixel(t_img_quad *image, int x, int y, int colour)
 	*(unsigned int *)dst = colour;
 }
 
-t_img_quad	*set_pixels(t_img_quad *frame, t_img_quad *image)
+t_img_quad	*set_pixels(t_img_quad *frame, t_img_quad *image,
+				t_v2i img_origin)
 {
-	int	x;
-	int	y;
-	int	ox;
-	int	oy;
-	int	colour;
+	t_v2i	p;
+	t_v2i	offset;
+	int		colour;
 
-	y = -1;
-	while (++y < image->size.height)
+	p.y = -1;
+	while (++p.y < image->size.height)
 	{
-		oy = y + image->origin.y;
-		if (0 < oy && oy <= frame->size.height)
+		offset.y = p.y + img_origin.y;
+		if (0 < offset.y && offset.y <= frame->size.height)
 		{
-			x = -1;
-			while (++x < image->size.width)
+			p.x = -1;
+			while (++p.x < image->size.width)
 			{
-				ox = x + image->origin.x;
-				if (0 <= ox && ox < frame->size.width)
+				offset.x = p.x + img_origin.x;
+				if (0 <= offset.x && offset.x < frame->size.width)
 				{
-					colour = image->buff[y * image->size.width + x];
-					put_pixel(frame, ox, oy, colour);
+					colour = image->buff[p.y * image->size.width + p.x];
+					put_pixel(frame, offset.x, offset.y, colour);
 				}
 			}
 		}

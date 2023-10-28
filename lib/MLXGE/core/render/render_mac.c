@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 20:38:32 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/28 21:17:51 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static inline t_img_quad	*clear_layer_frame(t_img_quad *frame,
 static inline void	update_viewports(t_img_quad *update_frame,
 						t_viewport *viewports)
 {
+	t_v2i		projection;
 	t_img_quad	*image;
 
 	while (viewports)
@@ -44,10 +45,17 @@ static inline void	update_viewports(t_img_quad *update_frame,
 		image = viewports->images_to_render;
 		while (image)
 		{
-			viewports->frame = set_pixels(viewports->frame, image);
+			projection = image->origin;
+			if (viewports->camera)
+			{
+				projection = (t_v2i){projection.x + viewports->camera->offset.x,
+						projection.y + viewports->camera->offset.y};
+			}
+			viewports->frame = set_pixels(viewports->frame, image, projection);
 			image = image->next;
 		}
-		update_frame = set_pixels(update_frame, viewports->frame);
+		update_frame = set_pixels(update_frame, viewports->frame,
+				viewports->frame->origin);
 		viewports = viewports->next;
 	}
 }
@@ -71,11 +79,11 @@ void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 			image = layers->images_to_render;
 			while (image)
 			{
-				layers->frame = set_pixels(layers->frame, image);
+				layers->frame = set_pixels(layers->frame, image, image->origin);
 				image = image->next;
 			}
 		}
-		set_pixels(win_frame, layers->frame);
+		set_pixels(win_frame, layers->frame, layers->frame->origin);
 	}
 	mlx_put_image_to_window(mlx_inst, mlx_win, win_frame->mlx_ptr, 0, 0);
 	mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, mlx_win);

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:05:18 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/28 20:29:05 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/28 21:07:03 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,28 +34,29 @@
 # include <core/dimensions.h>
 # include <core/vector.h>
 
-void		mlxge_init(void *app_struct_ptr,
-				int (*destroy_app_struct_funct)(void *));
-void		mlxge_destroy(void);
-int			mlxge_run(void);
+void			mlxge_init(void *app_struct_ptr,
+					int (*destroy_app_struct_funct)(void *));
+void			mlxge_destroy(void);
+int				mlxge_run(void);
 
-int			mlxge_create_window(int width, int height, char *title);
+int				mlxge_create_window(int width, int height, char *title);
 
-t_layer		*mlxge_new_layer(t_v2i origin, t_dimensions size,
-				int (*on_update)(t_layer *));
-int			mlxge_push_layer(t_layer *layer);
+t_layer			*mlxge_new_layer(t_v2i origin, t_dimensions size,
+					int (*on_update)(t_layer *));
+int				mlxge_push_layer(t_layer *layer);
 
-t_event		*mlxge_new_key_event(enum e_key_input_types input, int keycode,
-				int (*handler)(void *param), void *param);
-void		mlxge_push_event(t_event *event, t_event **list);
+t_event			*mlxge_new_key_event(enum e_key_input_types input, int keycode,
+					int (*handler)(void *param), void *param);
+void			mlxge_push_event(t_event *event, t_event **list);
 
-t_viewport	*mlxge_new_viewport(t_viewport **list, t_v2i origin,
+t_viewport		*mlxge_new_viewport(t_viewport **list, t_v2i origin,
 				t_dimensions size);
+t_cam_ortho2d	*mlxge_new_camera_2d_orthographic(t_v2i offset);
 
-t_img_quad	*mlxge_new_image(t_img_quad **list, t_v2i origin,
-				t_dimensions size);
-void		mlxge_fill(t_img_quad *image, uint32_t colour);
-void		mlxge_draw_circle(t_img_quad *image, t_v2i center, int size,
-				uint32_t colour);
+t_img_quad		*mlxge_new_image(t_img_quad **list, t_v2i origin,
+					t_dimensions size);
+void			mlxge_fill(t_img_quad *image, uint32_t colour);
+void			mlxge_draw_circle(t_img_quad *image, t_v2i center, int size,
+					uint32_t colour);
 
 #endif

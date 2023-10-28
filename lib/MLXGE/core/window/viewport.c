@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:52:44 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 20:53:17 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/28 21:29:07 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,30 @@ static inline void	push_viewport_list_back(t_viewport *view, t_viewport **list)
 	node->next = view;
 }
 
+void	mlxge_destroy_viewports(t_viewport *viewport_list)
+{
+	t_img_quad	*image;
+	t_viewport	*node;
+
+	node = viewport_list;
+	while (node)
+	{
+		viewport_list = viewport_list->next;
+		if (node->camera)
+			free(node->camera);
+		if (node->images_to_render)
+		{
+			image = node->images_to_render;
+			node->images_to_render = node->images_to_render->next;
+			mlxge_destroy_image_quad(image);
+		}
+		if (node->frame)
+			mlxge_destroy_image_quad(node->frame);
+		free(node);
+		node = viewport_list;
+	}
+}
+
 // ----- API -------------------------------------------------------------------
 
 t_viewport	*mlxge_new_viewport(t_viewport **list, t_v2i origin,
@@ -60,4 +84,19 @@ t_viewport	*mlxge_new_viewport(t_viewport **list, t_v2i origin,
 	}
 	push_viewport_list_back(view, list);
 	return (view);
+}
+
+t_cam_ortho2d	*mlxge_new_camera_2d_orthographic(t_v2i offset)
+{
+	t_cam_ortho2d	*camera;
+
+	camera = malloc(sizeof(t_cam_ortho2d));
+	if (!camera)
+	{
+		mlxge_log(ERROR, "Failed to create a new MLXGE 2D orthographic camera "\
+			"because : Couldn't allocate memory");
+		return ((void *)0);
+	}
+	camera->offset = offset;
+	return (camera);
 }
