@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:05:18 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 20:32:40 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/28 20:29:05 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ void		mlxge_push_event(t_event *event, t_event **list);
 t_viewport	*mlxge_new_viewport(t_viewport **list, t_v2i origin,
 				t_dimensions size);
 
-void		mlxge_fill(t_img_quad *image, uint32_t colour_argb);
+t_img_quad	*mlxge_new_image(t_img_quad **list, t_v2i origin,
+				t_dimensions size);
+void		mlxge_fill(t_img_quad *image, uint32_t colour);
+void		mlxge_draw_circle(t_img_quad *image, t_v2i center, int size,
+				uint32_t colour);
 
 #endif

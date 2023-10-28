@@ -6,11 +6,18 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 12:53:03 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 21:46:27 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/28 20:58:54 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
+
+enum e_viewport_count
+{
+	DEBUG,
+	// GAME,
+	COUNT_VIEWS
+};
 
 static int	game_loop(t_layer *game_layer)
 {
@@ -18,19 +25,24 @@ static int	game_loop(t_layer *game_layer)
 	return (1);
 }
 
-typedef struct s_display_properties
+static inline bool	define_debug_scene(t_viewport *debug_view)
 {
-	t_v2i			origin;
-	t_dimensions	size;
-	double			aspect_ratio;
-}	t_properties;
+	int			circle_radius;
+	t_img_quad	*player;
 
-enum e_viewport_count
-{
-	DEBUG,
-	GAME,
-	COUNT_VIEWS
-};
+	circle_radius = 16;
+	player = mlxge_new_image(&debug_view->images_to_render,
+			(t_v2i){-circle_radius + 1, -circle_radius + 1},
+			(t_dimensions){circle_radius * 2, circle_radius * 2});
+	if (!player)
+		// || create_player_camera(&debug_view->camera, debug_view->frame.size))
+		return (false);
+	mlxge_fill(player, player->bg_colour);
+	mlxge_draw_circle(player, (t_v2i){circle_radius, circle_radius},
+			circle_radius, 0xFF0000);
+	debug_view->frame->bg_colour = 0x4C4C4C;
+	return (true);
+}
 
 static inline bool	define_viewports(t_layer *game_layer,
 						t_dimensions view_size)
@@ -41,17 +53,22 @@ static inline bool	define_viewports(t_layer *game_layer,
 	view_origin = (t_v2i){0, 0};
 	views[DEBUG] = mlxge_new_viewport(&game_layer->viewport_list,
 			view_origin, view_size);
-	if (!views[DEBUG])
+	if (!views[DEBUG] || !define_debug_scene(views[DEBUG]))
 		return (false);
-	view_origin.x = view_size.width + 1;
-	views[GAME] = mlxge_new_viewport(&game_layer->viewport_list,
-			view_origin, view_size);
-	if (!views[GAME])
-		return (false);
-	views[DEBUG]->frame->bg_colour = 0x42F560;
-	views[GAME]->frame->bg_colour = 0x534CA1;
+	// view_origin.x = view_size.width + 1;
+	// views[GAME] = mlxge_new_viewport(&game_layer->viewport_list,
+	// 		view_origin, view_size);
+	// if (!views[GAME])
+	// 	return (false);
 	return (true);
 }
+
+typedef struct s_display_properties
+{
+	t_v2i			origin;
+	t_dimensions	size;
+	double			aspect_ratio;
+}	t_properties;
 
 void	initialise(t_cub3d *app, const char *map_filepath)
 {
@@ -67,7 +84,7 @@ void	initialise(t_cub3d *app, const char *map_filepath)
 	view.origin.y = 0;
 	view.size.width = WIN_H * view.aspect_ratio;
 	view.size.height = WIN_H;
-	win.width = view.size.width * 2 + 1;
+	win.width = view.size.width;// * 2 + 1;
 	win.height = view.size.height;
 	mlxge_init(app, destroy_cub3d);
 	if (mlxge_create_window(win.width, win.height, TITLE) < 0)
