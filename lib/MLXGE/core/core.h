@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:06:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 21:21:14 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/28 20:20:00 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ void			mlxge_destroy_layers(t_layer *list);
 
 t_img_quad		*mlxge_new_frame(t_v2i origin, t_dimensions size,
 					bool is_mlx_object);
-t_img_quad		*mlxge_new_image(t_v2i origin, t_dimensions size);
+t_img_quad		*mlxge_new_image(t_img_quad **list, t_v2i origin,
+					t_dimensions size);
 
 t_event_layer	*mlxge_load_event_layers(t_layer *render_list);
 void			mlxge_load_mlx_event_hooks(void *mlx_win_ptr,

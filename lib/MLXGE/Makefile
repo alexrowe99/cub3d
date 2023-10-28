@@ -2,19 +2,23 @@ NAME = libmlxge.a
 
 CORE_DIR = core
 CORE_C_SRC = $(addprefix $(CORE_DIR)/, $(addsuffix .c, \
+ log core \
  $(addprefix events/, events event_layers hooks key_event) \
- log core window layers update viewport image_quad draw output_ppm \
+ $(addprefix image/, image_quad output_ppm) \
+ $(addprefix layers/, layers) \
+ $(addprefix render/, draw pixels) \
+ $(addprefix window/, window update viewport) \
 ))
 
 SET_OS ?= $(shell uname)
 ifeq ($(SET_OS), Darwin)
 	BUILD_OS = -DBUILD_OS=1
 	MLX_BUILD_DIR = mlx/mac
-	CORE_C_SRC += $(addprefix $(CORE_DIR)/render_, $(addsuffix .c, mac ))
+	CORE_C_SRC += $(addprefix $(CORE_DIR)/render/render_, $(addsuffix .c, mac ))
 else ifeq ($(SET_OS), Linux)
 	BUILD_OS = -DBUILD_OS=2
 	MLX_BUILD_DIR = mlx/linux
-	CORE_C_SRC += $(addprefix $(CORE_DIR)/render_, $(addsuffix .c, linux ))
+	CORE_C_SRC += $(addprefix $(CORE_DIR)/render/render_, $(addsuffix .c, linux ))
 else
 	@echo Your operating system is not supported!
 	exit 1
@@ -26,12 +30,12 @@ EXTERN_LIBS = lib/$(MLX_BUILD_DIR)/libmlx.a lib/$(LIBALL_DIR)/libftall.a
 CORE_C_OBJS = $(CORE_C_SRC:.c=.o)
 MLXGE_OBJS = $(CORE_C_OBJS)
 
-CC=cc -Wall -Werror -Wextra #-O2
+CC = cc -Wall -Werror -Wextra -O2
 
 DEBUG =
 MODE = SET_OS=$(SET_OS)
 ifeq ($(DEBUG), 1)
-	CC += -g #-fsanitize=address
+	CC += -g -fsanitize=address
 	MODE += DEBUG=1
 endif
 

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 08:50:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 20:55:18 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/28 20:03:24 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,24 @@ void	mlxge_destroy_image_quad(t_img_quad *image)
 
 // ----- API -------------------------------------------------------------------
 
-t_img_quad	*mlxge_new_image(t_v2i origin, t_dimensions size)
+t_img_quad	*mlxge_new_image(t_img_quad **list, t_v2i origin,
+				t_dimensions size)
 {
-	return (create_image_quad(origin, size, false));
+	t_img_quad	*node;
+	t_img_quad	*image;
+
+	image = create_image_quad(origin, size, false);
+	if (image)
+	{
+		node = *list;
+		if (!node)
+		{
+			*list = image;
+			return (image);
+		}
+		while (node->next)
+			node = node->next;
+		node->next = image;
+	}
+	return (image);
 }

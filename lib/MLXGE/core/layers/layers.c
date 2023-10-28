@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:33:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 20:37:13 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/28 21:27:16 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	mlxge_destroy_layers(t_layer *list)
 			node->images_to_render = node->images_to_render->next;
 			mlxge_destroy_image_quad(image);
 		}
+		if (node->viewport_list)
+			mlxge_destroy_viewports(node->viewport_list);
 		if (node->frame)
 			mlxge_destroy_image_quad(node->frame);
 		free(node);
