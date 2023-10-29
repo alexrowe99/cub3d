@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:05:18 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/28 21:07:03 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/29 10:04:17 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,12 @@ t_cam_ortho2d	*mlxge_new_camera_2d_orthographic(t_v2i offset);
 
 t_img_quad		*mlxge_new_image(t_img_quad **list, t_v2i origin,
 					t_dimensions size);
+void			mlxge_output_ppm(t_img_quad *image);
+
 void			mlxge_fill(t_img_quad *image, uint32_t colour);
 void			mlxge_draw_circle(t_img_quad *image, t_v2i center, int size,
+					uint32_t colour);
+void			mlxge_fill_rect(t_img_quad *image, t_v2i start, t_v2i end,
 					uint32_t colour);
 
 #endif
