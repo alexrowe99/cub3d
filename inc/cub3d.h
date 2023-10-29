@@ -6,21 +6,19 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 18:01:26 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/29 11:57:05 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-// ----- C standard library headers ---------------------------------
+// ----- Headers ----------------------------------------------------
 
 # include <stdbool.h>
 # include <fcntl.h>
 # include <errno.h>
 # include <stdio.h>
-
-// ----- External library headers -----------------------------------
 
 # include <mlxge.h>
 
@@ -59,6 +57,13 @@ typedef struct s_entity
 	bool		has_moved;
 }	t_entity;
 
+enum s_generated_textures
+{
+	PLAYER_TEXTURE,
+	MAP_TEXTURE,
+	COUNT_GENERATED_TEXTURES
+};
+
 typedef struct s_cub3d
 {
 	t_dimensions	map_dim;
@@ -67,6 +72,7 @@ typedef struct s_cub3d
 	uint32_t		*rgb_floor_ceiling[RGB_COUNT];
 	char			*texture_paths[TEXTURE_COUNT];
 	t_entity		player;
+	t_img_quad		*textures[COUNT_GENERATED_TEXTURES];
 }	t_cub3d;
 
 t_cub3d		*cub3d(void);
@@ -75,6 +81,7 @@ bool		cub3d_error(const char *format_message, ...);
 int			destroy_cub3d(void *app_ptr);
 
 // Parser
+
 bool		parse_map_file(t_cub3d *app, const char *filepath);
 int			get_texture_id(const char *element);
 bool		parse_texture_element(const char *element, size_t id,
@@ -84,11 +91,14 @@ bool		parse_rgb_element(const char *element, size_t id, t_cub3d *app);
 bool		parse_map_tiles(t_file *m_file, t_cub3d *app);
 
 // Parser Utils
+
 bool		validate_map_tiles(const char *line);
 bool		is_valid_character(int c);
 bool		is_spawn_tile(int c, t_entity *player);
 
-// Colour
-uint32_t	rgb_to_uint32(uint8_t r, uint8_t g, uint8_t b);
+// Debug
+
+bool		define_debug_scene(t_cub3d *app, t_viewport *debug_view);
+t_img_quad	*draw_map_texture(t_cub3d *app, t_viewport *debug_view);
 
 #endif
