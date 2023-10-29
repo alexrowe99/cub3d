@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 08:50:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/28 20:03:24 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/29 11:42:57 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ t_img_quad	*mlxge_new_image(t_img_quad **list, t_v2i origin,
 	image = create_image_quad(origin, size, false);
 	if (image)
 	{
+		mlxge_fill(image, image->bg_colour);
 		node = *list;
 		if (!node)
 		{

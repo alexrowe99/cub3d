@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:39:05 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/28 20:50:14 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/29 10:13:51 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,22 @@ void	mlxge_draw_circle(t_img_quad *image, t_v2i center, int radius,
 				}
 			}
 		}
+	}
+}
+
+void	mlxge_fill_rect(t_img_quad *image, t_v2i start, t_v2i end,
+			uint32_t colour)
+{
+	int	px;
+
+	while (start.y < end.y)
+	{
+		px = start.x;
+		while (px < end.x)
+		{
+			image->buff[start.y * image->size.width + px] = colour;
+			px++;
+		}
+		start.y++;
 	}
 }
