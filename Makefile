@@ -31,7 +31,7 @@ BONUS_OBJ = $(BONUS_SRC:%.c=%.o)
 
 # ----- Compilation Flags ------------------------------------------------------
 
-CFLAGS = -Wall -Werror -Wextra -O2
+CFLAGS = -Wall -Werror -Wextra# -O2
 
 OSLINK =
 DEF_OS =
@@ -49,7 +49,7 @@ BUILD_OS = SET_OS=$(SET_OS)
 
 DEBUG =
 ifeq ($(DEBUG),1)
-	CFLAGS += -g -fsanitize=address
+	CFLAGS += -g# -fsanitize=address
 endif
 
 # ----- Build Rules ------------------------------------------------------------

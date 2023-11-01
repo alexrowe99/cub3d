@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 12:53:03 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/29 12:05:27 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/30 16:56:28 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,31 +21,41 @@ enum e_viewport_count
 
 static int	game_loop(t_layer *game_layer)
 {
+	// static int	loop_count;
 	t_cub3d		*app;
 	t_entity	*player;
-	t_img_quad	*map;
+	// t_img_quad	*map;
 
-	(void)game_layer;
-	// app = cub3d();
-	// player = &app->player;
+	// if (loop_count == 1)
+	// {
+	// 	mlxge_output_ppm(game_layer->frame);
+	// 	mlxge_destroy();
+	// }
+	// loop_count++;
+	app = cub3d();
+	player = &app->player;
+	t_v2i move = {0, 0};
 	if (mlxge_is_key_down(KEY_W))
 	{
-		player->pos.y -= player->velocity;
+		move.y -= player->velocity;
 	}
-	// if (mlxge_is_key_down(KEY_A))
-	// {
-	// 	player->pos.x -= player->velocity;
-	// }
-	// if (mlxge_is_key_down(KEY_S))
-	// {
-	// 	player->pos.y += player->velocity;
-	// }
-	// if (mlxge_is_key_down(KEY_D))
-	// {
-	// 	player->pos.x += player->velocity;
-	// }
-	// app->textures[MAP_TEXTURE]->origin.x -= player->pos.x;
-	// app->textures[MAP_TEXTURE]->origin.y -= player->pos.y;
+	if (mlxge_is_key_down(KEY_A))
+	{
+		move.x -= player->velocity;
+	}
+	if (mlxge_is_key_down(KEY_S))
+	{
+		move.y += player->velocity;
+	}
+	if (mlxge_is_key_down(KEY_D))
+	{
+		move.x += player->velocity;
+	}
+	if (app->textures[PLAYER_TEXTURE]->origin.y < game_layer->viewport_list->frame->size.height / 4)
+		app->textures[MAP_TEXTURE]->origin.y -= move.y;
+	else
+		app->textures[PLAYER_TEXTURE]->origin.y += move.y;
+	app->textures[PLAYER_TEXTURE]->origin.x += move.x;
 	return (1);
 }
 
@@ -85,7 +95,7 @@ void	initialise(t_cub3d *app, const char *map_filepath)
 	ft_bzero(app, sizeof(t_cub3d));
 	if (!parse_map_file(app, map_filepath))
 		exit(destroy_cub3d(app));
-	view.aspect_ratio = 4.0f / 3;
+	view.aspect_ratio = 4.0f/3;
 	view.origin.x = 0;
 	view.origin.y = 0;
 	view.size.width = WIN_H * view.aspect_ratio;
@@ -99,4 +109,5 @@ void	initialise(t_cub3d *app, const char *map_filepath)
 	if (!game_layer || !mlxge_push_layer(game_layer)
 		|| !define_viewports(app, game_layer, view.size))
 		mlxge_destroy();
+	app->player.velocity = 1.0f;
 }

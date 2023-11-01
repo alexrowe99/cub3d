@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 09:20:52 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/29 11:54:20 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/30 12:47:36 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static inline t_img_quad	*draw_player_texture(t_viewport *debug_view)
 
 	circle_radius = 4;
 	player = mlxge_new_image(&debug_view->images_to_render,
-			(t_v2i){-circle_radius + 1, -circle_radius + 1},
+			(t_v2i){-circle_radius, -circle_radius},
 			(t_dimensions){circle_radius * 2, circle_radius * 2});
 	if (player)
 		mlxge_draw_circle(player, (t_v2i){circle_radius, circle_radius},

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:40:34 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/29 11:39:36 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/30 12:34:22 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_img_quad	*draw_map_texture(t_cub3d *app, t_viewport *debug_view)
 	}
 	player_world_pos = (t_v2d){app->player.pos.x * app->tile_size,
 			app->player.pos.y * app->tile_size};
-	map->origin = offset_player_pos(player_world_pos, app->tile_size / 2 - 1,
+	map->origin = offset_player_pos(player_world_pos, app->tile_size / 2,
 			map->size);
 	return (map);
 }
