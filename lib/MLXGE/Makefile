@@ -4,6 +4,7 @@ CORE_DIR = core
 CORE_C_SRC = $(addprefix $(CORE_DIR)/, $(addsuffix .c, \
  log core \
  $(addprefix events/, events event_layers hooks key_event) \
+ $(addprefix input/, key_input keycodes ) \
  $(addprefix image/, image_quad output_ppm) \
  $(addprefix layers/, layers) \
  $(addprefix render/, draw pixels) \
@@ -13,10 +14,12 @@ CORE_C_SRC = $(addprefix $(CORE_DIR)/, $(addsuffix .c, \
 SET_OS ?= $(shell uname)
 ifeq ($(SET_OS), Darwin)
 	BUILD_OS = -DBUILD_OS=1
+	KEYCODE_FILENAME = macos_keycodes.h
 	MLX_BUILD_DIR = mlx/mac
 	CORE_C_SRC += $(addprefix $(CORE_DIR)/render/render_, $(addsuffix .c, mac ))
 else ifeq ($(SET_OS), Linux)
 	BUILD_OS = -DBUILD_OS=2
+	KEYCODE_FILENAME = linux_keycodes.h
 	MLX_BUILD_DIR = mlx/linux
 	CORE_C_SRC += $(addprefix $(CORE_DIR)/render/render_, $(addsuffix .c, linux ))
 else
@@ -24,18 +27,20 @@ else
 	exit 1
 endif
 
+BUILD_OS += -DFULL_PATH_MLXGE='"$(shell pwd)"' -DMLX_KEYCODE_FILE='"$(KEYCODE_FILENAME)"'
+
 LIBALL_DIR = libftall
 EXTERN_LIBS = lib/$(MLX_BUILD_DIR)/libmlx.a lib/$(LIBALL_DIR)/libftall.a
 
 CORE_C_OBJS = $(CORE_C_SRC:.c=.o)
 MLXGE_OBJS = $(CORE_C_OBJS)
 
-CC = cc -Wall -Werror -Wextra -O2
+CC = cc -Wall -Werror -Wextra# -O2
 
 DEBUG =
 MODE = SET_OS=$(SET_OS)
 ifeq ($(DEBUG), 1)
-	CC += -g -fsanitize=address
+	CC += -g# -fsanitize=address
 	MODE += DEBUG=1
 endif
 

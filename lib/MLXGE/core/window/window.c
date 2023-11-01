@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 10:16:02 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 21:20:24 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/30 15:13:40 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,17 @@ int	mlxge_create_window(int width, int height, char *title)
 	if (!win_layer)
 		return (-1);
 	mlxge_push_layer(win_layer);
-	close_win = mlxge_new_key_event(PRESS, KEY_ESCAPE, close_window, 0);
-	if (!close_win)
+	close_win = mlxge_new_key_event(PRESS, MLX_KEY_ESCAPE, close_window, 0);
+	if (close_win)
 	{
-		free(win_layer);
-		return (-1);
+		mlxge_push_event(close_win, win_layer->events);
+		close_win = mlxge_new_destroy_event(close_window, 0);
+		if (close_win)
+		{
+			mlxge_push_event(close_win, win_layer->events);
+			return (0);
+		}
 	}
-	mlxge_push_event(close_win, win_layer->events);
-	return (0);
+	free(win_layer);
+	return (-1);
 }

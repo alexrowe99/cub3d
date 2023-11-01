@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:03:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 20:44:59 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/30 16:36:26 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,13 @@ t_mlxge	*get_core(void)
 }
 
 // ----- API -------------------------------------------------------------------
-// Bloody norminette making this stuff stoopid as hell.
+
 void	mlxge_init(void *app_struct_ptr,
 			int (*destroy_app_struct_funct)(void *))
 {
 	*get_core()->sandbox = (struct s_user_app){.user_app_ref = app_struct_ptr,
 	.user_app_destroy = destroy_app_struct_funct};
+	mlxge_keyboard();
 }
 
 #define SUCCESS 0
@@ -73,6 +74,7 @@ void	mlxge_destroy(void)
 {
 	t_mlxge	*core;
 
+	free(mlxge_keyboard());
 	core = get_core();
 	if (core->event_layers)
 		mlxge_destroy_event_layers(core->event_layers);

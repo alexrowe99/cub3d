@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 11:42:57 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 21:17:53 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/30 15:10:11 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,16 @@ typedef struct s_event_list
 {
 	int					type;
 	int					code;
-	int					(*handler)(int, void *);
-	int					(*action)(void *);
+	int					(*handler)(void *);
 	void				*param;
 	struct s_event_list	*next;
 }	t_event;
 
-t_event	*mlxge_new_key_event(enum e_key_input_types input, int keycode,
-			int (*action_func)(void *param), void *param);
 void	mlxge_push_event(t_event *event, t_event **list);
 void	mlxge_destroy_events(t_event *list);
+
+t_event	*mlxge_new_key_event(enum e_key_input_types input, int keycode,
+			int (*handler_func)(void *param), void *param);
+t_event	*mlxge_new_destroy_event(int (*handler_funct)(void *), void *param);
 
 #endif

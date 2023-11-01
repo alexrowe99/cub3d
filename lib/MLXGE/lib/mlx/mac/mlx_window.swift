@@ -12,7 +12,7 @@ class WinEvent: NSWindow
   var eventFuncts = [UnsafeMutableRawPointer?]()
   var eventParams = [UnsafeMutableRawPointer]()
 
-  var keyrepeat = 1
+  var keyrepeat = 0
   var keyflag:UInt32 = 0
 
   var size_y:Int

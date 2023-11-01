@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:06:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/28 20:20:00 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/30 16:22:52 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@
 # endif
 # ifdef BUILD_OS
 #  if BUILD_OS == MACOS
-#   include <macos_keycodes.h>
+// #   include <macos_keycodes.h>
 #   include <../lib/mlx/mac/mlx.h>
 #  elif BUILD_OS == LINUX
-#   include <linux_keycodes.h>
+// #   include <linux_keycodes.h>
 #   include <../lib/mlx/linux/mlx.h>
 #  else
 #   error "OS is not yet supported..."
@@ -41,6 +41,7 @@
 # include <events.h>
 # include <render.h>
 # include <vector.h>
+# include <key_input.h>
 
 typedef struct s_global_time
 {
@@ -82,13 +83,18 @@ t_img_quad		*mlxge_new_image(t_img_quad **list, t_v2i origin,
 					t_dimensions size);
 
 t_event_layer	*mlxge_load_event_layers(t_layer *render_list);
+int				mlxge_handle_destroy_events(t_event_layer *layers_list);
 void			mlxge_load_mlx_event_hooks(void *mlx_win_ptr,
 					t_event_layer *event_layers);
+
+void			*map_mlx_keycodes(t_key_input *keyboard);
+int				mlxge_handle_key_press_events(int keycode, t_event_layer *list);
+int				mlxge_handle_key_release_events(int keycode,
+					t_event_layer *list);
 void			mlxge_destroy_event_layers(t_event_layer *list);
 
-int				mlxge_handle_event(int code, t_event_layer *event_layers,
-					enum e_event_types type);
-
 void			mlxge_output_ppm(t_img_quad *image);
+
+t_key_input		*mlxge_keyboard(void);
 
 #endif

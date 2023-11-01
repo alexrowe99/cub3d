@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/15 12:27:48 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/06 12:03:56 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/30 11:57:19 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	*init_buffer(t_convert *c)
 
 int	resize_buffer(t_convert *c)
 {
-	c->bs = ft_resize_str(c->buffer, BUFFER_RESIZE);
+	c->bs = ft_resize_str(c->buffer, c->bs + BUFFER_RESIZE);
 	if (c->bs == -1)
 		return (-1);
 	return (c->ret_len);

@@ -6,36 +6,74 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 20:48:48 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 21:04:16 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/30 16:37:25 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <events.h>
 #include <core.h>
 
-static int	mlxge_handle_key_press(int keycode, void *param)
+int	mlxge_handle_key_events(enum e_event_types type, int keycode,
+						t_event_layer *layers_list)
 {
-	return (mlxge_handle_event(keycode, (t_event_layer *)param, KEY_PRESS));
+	t_event			*event;
+	t_event_layer	*layers;
+
+	layers = layers_list;
+	while (layers)
+	{
+		event = layers->layer_ref->events[type];
+		while (event)
+		{
+			if (event->code == keycode)
+			{
+				event->handler(event->param);
+				return (1);
+			}
+			event = event->next;
+		}
+		layers = layers->next;
+	}
+	return (0);
 }
 
-static int	mlxge_handle_key_release(int keycode, void *param)
+int	mlxge_handle_key_press_events(int keycode, t_event_layer *list)
 {
-	return (mlxge_handle_event(keycode, (t_event_layer *)param, KEY_RELEASE));
+	int			i;
+	t_key_input	*keyboard;
+
+	if (mlxge_handle_key_events(KEY_PRESS, keycode, list))
+		return (1);
+	i = 0;
+	keyboard = mlxge_keyboard();
+	while (i < COUNT_TRACKED_KEYCODES && keyboard->input[i].code != keycode)
+		i++;
+	keyboard->input[i].is_down = true;
+	return (keycode);
+}
+
+int	mlxge_handle_key_release_events(int keycode, t_event_layer *list)
+{
+	int			i;
+	t_key_input	*keyboard;
+
+	if (mlxge_handle_key_events(KEY_RELEASE, keycode, list))
+		return (1);
+	i = 0;
+	keyboard = mlxge_keyboard();
+	while (i < COUNT_TRACKED_KEYCODES && keyboard->input[i].code != keycode)
+		i++;
+	keyboard->input[i].is_down = false;
+	return (keycode);
 }
 
 // ---- API --------------------------------------------------------------------
 
 t_event	*mlxge_new_key_event(enum e_key_input_types input, int keycode,
-			int (*action_func)(void *param), void *param)
+			int (*handler_func)(void *param), void *param)
 {
-	static int	(*handle_key_input[2])(int, void *);
 	t_event		*event;
 
-	if (!handle_key_input[PRESS])
-	{
-		handle_key_input[PRESS] = mlxge_handle_key_press;
-		handle_key_input[RELEASE] = mlxge_handle_key_release;
-	}
 	event = ft_calloc(1, sizeof(t_event));
 	if (!event)
 	{
@@ -45,8 +83,7 @@ t_event	*mlxge_new_key_event(enum e_key_input_types input, int keycode,
 	}
 	event->type = input;
 	event->code = keycode;
-	event->handler = handle_key_input[input];
-	event->action = action_func;
+	event->handler = handler_func;
 	event->param = param;
 	return (event);
 }

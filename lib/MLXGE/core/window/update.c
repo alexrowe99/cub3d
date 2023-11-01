@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 20:39:42 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 21:36:59 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/29 15:44:19 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,6 @@ int	mlxge_run(void)
 	mlx_loop_hook(core->mlx_inst_ptr, mlxge_on_update, core->render_layers);
 	core->timer = (t_gtime){{0}, {0}, 0.0f, 0.0f};
 	gettimeofday(&core->timer.start, 0);
+	printf("\n");
 	return (mlx_loop(core->mlx_inst_ptr));
 }

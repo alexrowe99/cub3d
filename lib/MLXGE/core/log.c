@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:57:48 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/25 11:23:08 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/30 12:05:21 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,6 @@ void	mlxge_log(enum e_log_levels lvl, const char *format, ...)
 	ft_vasprintf(&fmt_output, format, ap);
 	va_end(ap);
 	get_log_prefix(lvl, &log_prefix);
-	ft_printf("%s\e[0m: %s.\n", log_prefix, fmt_output);
+	ft_printf("%s\e[0m: %s\n", log_prefix, fmt_output);
 	free(fmt_output);
 }

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 20:08:49 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/29 00:02:03 by lmells           ###   ########.fr       */
+/*   Updated: 2023/10/30 12:41:57 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_img_quad	*set_pixels(t_img_quad *frame, t_img_quad *image,
 	while (++p.y < image->size.height)
 	{
 		offset.y = p.y + img_origin.y;
-		if (0 < offset.y && offset.y <= frame->size.height)
+		if (0 <= offset.y && offset.y < frame->size.height)
 		{
 			p.x = -1;
 			while (++p.x < image->size.width)
