@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/02 13:39:21 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/02 21:03:51 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,18 +43,19 @@
 
 typedef struct s_file_contents
 {
-	int			fd;
-	char		**contents;
-	size_t		line_count;
-	size_t		it;
+	int				fd;
+	char			**contents;
+	size_t			line_count;
+	size_t			it;
 }	t_file;
 
 typedef struct s_entity
 {
-	t_v2d		pos;	// Relateive to world space - mapped between (-1 -> 1)
-	t_v2i		direction;
-	double		velocity;
-	bool		has_moved;
+	t_v2d			pos;
+	t_v2i			direction;
+	double			move_speed;
+	bool			has_moved;
+	t_img_quad		*sprite;
 }	t_entity;
 
 typedef struct s_world
@@ -69,6 +70,12 @@ enum s_generated_textures
 	PLAYER_TEXTURE,
 	MAP_TEXTURE,
 	COUNT_GENERATED_TEXTURES
+};
+
+enum s_parse_rgb_id
+{
+	ID_FLOOR_RGB = 0,
+	ID_CEILING_RGB
 };
 
 typedef struct s_cub3d

@@ -33,8 +33,6 @@ BONUS_OBJ = $(BONUS_SRC:%.c=%.o)
 
 CFLAGS = -Wall -Werror -Wextra# -O2
 
-OSLINK =
-DEF_OS =
 SET_OS = $(shell uname)
 ifeq ($(SET_OS), Darwin)
 	OSLINK = -framework OpenGL -framework AppKit
