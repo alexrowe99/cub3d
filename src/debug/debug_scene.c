@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   debug_scene.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 09:20:52 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/30 12:47:36 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/02 15:39:07 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-static inline bool	create_player_camera(t_cam_ortho2d **camera, int offset_x,
+t_cam_ortho2d	*create_player_camera(t_cam_ortho2d **camera, int offset_x,
 						int offset_y)
 {
 	*camera = mlxge_new_camera_2d_orthographic((t_v2i){offset_x, offset_y});
 	return (*camera);
 }
 
-static inline t_img_quad	*draw_player_texture(t_viewport *debug_view)
+t_img_quad	*draw_player_texture(t_viewport *debug_view)
 {
 	int			circle_radius;
 	t_img_quad	*player;
@@ -36,15 +36,11 @@ static inline t_img_quad	*draw_player_texture(t_viewport *debug_view)
 
 bool	define_debug_scene(t_cub3d *app, t_viewport *debug_view)
 {
-	t_dimensions	cam_offset;
-
-	app->tile_size = 64;
 	debug_view->frame->bg_colour = 0x3C3C3C;
-	cam_offset = (t_dimensions){debug_view->frame->size.width / 2,
-			debug_view->frame->size.height / 2};
 	app->textures[MAP_TEXTURE] = draw_map_texture(app, debug_view);
-	app->textures[PLAYER_TEXTURE] = draw_player_texture(debug_view);
-	return (app->textures[MAP_TEXTURE] && app->textures[PLAYER_TEXTURE] 
-			&& create_player_camera(&debug_view->camera, cam_offset.width,
-					cam_offset.height));
+	app->world.player_camera = create_player_camera(&debug_view->camera, 0, 0);
+			// debug_view->frame->size.width / 2,
+			// debug_view->frame->size.height / 2);
+	return (app->textures[MAP_TEXTURE] != (void *)0
+		&& app->world.player_camera != (void *)0);
 }

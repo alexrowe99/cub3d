@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   viewport.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:52:44 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/28 21:29:07 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/02 11:51:28 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ t_cam_ortho2d	*mlxge_new_camera_2d_orthographic(t_v2i offset)
 {
 	t_cam_ortho2d	*camera;
 
-	camera = malloc(sizeof(t_cam_ortho2d));
+	camera = ft_calloc(1, sizeof(t_cam_ortho2d));
 	if (!camera)
 	{
 		mlxge_log(ERROR, "Failed to create a new MLXGE 2D orthographic camera "\

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   update.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 20:39:42 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/29 15:44:19 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/02 15:33:45 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ int	mlxge_on_update(t_layer *list)
 			&core->timer.end);
 	gettimeofday(&core->timer.start, 0);
 	core->timer.since_last_print += core->timer.elapsed_sec;
-	if (core->timer.since_last_print >= ONE_SECOND)
-	{
-		printf("\033[A\33[2K\rElapsed: %f | FPS: %i\n",
-			core->timer.elapsed_sec,
-			(int)(ONE_SECOND / core->timer.elapsed_sec));
-		core->timer.since_last_print = 0.0f;
-	}
+	// if (core->timer.since_last_print >= ONE_SECOND)
+	// {
+	// 	printf("\033[A\33[2K\rElapsed: %f | FPS: %i\n",
+	// 		core->timer.elapsed_sec,
+	// 		(int)(ONE_SECOND / core->timer.elapsed_sec));
+	// 	core->timer.since_last_print = 0.0f;
+	// }
 	layer = list;
 	while (layer->next)
 	{

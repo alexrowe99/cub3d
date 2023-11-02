@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/29 11:57:05 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/02 13:39:21 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 
 // ----- Window definitions -----------------------------------------
 
-# define WIN_H 512
+# define WIN_H 600
 # define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
 
 // ----- Parser definitions -----------------------------------------
@@ -51,11 +51,18 @@ typedef struct s_file_contents
 
 typedef struct s_entity
 {
-	t_v2d		pos;
+	t_v2d		pos;	// Relateive to world space - mapped between (-1 -> 1)
 	t_v2i		direction;
 	double		velocity;
 	bool		has_moved;
 }	t_entity;
+
+typedef struct s_world
+{
+	t_cam_ortho2d	*player_camera;
+	t_dimensions	size;
+	size_t			scale;
+}	t_world;
 
 enum s_generated_textures
 {
@@ -66,6 +73,7 @@ enum s_generated_textures
 
 typedef struct s_cub3d
 {
+	t_world			world;
 	t_dimensions	map_dim;
 	char			**map_tiles;
 	size_t			tile_size;

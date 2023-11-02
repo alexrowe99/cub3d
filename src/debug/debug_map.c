@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:40:34 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/30 12:34:22 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/02 15:04:59 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static inline void	draw_map_tile(t_img_quad *map, t_v2i tile_pos, t_cub3d *app)
 	}
 }
 
-static inline t_v2i	offset_player_pos(t_v2d player_pos, int tile_offset,
+t_v2i	offset_player_pos(t_v2d player_pos, int tile_offset,
 						t_dimensions map)
 {
 	return ((t_v2i){-map.width + (map.width - player_pos.x) - tile_offset,
@@ -42,7 +42,7 @@ static inline t_v2i	offset_player_pos(t_v2d player_pos, int tile_offset,
 
 t_img_quad	*draw_map_texture(t_cub3d *app, t_viewport *debug_view)
 {
-	t_v2d		player_world_pos;
+	// t_v2d		player_world_pos;
 	t_v2i		tile_pos;
 	t_img_quad	*map;
 
@@ -59,9 +59,9 @@ t_img_quad	*draw_map_texture(t_cub3d *app, t_viewport *debug_view)
 				draw_map_tile(map, tile_pos, app);
 		}
 	}
-	player_world_pos = (t_v2d){app->player.pos.x * app->tile_size,
-			app->player.pos.y * app->tile_size};
-	map->origin = offset_player_pos(player_world_pos, app->tile_size / 2,
-			map->size);
+	// player_world_pos = (t_v2d){app->player.pos.x * app->tile_size,
+	// 		app->player.pos.y * app->tile_size};
+	// map->origin = offset_player_pos(player_world_pos, app->tile_size / 2,
+	// 		map->size);
 	return (map);
 }

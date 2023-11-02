@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_mac.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/28 21:17:51 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/02 13:49:42 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 				image = image->next;
 			}
 		}
+		// mlxge_output_ppm(layers->frame);
 		set_pixels(win_frame, layers->frame, layers->frame->origin);
 	}
 	mlx_put_image_to_window(mlx_inst, mlx_win, win_frame->mlx_ptr, 0, 0);
