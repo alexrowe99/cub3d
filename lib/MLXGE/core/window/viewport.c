@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   viewport.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:52:44 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/02 11:51:28 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/02 18:16:23 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_viewport	*mlxge_new_viewport(t_viewport **list, t_v2i origin,
 	return (view);
 }
 
-t_cam_ortho2d	*mlxge_new_camera_2d_orthographic(t_v2i offset)
+t_cam_ortho2d	*mlxge_new_camera_2d_orthographic(t_v2i origin)
 {
 	t_cam_ortho2d	*camera;
 
@@ -97,6 +97,6 @@ t_cam_ortho2d	*mlxge_new_camera_2d_orthographic(t_v2i offset)
 			"because : Couldn't allocate memory");
 		return ((void *)0);
 	}
-	camera->offset = offset;
+	camera->origin = origin;
 	return (camera);
 }

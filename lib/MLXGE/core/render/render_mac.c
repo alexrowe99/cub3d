@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_mac.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/02 13:49:42 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/02 21:36:25 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ static inline t_img_quad	*clear_layer_frame(t_img_quad *frame,
 static inline void	update_viewports(t_img_quad *update_frame,
 						t_viewport *viewports)
 {
-	t_v2i		projection;
-	t_img_quad	*image;
+	t_v2i			projection;
+	t_img_quad		*image;
 
 	while (viewports)
 	{
@@ -48,8 +48,9 @@ static inline void	update_viewports(t_img_quad *update_frame,
 			projection = image->origin;
 			if (viewports->camera)
 			{
-				projection = (t_v2i){projection.x + viewports->camera->offset.x,
-						projection.y + viewports->camera->offset.y};
+				t_cam_ortho2d	cam = *viewports->camera;
+				projection = (t_v2i){projection.x + cam.origin.x - cam.position.x,
+						projection.y + cam.origin.y - cam.position.y};
 			}
 			viewports->frame = set_pixels(viewports->frame, image, projection);
 			image = image->next;
@@ -83,7 +84,6 @@ void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 				image = image->next;
 			}
 		}
-		// mlxge_output_ppm(layers->frame);
 		set_pixels(win_frame, layers->frame, layers->frame->origin);
 	}
 	mlx_put_image_to_window(mlx_inst, mlx_win, win_frame->mlx_ptr, 0, 0);
