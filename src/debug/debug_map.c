@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 10:40:34 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/02 21:04:43 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:13:48 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static inline void	draw_map_tile(t_img_quad *map, t_v2i tile_pos, t_cub3d *app)
 	int			tile;
 	t_v2i		tile_start;
 	t_v2i		tile_end;
-	uint32_t	colour;
+	int	colour;
 
 	tile = app->map_tiles[tile_pos.y][tile_pos.x];
 	if (tile == '1' || tile == '0' || is_spawn_tile(tile, &app->player))

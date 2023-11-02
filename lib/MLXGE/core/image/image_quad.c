@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   image_quad.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 08:50:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/29 11:42:57 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:13:48 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static t_img_quad	*create_image_quad(t_v2i origin, t_dimensions size,
 	image->size = size;
 	if (!is_mlx_object)
 	{
-		image->buff = malloc((size.width * size.height + 1) * sizeof(uint32_t));
+		image->buff = malloc((size.width * size.height + 1) * sizeof(int));
 		if (!image->buff)
 		{
 			mlxge_log(ERROR, "Failed to create MLXGE image quad because : "\

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/02 21:03:51 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:13:48 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef struct s_cub3d
 	t_dimensions	map_dim;
 	char			**map_tiles;
 	size_t			tile_size;
-	uint32_t		*rgb_floor_ceiling[RGB_COUNT];
+	int		*rgb_floor_ceiling[RGB_COUNT];
 	char			*texture_paths[TEXTURE_COUNT];
 	t_entity		player;
 	t_img_quad		*textures[COUNT_GENERATED_TEXTURES];

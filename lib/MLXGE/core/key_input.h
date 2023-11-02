@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_input.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:26:24 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/30 16:33:13 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:18:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #  if BUILD_OS == OS_MACOS
 #   include "macos_keycodes.h"
 #  elif BUILD_OS == OS_LINUX
-#   include <linux_keycodes.h>
+#   include "linux_keycodes.h"
 #  else
 #   error "OS is not supported!"
 #  endif
@@ -101,7 +101,7 @@ enum e_mlxge_keycodes
 
 struct s_key_input_map
 {
-	uint8_t		code;
+	int			code;
 	bool		is_down;
 };
 

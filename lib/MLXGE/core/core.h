@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:06:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/30 16:22:52 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:24:56 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define MACOS 1
 # define LINUX 2
 # ifndef BUILD_OS
-#  define BUILD_OS MACOS
+#  define BUILD_OS LINUX
 # endif
 # ifdef BUILD_OS
 #  if BUILD_OS == MACOS

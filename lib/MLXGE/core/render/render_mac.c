@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_mac.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/02 21:36:25 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:13:48 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static inline t_img_quad	*clear_layer_frame(t_img_quad *frame,
 			mlx_destroy_image(mlx_instance, frame->mlx_ptr);
 		frame->mlx_ptr = mlx_new_image(mlx_instance, frame->size.width,
 				frame->size.height);
-		frame->buff = (uint32_t *)mlx_get_data_addr(frame->mlx_ptr,
+		frame->buff = (int *)mlx_get_data_addr(frame->mlx_ptr,
 				&frame->ctx[0], &frame->ctx[1], &frame->ctx[2]);
 	}
 	mlxge_fill(frame, frame->bg_colour);

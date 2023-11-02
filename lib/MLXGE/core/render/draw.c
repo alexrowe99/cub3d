@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:39:05 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/29 10:13:51 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:13:48 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <render.h>
 #include <dimensions.h>
 
-void	mlxge_fill(t_img_quad *image, uint32_t colour)
+void	mlxge_fill(t_img_quad *image, int colour)
 {
 	int	size;
 
@@ -23,7 +23,7 @@ void	mlxge_fill(t_img_quad *image, uint32_t colour)
 }
 
 void	mlxge_draw_circle(t_img_quad *image, t_v2i center, int radius,
-			uint32_t colour)
+			int colour)
 {
 	t_v2i	d;
 	t_v2i	s;
@@ -50,7 +50,7 @@ void	mlxge_draw_circle(t_img_quad *image, t_v2i center, int radius,
 }
 
 void	mlxge_fill_rect(t_img_quad *image, t_v2i start, t_v2i end,
-			uint32_t colour)
+			int colour)
 {
 	int	px;
 

@@ -64,7 +64,7 @@ shared_lib: $(EXTERN_LIBS)
 	mkdir lib/shared
 	cd lib/shared; \
 	ar -x ../$(LIBALL_DIR)/libftall.a; \
-	ar -x ../lib/$(MLX_BUILD_DIR)/libmlx.a; \
+	ar -x ../$(MLX_BUILD_DIR)/libmlx.a; \
 	ar -rcsv $(NAME) *.o; \
 	mv $(NAME) ../../.
 endif
