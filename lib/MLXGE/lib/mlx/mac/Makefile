@@ -12,16 +12,13 @@ C_OBJ=$(C_SRC:.c=.o)
 CFLAGS=-O3
 
 NAME=libmlx.dylib
-STATIC=libmlx.a
 
 INC=-I.
-#OPTI=-Ounchecked
 
 all: $(NAME)
 
 $(NAME): $(MODULE_OBJ) $(OBJ) $(C_OBJ)
 	swiftc $(OPTI) $(INC) -o $(NAME) -emit-library $(OBJ) $(C_OBJ) -lz
-	swiftc $(OPTI) $(INC) -o $(STATIC) -emit-library -static $(OBJ) $(C_OBJ) -lz
 
 %.o: %.swift
 	swiftc $(OPTI) $(INC) -parse-as-library -c $< -o $@

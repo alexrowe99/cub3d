@@ -30,13 +30,14 @@ endif
 BUILD_OS += -DFULL_PATH_MLXGE='"$(shell pwd)"' -DMLX_KEYCODE_FILE='"$(KEYCODE_FILENAME)"'
 
 LIBALL_DIR = libftall
-EXTERN_LIBS = lib/$(MLX_BUILD_DIR)/libmlx.a lib/$(LIBALL_DIR)/libftall.a
+EXTERN_LIBS = lib/$(MLX_BUILD_DIR)/libmlx.dylib lib/$(LIBALL_DIR)/libftall.a
 
 CORE_C_OBJS = $(CORE_C_SRC:.c=.o)
 MLXGE_OBJS = $(CORE_C_OBJS)
 
-CC = cc -Wall -Werror -Wextra# -O2
+CC = cc -Wall -Werror -Wextra -O2
 
+CWD = 
 DEBUG =
 MODE = SET_OS=$(SET_OS)
 ifeq ($(DEBUG), 1)
@@ -52,7 +53,6 @@ $(NAME): shared_lib $(MLXGE_OBJS)
 shared_lib: $(EXTERN_LIBS)
 	mkdir lib/shared
 	cd lib/shared; \
-	ar -x ../$(MLX_BUILD_DIR)/libmlx.a; \
 	ar -x ../$(LIBALL_DIR)/libftall.a; \
 	ar -rcsv $(NAME) *.o; \
 	mv $(NAME) ../../.; \
@@ -62,13 +62,15 @@ $(EXTERN_LIBS):
 	make -C lib/$(LIBALL_DIR) $(MODE)
 	@echo "\nBUILDING MAKE IN DIR: lib/$(MLX_BUILD_DIR)"
 	make -C lib/$(MLX_BUILD_DIR) $(MODE)
+	mv lib/$(MLX_BUILD_DIR)/libmlx.dylib .
+	cp libmlx.dylib $(CWD)
 
 $(CORE_C_OBJS): %.o: %.c
 	$(CC) -c $< -I$(CORE_DIR) $(BUILD_OS) -o $@
 
 clean:
 	@echo lib/$(MLX_BUILD_DIR) lib/$(LIBALL_DIR)
-	rm -rf **/*.o **/**/*.o $(NAME)
+	rm -rf **/*.o **/**/*.o $(NAME) *.dylib
 
 fclean: clean
 	rm -rf lib/shared

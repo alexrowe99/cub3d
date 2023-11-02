@@ -39,13 +39,14 @@ SET_OS = $(shell uname)
 ifeq ($(SET_OS), Darwin)
 	OSLINK = -framework OpenGL -framework AppKit
 	DEF_OS = -DBUILD_OS=1
+	LINK += -Llib/MLXGE -lmlx
 else ifeq ($(SET_OS), Linux)
 	INC += -I/usr/include
 	LINK += -L/usr/lib
 	OSLINK = -lXext -lX11 -lm -lz
 	DEF_OS += -DBUILD_OS=2
 endif
-BUILD_OS = SET_OS=$(SET_OS)
+BUILD_OS = SET_OS=$(SET_OS) CWD=$(shell pwd)
 
 DEBUG =
 ifeq ($(DEBUG),1)
@@ -85,7 +86,7 @@ else
 endif
 
 clean:
-	rm -rf $(NAME) $(MANDATORY_OBJ) *.dSYM
+	rm -rf $(NAME) $(MANDATORY_OBJ) *.dSYM *.dylib
 
 fclean: clean
 	make -C lib/MLXGE fclean
