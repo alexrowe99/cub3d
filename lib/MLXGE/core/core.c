@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:03:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/30 16:36:26 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:35:01 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	mlxge_init(void *app_struct_ptr,
 
 #define SUCCESS 0
 
+# if BUILD_OS == MACOS
 void	mlxge_destroy(void)
 {
 	t_mlxge	*core;
@@ -90,3 +91,29 @@ void	mlxge_destroy(void)
 	mlxge_log(INFO, "MLXGE has successfully been destroyed... Exiting!");
 	exit(SUCCESS);
 }
+# else
+void	mlxge_destroy(void)
+{
+	t_mlxge	*core;
+
+	free(mlxge_keyboard());
+	core = get_core();
+	if (core->event_layers)
+		mlxge_destroy_event_layers(core->event_layers);
+	if (core->render_layers)
+		mlxge_destroy_layers(core->render_layers);
+	if (core->mlx_window && core->mlx_window->mlx_win_ptr)
+	{
+		mlx_destroy_window(core->mlx_inst_ptr, core->mlx_window->mlx_win_ptr);
+		mlx_destroy_display(core->mlx_inst_ptr);
+		free(core->mlx_inst_ptr);
+	}
+	free(core->mlx_window);
+	if (core->sandbox && core->sandbox->user_app_ref)
+		core->sandbox->user_app_destroy(core->sandbox->user_app_ref);
+	free(core->sandbox);
+	free(core);
+	mlxge_log(INFO, "MLXGE has successfully been destroyed... Exiting!");
+	exit(SUCCESS);
+}
+#endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/16 09:42:08 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:38:56 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	destroy_cub3d(void *app_ptr)
 		ft_vfree(1, &app->texture_paths[i]);
 		if (i < RGB_COUNT)
 			ft_vfree(1, &app->rgb_floor_ceiling[i]);
+		// if (i < 2 && app->textures[i])
+		// 	mlxge_destroy_image_quad(app->textures[i]);
 	}
 	if (app->map_tiles)
 	{

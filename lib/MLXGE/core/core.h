@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:06:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 10:24:56 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:32:25 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@
 # endif
 # ifdef BUILD_OS
 #  if BUILD_OS == MACOS
-// #   include <macos_keycodes.h>
 #   include <../lib/mlx/mac/mlx.h>
 #  elif BUILD_OS == LINUX
-// #   include <linux_keycodes.h>
 #   include <../lib/mlx/linux/mlx.h>
 #  else
 #   error "OS is not yet supported..."

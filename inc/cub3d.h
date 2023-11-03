@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 10:13:48 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:49:21 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,21 @@ typedef struct s_entity
 	t_img_quad		*sprite;
 }	t_entity;
 
+typedef struct s_map
+{
+	t_dimensions	size;
+	char			**tiles;
+	t_img_quad		*sprite;
+}	t_map;
+
 typedef struct s_world
 {
-	t_cam_ortho2d	*player_camera;
 	t_dimensions	size;
 	size_t			scale;
+	t_map			map;
+	t_entity		player;
+	t_cam_ortho2d	*camera_player;
 }	t_world;
-
-enum s_generated_textures
-{
-	PLAYER_TEXTURE,
-	MAP_TEXTURE,
-	COUNT_GENERATED_TEXTURES
-};
 
 enum s_parse_rgb_id
 {
@@ -80,14 +82,9 @@ enum s_parse_rgb_id
 
 typedef struct s_cub3d
 {
+	int				*rgb[RGB_COUNT];
+	char			*wall_texture_paths[TEXTURE_COUNT];
 	t_world			world;
-	t_dimensions	map_dim;
-	char			**map_tiles;
-	size_t			tile_size;
-	int		*rgb_floor_ceiling[RGB_COUNT];
-	char			*texture_paths[TEXTURE_COUNT];
-	t_entity		player;
-	t_img_quad		*textures[COUNT_GENERATED_TEXTURES];
 }	t_cub3d;
 
 t_cub3d		*cub3d(void);
