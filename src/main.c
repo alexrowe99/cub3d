@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 10:38:56 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:55:13 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,30 +29,6 @@ bool	cub3d_error(const char *format_message, ...)
 	return (true);
 }
 
-int	destroy_cub3d(void *app_ptr)
-{
-	size_t	i;
-	t_cub3d	*app;
-
-	app = (t_cub3d *)app_ptr;
-	i = TEXTURE_COUNT;
-	while (i--)
-	{
-		ft_vfree(1, &app->texture_paths[i]);
-		if (i < RGB_COUNT)
-			ft_vfree(1, &app->rgb_floor_ceiling[i]);
-		// if (i < 2 && app->textures[i])
-		// 	mlxge_destroy_image_quad(app->textures[i]);
-	}
-	if (app->map_tiles)
-	{
-		while (app->map_dim.height)
-			ft_vfree(1, &app->map_tiles[--app->map_dim.height]);
-		free(app->map_tiles);
-	}
-	app->map_tiles = NULL;
-	return (0);
-}
 
 static bool	validate_args(int ac, char **av)
 {

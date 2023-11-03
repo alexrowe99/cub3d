@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:37:07 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/17 16:25:20 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 11:49:08 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ static bool	check_data_populated(t_cub3d *app, bool validated)
 	i = 0;
 	while (i < TEXTURE_COUNT)
 	{
-		if (app->texture_paths[i++] == NULL)
+		if (app->wall_texture_paths[i++] == NULL)
 			return (!cub3d_error("Invalid parse: Required texture paths are "\
 					"missing"));
 	}
 	i = 0;
 	while (i < RGB_COUNT)
 	{
-		if (app->rgb_floor_ceiling[i++] == NULL)
+		if (app->rgb[i++] == NULL)
 			return (!cub3d_error("Invalid parse: Required RGB values are "\
 					"missing"));
 	}

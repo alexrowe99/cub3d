@@ -17,7 +17,8 @@ NAME_BONUS = cub3d_bonus
 # ----- Mandatory C Files ------------------------------------------------------
 
 MANDATORY_SRC = $(addprefix $(SRC_DIR)/, $(addsuffix .c, \
-main initialise parser parser_textures parser_rgb parser_map parser_utils \
+parser parser_textures parser_rgb parser_map parser_utils \
+main initialise destroy \
 $(addprefix debug/debug_, scene map) \
 ))
 MANDATORY_OBJ = $(MANDATORY_SRC:%.c=%.o)

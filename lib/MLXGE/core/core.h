@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:06:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 10:32:25 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 10:54:06 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define MACOS 1
 # define LINUX 2
 # ifndef BUILD_OS
-#  define BUILD_OS LINUX
+#  define BUILD_OS MACOS
 # endif
 # ifdef BUILD_OS
 #  if BUILD_OS == MACOS

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 14:52:57 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/07 13:52:00 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 11:53:57 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ bool	parse_texture_element(const char *element, size_t elem_id, t_cub3d *app)
 	bool	valid;
 	char	*path;
 
-	if (app->texture_paths[elem_id])
+	if (app->wall_texture_paths[elem_id])
 		return (!cub3d_error("Invalid parse: Duplicate texture found "\
 				"\"%s\"", element));
 	path = ft_strtrim(&element[2], " \t");
@@ -81,7 +81,7 @@ bool	parse_texture_element(const char *element, size_t elem_id, t_cub3d *app)
 		return (!cub3d_error("Invalid parse: No texture path found: \"%s\"",
 				element));
 	}
-	valid = store_xpm_path(&app->texture_paths[elem_id],
+	valid = store_xpm_path(&app->wall_texture_paths[elem_id],
 			validate_texture_path(path));
 	free(path);
 	return (valid);
