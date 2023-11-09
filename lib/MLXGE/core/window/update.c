@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 20:39:42 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/02 21:45:00 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/06 18:52:23 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	mlxge_on_update(t_layer *list)
 	while (layer->next)
 	{
 		layer = layer->next;
-		layer->on_update(layer);
+		layer->on_update(layer, core->timer.elapsed_sec);
 	}
 	mlxge_render(core->mlx_inst_ptr, core->mlx_window->mlx_win_ptr, list);
 	return (1);

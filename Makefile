@@ -38,7 +38,7 @@ SET_OS = $(shell uname)
 ifeq ($(SET_OS), Darwin)
 	OSLINK = -framework OpenGL -framework AppKit
 	DEF_OS = -DBUILD_OS=1
-	LINK += -Llib/MLXGE -lmlx
+	LINK += -Llib/MLXGE -lmlx -lm
 else ifeq ($(SET_OS), Linux)
 	INC += -I/usr/include
 	LINK += -L/usr/lib

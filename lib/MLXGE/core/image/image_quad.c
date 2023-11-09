@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   image_quad.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 08:50:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 10:13:48 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/06 19:13:13 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static inline t_img_quad	*new_image_quad(void)
 	return (image);
 }
 
-static t_img_quad	*create_image_quad(t_v2i origin, t_dimensions size,
+static t_img_quad	*create_image_quad(t_v2d origin, t_dimensions size,
 						bool is_mlx_object)
 {
 	t_img_quad	*image;
@@ -53,7 +53,7 @@ static t_img_quad	*create_image_quad(t_v2i origin, t_dimensions size,
 	return (image);
 }
 
-t_img_quad	*mlxge_new_frame(t_v2i origin, t_dimensions size,
+t_img_quad	*mlxge_new_frame(t_v2d origin, t_dimensions size,
 				bool is_mlx_object)
 {
 	return (create_image_quad(origin, size, is_mlx_object));
@@ -77,7 +77,7 @@ void	mlxge_destroy_image_quad(t_img_quad *image)
 
 // ----- API -------------------------------------------------------------------
 
-t_img_quad	*mlxge_new_image(t_img_quad **list, t_v2i origin,
+t_img_quad	*mlxge_new_image(t_img_quad **list, t_v2d origin,
 				t_dimensions size)
 {
 	t_img_quad	*node;

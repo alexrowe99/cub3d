@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:39:05 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 10:13:48 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/07 18:21:31 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,23 @@ void	mlxge_fill_rect(t_img_quad *image, t_v2i start, t_v2i end,
 			px++;
 		}
 		start.y++;
+	}
+}
+
+typedef struct s_line_y
+{
+	int	start;
+	int	end;
+}	t_line;
+
+void	mlxge_draw_vertical_line(t_img_quad *image, int x, t_v2i y_line, int colour)
+{
+	t_line	y;
+
+	y = (t_line){y_line.x, y_line.y};
+	while (y.start <= y.end)
+	{
+		image->buff[y.start * image->size.width + x] = colour;
+		y.start++;
 	}
 }

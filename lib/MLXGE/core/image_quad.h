@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   image_quad.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:42:06 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 10:13:57 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/06 19:07:13 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 typedef struct s_image_quad_list
 {
-	t_v2i						origin;
+	t_v2d						origin;
 	t_dimensions				size;
 	int							bg_colour;
 	bool						is_mlx_object;

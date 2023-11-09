@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:34:16 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 19:15:26 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/06 18:52:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 typedef struct s_layer_list
 {
-	int							(*on_update)(struct s_layer_list *);
+	int							(*on_update)(struct s_layer_list *, double timestep);
 	t_event						*events[COUNT_EVENT_TYPES];
 	t_img_quad					*frame;
 	struct s_image_quad_list	*images_to_render;

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:52:44 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/02 18:16:23 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/06 19:11:09 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	mlxge_destroy_viewports(t_viewport *viewport_list)
 
 // ----- API -------------------------------------------------------------------
 
-t_viewport	*mlxge_new_viewport(t_viewport **list, t_v2i origin,
+t_viewport	*mlxge_new_viewport(t_viewport **list, t_v2d origin,
 				t_dimensions size)
 {
 	t_viewport	*view;

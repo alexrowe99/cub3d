@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:37:07 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 11:49:08 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 17:12:33 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ bool	parse_map_file(t_cub3d *app, const char *filepath)
 	ft_bzero(&map_file, sizeof(t_file));
 	success = read_file_contents(filepath, &map_file);
 	success = success && parse_map_settings(&map_file, app);
-	success = success && parse_map_tiles(&map_file, app);
+	success = success && parse_map_tiles(&map_file, &app->world);
 	ft_free_str_2d(map_file.contents, map_file.line_count);
 	return (success);
 }

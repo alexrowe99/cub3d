@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:06:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 10:54:06 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/06 19:10:11 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,14 @@ t_mlxge			*get_core(void);
 void			mlxge_destroy(void);
 
 t_layer			*create_window_layer(t_dimensions size);
-t_layer			*mlxge_new_layer(t_v2i origin, t_dimensions size,
-					int (*on_update)(t_layer *));
+t_layer			*mlxge_new_layer(t_v2d origin, t_dimensions size,
+					int (*on_update)(t_layer *, double));
 int				mlxge_push_layer(t_layer *layer);
 void			mlxge_destroy_layers(t_layer *list);
 
-t_img_quad		*mlxge_new_frame(t_v2i origin, t_dimensions size,
+t_img_quad		*mlxge_new_frame(t_v2d origin, t_dimensions size,
 					bool is_mlx_object);
-t_img_quad		*mlxge_new_image(t_img_quad **list, t_v2i origin,
+t_img_quad		*mlxge_new_image(t_img_quad **list, t_v2d origin,
 					t_dimensions size);
 
 t_event_layer	*mlxge_load_event_layers(t_layer *render_list);

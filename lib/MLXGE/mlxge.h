@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlxge.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:05:18 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 10:13:48 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/07 14:07:02 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@
 # include <core/key_input.h>
 
 void			mlxge_init(void *app_struct_ptr,
-					int (*destroy_app_struct_funct)(void *));
+					int (*destroy_app_struct_funct)());
 void			mlxge_destroy(void);
 int				mlxge_run(void);
 
 int				mlxge_create_window(int width, int height, char *title);
 
-t_layer			*mlxge_new_layer(t_v2i origin, t_dimensions size,
-					int (*on_update)(t_layer *));
+t_layer			*mlxge_new_layer(t_v2d origin, t_dimensions size,
+					int (*on_update)(t_layer *, double));
 int				mlxge_push_layer(t_layer *layer);
 
 bool			mlxge_is_key_down(enum e_mlxge_keycodes code);
@@ -51,11 +51,11 @@ t_event			*mlxge_new_key_event(enum e_key_input_types input, int keycode,
 					int (*handler)(void *param), void *param);
 void			mlxge_push_event(t_event *event, t_event **list);
 
-t_viewport		*mlxge_new_viewport(t_viewport **list, t_v2i origin,
+t_viewport		*mlxge_new_viewport(t_viewport **list, t_v2d origin,
 				t_dimensions size);
 t_cam_ortho2d	*mlxge_new_camera_2d_orthographic(t_v2i offset);
 
-t_img_quad		*mlxge_new_image(t_img_quad **list, t_v2i origin,
+t_img_quad		*mlxge_new_image(t_img_quad **list, t_v2d origin,
 					t_dimensions size);
 void			mlxge_output_ppm(t_img_quad *image);
 
@@ -64,5 +64,6 @@ void			mlxge_draw_circle(t_img_quad *image, t_v2i center, int size,
 					int colour);
 void			mlxge_fill_rect(t_img_quad *image, t_v2i start, t_v2i end,
 					int colour);
+void			mlxge_draw_vertical_line(t_img_quad *image, int x, t_v2i y_line, int colour);
 
 #endif

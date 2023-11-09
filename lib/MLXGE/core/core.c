@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:03:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 10:35:01 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/03 17:43:33 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ t_mlxge	*get_core(void)
 // ----- API -------------------------------------------------------------------
 
 void	mlxge_init(void *app_struct_ptr,
-			int (*destroy_app_struct_funct)(void *))
+			int (*destroy_app_struct_funct)())
 {
 	*get_core()->sandbox = (struct s_user_app){.user_app_ref = app_struct_ptr,
 	.user_app_destroy = destroy_app_struct_funct};

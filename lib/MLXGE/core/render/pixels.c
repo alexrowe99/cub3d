@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 20:08:49 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/30 12:41:57 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/06 19:13:30 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static inline void	put_pixel(t_img_quad *image, int x, int y, int colour)
 }
 
 t_img_quad	*set_pixels(t_img_quad *frame, t_img_quad *image,
-				t_v2i img_origin)
+				t_v2d img_origin)
 {
 	t_v2i	p;
 	t_v2i	offset;
@@ -40,13 +40,13 @@ t_img_quad	*set_pixels(t_img_quad *frame, t_img_quad *image,
 	p.y = -1;
 	while (++p.y < image->size.height)
 	{
-		offset.y = p.y + img_origin.y;
+		offset.y = p.y + (int)img_origin.y;
 		if (0 <= offset.y && offset.y < frame->size.height)
 		{
 			p.x = -1;
 			while (++p.x < image->size.width)
 			{
-				offset.x = p.x + img_origin.x;
+				offset.x = p.x + (int)img_origin.x;
 				if (0 <= offset.x && offset.x < frame->size.width)
 				{
 					colour = image->buff[p.y * image->size.width + p.x];
