@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libftall.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 15:07:45 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 21:12:49 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/09 12:48:58 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,7 @@ size_t	ft_2d_array_len(char **array);
 void	ft_free_str_2d(char **array, size_t len);
 void	*ft_vfree(size_t count, ...);
 char	**ft_strdup_2d(char **array);
+int		**ft_dup_2d_int_n(int **array, size_t n);
+void	*ft_free_2d_int_n(int **array, size_t n);
 
 #endif

@@ -17,7 +17,7 @@ $(addprefix core/, $(addsuffix .c, printf_core core_utils convert_args output_fo
 
 ADDONS_DIR = addons
 ADDONS_SRC = $(addprefix $(ADDONS_DIR)/, $(addprefix ft_, $(addsuffix .c,\
-strndup resize_str append_str_2d 2d_array_len free_str_2d vfree strdup_2d)))
+strndup resize_str append_str_2d 2d_array_len free_str_2d vfree strdup_2d int_2d)))
 
 SRC = $(LIBFT_SRC) $(ADDONS_SRC)
 LIBFT_OBJS = $(SRC:.c=.o)

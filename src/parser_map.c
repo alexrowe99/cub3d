@@ -3,63 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   parser_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:19:55 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 17:38:30 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/09 13:02:20 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-static char	**populate_map_tiles(char **raw_tile_data, t_map *map)
+static int	**populate_map_tiles(char **raw_tile_data, t_map *map)
 {
-	int		i;
+	t_v2i	it;
 
-	map->tiles = ft_calloc(map->size.height + 1, sizeof(char *));
+	map->tiles = ft_calloc(map->size.height + 1, sizeof(int *));
 	if (!map->tiles)
 	{
 		cub3d_error("Something unexpected happened");
 		return (NULL);
 	}
-	i = -1;
-	while (++i < map->size.height)
+	it.y = -1;
+	while (++it.y < map->size.height)
 	{
-		map->tiles[i] = malloc(map->size.width + 1);
-		if (!map->tiles[i])
+		map->tiles[it.y] = ft_calloc(map->size.width + 1, sizeof(int));
+		if (!map->tiles[it.y])
 		{
 			cub3d_error("Something unexpected happened");
-			ft_free_str_2d(map->tiles, i);
+			ft_free_2d_int_n(map->tiles, map->size.height);
 			return (NULL);
 		}
-		map->tiles[i][map->size.width] = '\0';
-		ft_memset(map->tiles[i], ' ', map->size.width);
-		ft_memcpy(map->tiles[i], raw_tile_data[i],
-			ft_strlen(raw_tile_data[i]));
+		it.x = -1;
+		while (++it.x < map->size.width)
+			map->tiles[it.y][it.x] = store_tile(raw_tile_data[it.y][it.x]);
 	}
 	return (map->tiles);
 }
 
-static bool	validate_store_player_spawn(t_world *world, t_dimensions map_size)
+static bool	validate_store_player_spawn(t_world *world, t_dimensions it)
 {
 	int		tile;
 	bool	has_spawn;
 	bool	spawn_found;
 
 	has_spawn = false;
-	while (--map_size.height)
+	while (--it.height)
 	{
-		map_size.width = -1;
-		while (++map_size.width < world->map.size.width)
+		it.width = -1;
+		while (++it.width < world->map.size.width)
 		{
-			tile = world->map.tiles[map_size.height][map_size.width];
+			tile = world->map.tiles[it.height][it.width];
 			spawn_found = is_spawn_tile(tile, &world->player);
 			if (spawn_found && has_spawn)
 				return (!cub3d_error("Invalid parse: Multiple spawn points "\
 						"detected in map file"));
 			else if (spawn_found && !has_spawn)
 			{
-				world->player.position = (t_v2d){map_size.width, map_size.height};
+				world->map.tiles[it.height][it.width] = TILE_FLOOR;
+				world->player.position = (t_v2d){it.width, it.height};
 				has_spawn = true;
 			}
 		}
@@ -70,7 +70,7 @@ static bool	validate_store_player_spawn(t_world *world, t_dimensions map_size)
 typedef struct s_floodfill_map_validation
 {
 	t_dimensions	dim;
-	char			**grid;
+	int				**grid;
 	bool			*visited;
 }	t_ffill;
 
@@ -104,7 +104,7 @@ static bool	check_map_enclosed(t_world *world)
 	bool	valid;
 	t_ffill	check;
 
-	check.grid = ft_strdup_2d(world->map.tiles);
+	check.grid = ft_dup_2d_int_n(world->map.tiles, world->map.size.height);
 	if (!check.grid)
 		return (!cub3d_error("Something unexpected happened"));
 	valid = false;
@@ -114,12 +114,12 @@ static bool	check_map_enclosed(t_world *world)
 	if (check.visited)
 	{
 		valid = validate_map_floodfill(&check,
-				(t_v2i){world->player.position.x, world->player.position.y}, '1');
+				(t_v2i){world->player.position.x, world->player.position.y}, TILE_WALL);
 		if (!valid)
 			cub3d_error("Invalid parse: Map is not enclosed by wall tiles");
 		free(check.visited);
 	}
-	ft_free_str_2d(check.grid, check.dim.height);
+	ft_free_2d_int_n(check.grid, check.dim.height);
 	return (valid);
 }
 

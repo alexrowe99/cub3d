@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:32:26 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/07 17:53:38 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/09 14:51:30 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ bool	is_spawn_tile(int c, t_entity *entity)
 		else if (c == 'S')
 			entity->direction = (t_v2d){0, 1};
 		else if (c == 'E')
-			entity->direction = (t_v2d){1, 0};
-		else if (c == 'W')
 			entity->direction = (t_v2d){-1, 0};
+		else if (c == 'W')
+			entity->direction = (t_v2d){1, 0};
 	}
 	return (is_spawn);
 }
 
 bool	is_valid_character(int c)
 {
-	return (c == ' ' || c == '0' || c == '1' || is_spawn_tile(c, NULL));
+	return (c == ' ' || c == '0' || c == '1' || is_spawn_tile(c, 0));
 }
 
 bool	validate_map_tiles(const char *line)
@@ -46,4 +46,18 @@ bool	validate_map_tiles(const char *line)
 		line++;
 	}
 	return (true);
+}
+
+int	store_tile(char tile)
+{
+	if (tile != ' ')
+	{
+		if (is_spawn_tile(tile, 0))
+		{
+			// printf("Spawn = %c/%i\n", tile, tile);
+			return (tile);
+		}
+		return (ft_atoi(&tile) + 1);
+	}
+	return (-1);
 }

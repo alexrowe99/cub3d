@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   macos_keycodes.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:26:47 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/30 16:33:21 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/09 11:48:21 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ enum e_keycodes
 	MLX_KEY_COMMAND_RIGHT = 260,
 	MLX_KEY_OPTION_RIGHT = 262,
 	MLX_KEY_ARROW_LEFT = 123,
-	MLX_KEY_ARROW_RIGHT = 124,
-	MLX_KEY_ARROW_DOWN = 125,
 	MLX_KEY_ARROW_UP = 126,
+	MLX_KEY_ARROW_DOWN = 125,
+	MLX_KEY_ARROW_RIGHT = 124,
 };
 
 #endif
