@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:19:55 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/09 13:02:20 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/10 09:44:10 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ static int	**populate_map_tiles(char **raw_tile_data, t_map *map)
 			return (NULL);
 		}
 		it.x = -1;
-		while (++it.x < map->size.width)
+		while (++it.x < map->size.width && raw_tile_data[it.y][it.x])
 			map->tiles[it.y][it.x] = store_tile(raw_tile_data[it.y][it.x]);
+		while (it.x < map->size.width)
+			map->tiles[it.y][it.x++] = TILE_EMPTY;
 	}
 	return (map->tiles);
 }

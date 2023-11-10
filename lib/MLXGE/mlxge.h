@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlxge.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:05:18 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/07 14:07:02 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/10 10:34:16 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_img_quad		*mlxge_new_image(t_img_quad **list, t_v2d origin,
 void			mlxge_output_ppm(t_img_quad *image);
 
 void			mlxge_fill(t_img_quad *image, int colour);
-void			mlxge_draw_circle(t_img_quad *image, t_v2i center, int size,
+void			mlxge_draw_circle(t_img_quad *image, t_v2i center, int radius,
 					int colour);
 void			mlxge_fill_rect(t_img_quad *image, t_v2i start, t_v2i end,
 					int colour);

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/09 13:58:34 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/10 10:38:12 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 
 // ----- Window definitions -----------------------------------------
 
-# define WIN_H 480
+# define WIN_H 600
 # define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
 
 // ----- Parser definitions -----------------------------------------
@@ -70,6 +70,7 @@ enum e_map_tile_types
 
 typedef struct s_map
 {
+	int				scale;
 	t_dimensions	size;
 	int				**tiles;
 	t_img_quad		*sprite;

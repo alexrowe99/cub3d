@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_mac.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/07 15:03:26 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/10 14:06:09 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static inline void	update_viewports(t_img_quad *update_frame,
 	t_v2d			projection;
 	t_img_quad		*image;
 
+	// printf("Update Frame = %p\n", update_frame);
 	while (viewports)
 	{
 		viewports->frame = clear_layer_frame(viewports->frame,
@@ -53,7 +54,6 @@ static inline void	update_viewports(t_img_quad *update_frame,
 						projection.y + cam.origin.y - cam.position.y};
 			}
 			viewports->frame = set_pixels(viewports->frame, image, projection);
-			// mlxge_output_ppm(viewports->frame);
 			image = image->next;
 		}
 		update_frame = set_pixels(update_frame, viewports->frame,
@@ -85,9 +85,9 @@ void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 				image = image->next;
 			}
 		}
+		// mlxge_output_ppm(layers->frame);
 		set_pixels(win_frame, layers->frame, layers->frame->origin);
 	}
 	mlx_put_image_to_window(mlx_inst, mlx_win, win_frame->mlx_ptr, 0, 0);
 	mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, mlx_win);
-	// mlxge_destroy();
 }
