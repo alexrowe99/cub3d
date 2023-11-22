@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/10 14:06:09 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/22 16:51:40 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 	t_img_quad	*image;
 	t_img_quad	*win_frame;
 
+	// printf("Rendering frame.\n");
 	win_frame = clear_layer_frame(layers->frame, layers->frame->is_mlx_object);
 	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, win_frame->mlx_ptr);
 	while (layers->next)
@@ -90,4 +91,5 @@ void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 	}
 	mlx_put_image_to_window(mlx_inst, mlx_win, win_frame->mlx_ptr, 0, 0);
 	mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, mlx_win);
+	// printf("Frame Complete.\n");
 }

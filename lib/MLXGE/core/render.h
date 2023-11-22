@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:02 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/06 19:12:54 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/22 16:22:51 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@ void		mlxge_fill_rect(t_img_quad *image, t_v2i start, t_v2i end,
 				int colour);
 t_img_quad	*set_pixels(t_img_quad *frame, t_img_quad *image,
 				t_v2d img_origin);
+void		put_pixel(t_img_quad *image, int x, int y, int colour);
 
 #endif

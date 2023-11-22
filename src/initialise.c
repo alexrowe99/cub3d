@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 12:53:03 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/10 14:06:15 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/22 17:35:06 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ void	gather_input(t_world *world, double timestep)
 	player->move = (t_v2d){0};
 	player->move_speed = timestep * 5.0f;
 	if (mlxge_is_key_down(KEY_W))
-		player->move = (movement()[FORWARD]).update(player);
+		player->move = movement()[FORWARD].update(player);
 	if (mlxge_is_key_down(KEY_S))
 		player->move = movement()[BACKWARD].update(player);
 	if (mlxge_is_key_down(KEY_A))
@@ -198,24 +198,36 @@ void	gather_input(t_world *world, double timestep)
 		player->move = movement()[RIGHT].update(player);
 }
 
+void	update_minimap(t_viewport *view, t_world world)
+{
+	view->camera->position.x += world.player.move.x * world.map.scale;
+	view->camera->position.y += world.player.move.y * world.map.scale;
+}
+
+static inline void	update_world(t_world *world)
+{
+	world->player.position.x += world->player.move.x;
+	world->player.position.y += world->player.move.y;
+	world->player.sprite->origin.x += world->player.move.x * world->map.scale;
+	world->player.sprite->origin.y += world->player.move.y * world->map.scale;
+}
+
 static int	game_loop(t_layer *game_layer, double timestep)
 {
 	t_cub3d		*app;
-	// t_img_quad	*view;
+	t_img_quad	*view;
 
 	(void)game_layer;
 	app = cub3d();
-	// view = app->game_view->images_to_render->next;
-	// raycast(&app->raycaster, view, &app->world);
+	view = app->game_view->images_to_render->next;
+	raycast(&app->raycaster, view, &app->world);
 	gather_input(&app->world, timestep);
-
-	app->debug_view->camera->position.x += app->world.player.move.x * app->world.map.scale;
-	app->debug_view->camera->position.y += app->world.player.move.y * app->world.map.scale;
-
+	update_minimap(app->debug_view, app->world);
+	update_world(&app->world);
 	return (1);
 }
 
-static inline void	*create_map_sprite(t_img_quad **list, t_v2d view_origin,
+void	*create_map_sprite(t_img_quad **list, t_v2d view_origin,
 						t_map *map)
 {
 	t_v2i			p;
@@ -250,18 +262,18 @@ static inline void	*create_map_sprite(t_img_quad **list, t_v2d view_origin,
 	return (map->sprite);
 }
 
-// static inline void	*create_player_sprite(t_img_quad **list, t_entity *player)
-// {
-// 	int	circle_radius;
+static inline void	*create_player_sprite(t_img_quad **list, t_entity *player)
+{
+	int	circle_radius;
 
-// 	circle_radius = 4;
-// 	player->sprite = mlxge_new_image(list, (t_v2d){-circle_radius, -circle_radius},
-// 		(t_dimensions){circle_radius * 2 + 1, circle_radius * 2 + 1});
-// 	if (player->sprite)
-// 		mlxge_draw_circle(player->sprite, (t_v2i){circle_radius, circle_radius},
-// 			circle_radius, 0xFF0000);
-// 	return (player->sprite);
-// }
+	circle_radius = 4;
+	player->sprite = mlxge_new_image(list, (t_v2d){-circle_radius, -circle_radius},
+		(t_dimensions){circle_radius * 2 + 1, circle_radius * 2 + 1});
+	if (player->sprite)
+		mlxge_draw_circle(player->sprite, (t_v2i){circle_radius, circle_radius},
+			circle_radius, 0xFF0000);
+	return (player->sprite);
+}
 
 static inline t_viewport	*create_debug_viewport(t_viewport **list,
 								t_v2d view_origin, t_dimensions view_size,
@@ -272,60 +284,60 @@ static inline t_viewport	*create_debug_viewport(t_viewport **list,
 	view = mlxge_new_viewport(list, view_origin, view_size);
 	if (!view)
 		return ((void *)0);
-	if (!create_map_sprite(&view->images_to_render, (t_v2d){0}, &world->map))
-		// || !create_player_sprite(&view->images_to_render, &world->player))
+	if (!create_map_sprite(&view->images_to_render, (t_v2d){0}, &world->map)
+		|| !create_player_sprite(&view->images_to_render, &world->player))
 		return ((void *)0);
 	view->camera = mlxge_new_camera_2d_orthographic((t_v2i){view_size.width / 2,
 			view_size.height / 2});
 	if (!view->camera)
 		return ((void *)0);
-	// view->camera->position = (t_v2d){
-	// 	world->player.position.x * world->map.scale,
-	// 	world->player.position.y * world->map.scale,
-	// };
+	view->camera->position = (t_v2d){
+		world->player.position.x * world->map.scale,
+		world->player.position.y * world->map.scale,
+	};
+	world->player.sprite->origin.x += view->camera->position.x;
+	world->player.sprite->origin.y += view->camera->position.y;
 	return (view);
 }
 
-// static inline void	draw_background(t_img_quad *view, int **rgb_settings)
-// {
-// 	int	half_max_y;
+static inline void	draw_background(t_img_quad *view, int **rgb_settings)
+{
+	int	half_max_y;
 
-// 	half_max_y = view->size.height / 2;
-// 	mlxge_fill_rect(view, (t_v2i){0, 0},
-// 		(t_v2i){view->size.width, half_max_y}, *rgb_settings[ID_CEILING_RGB]);
-// 	mlxge_fill_rect(view, (t_v2i){0, half_max_y},
-// 		(t_v2i){view->size.width, view->size.height},
-// 		*rgb_settings[ID_FLOOR_RGB]);
-// }
+	half_max_y = view->size.height / 2;
+	mlxge_fill_rect(view, (t_v2i){0, 0},
+		(t_v2i){view->size.width, half_max_y}, *rgb_settings[ID_CEILING_RGB]);
+	mlxge_fill_rect(view, (t_v2i){0, half_max_y},
+		(t_v2i){view->size.width, view->size.height},
+		*rgb_settings[ID_FLOOR_RGB]);
+}
 
-// void	*create_raycast_viewport(t_viewport **list,
-// 						t_v2d view_origin, t_dimensions view_size, t_cub3d *app)
-// {
-// 	t_img_quad	*background;
+void	*create_raycast_viewport(t_viewport **list,
+						t_v2d view_origin, t_dimensions view_size, t_cub3d *app)
+{
+	t_img_quad	*background;
 
-// 	app->game_view = mlxge_new_viewport(list, view_origin, view_size);
-// 	if (!app->game_view)
-// 		return ((void *)0);
-// 	background = mlxge_new_image(&app->game_view->images_to_render,
-// 		(t_v2d){0, 0}, view_size);
-// 	if (!background)
-// 		return ((void *)0);
-// 	draw_background(background, app->rgb);
-// 	mlxge_new_image(&app->game_view->images_to_render, (t_v2d){0, 0}, view_size);
-// 	return (app->game_view);
-// }
+	app->game_view = mlxge_new_viewport(list, view_origin, view_size);
+	if (!app->game_view)
+		return ((void *)0);
+	background = mlxge_new_image(&app->game_view->images_to_render, (t_v2d){0, 0}, view_size);
+	if (!background)
+		return ((void *)0);
+	draw_background(background, app->rgb);
+	mlxge_new_image(&app->game_view->images_to_render, (t_v2d){0, 0}, view_size);
+	return (app->game_view);
+}
 
 static inline bool	define_viewports(t_cub3d *app, t_layer *game_layer,
 						t_dimensions view_size)
 {
 	app->debug_view = create_debug_viewport(&game_layer->viewport_list,
 		(t_v2d){0, 0}, view_size, &app->world);
-	return (app->debug_view);
-	// if (!app->debug_view)
-	// 	return (false);
-	// app->game_view = create_raycast_viewport(&game_layer->viewport_list,
-	// 	(t_v2d){view_size.width + 4, 0}, view_size, app);
-	// return (app->game_view);
+	if (!app->debug_view)
+		return (false);
+	app->game_view = create_raycast_viewport(&game_layer->viewport_list,
+		(t_v2d){view_size.width + 4, 0}, view_size, app);
+	return (app->game_view);
 }
 
 static inline void	initalise_world(t_cub3d *app)
@@ -361,7 +373,7 @@ void	initialise(t_cub3d *app, const char *map_filepath)
 		exit(destroy_cub3d(app));
 
 	view = *set_display(WIN_H, 4.0f / 3);
-	*(&window()->size.width) = view.size.width;// * 2 + 2;
+	*(&window()->size.width) = view.size.width * 2 + 2;
 	mlxge_init(app, destroy_cub3d);
 	if (mlxge_create_window(window()->size.width, window()->size.height, TITLE) < 0)
 		mlxge_destroy();

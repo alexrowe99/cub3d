@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:39:05 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/07 18:21:31 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/22 16:22:11 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,22 @@
 
 void	mlxge_fill(t_img_quad *image, int colour)
 {
-	int	size;
+	t_v2i	p;
 
-	size = image->size.width * image->size.height;
-	while (size--)
-		image->buff[size] = colour;
+	if (image->is_mlx_object)
+	{
+		p.y = -1;
+		while (++p.y < image->size.height)
+		{
+			p.x = -1;
+			while (++p.x < image->size.width)
+				put_pixel(image, p.x, p.y, colour);
+		}
+		return ;
+	}
+	p.x = image->size.width * image->size.height;
+	while (p.x--)
+		image->buff[p.x] = colour;
 }
 
 void	mlxge_draw_circle(t_img_quad *image, t_v2i center, int radius,

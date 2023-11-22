@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pixels.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 20:08:49 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/06 19:13:30 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/22 16:22:44 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <render.h>
 #include <dimensions.h>
 
-static inline void	put_pixel(t_img_quad *image, int x, int y, int colour)
+void	put_pixel(t_img_quad *image, int x, int y, int colour)
 {
 	char	*buff;
 	char	*dst;
