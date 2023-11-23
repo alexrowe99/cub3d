@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
+/*   bonus_cub3d.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/24 09:39:39 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/24 09:27:28 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H
+#ifndef BONUS_CUB3D_H
+# define BONUS_CUB3D_H
 
 // ----- Headers ----------------------------------------------------
 
@@ -22,7 +22,6 @@
 # include <math.h>
 
 # include <mlxge.h>
-# include <cub3d_file_struct.h>
 
 // ----- Window definitions -----------------------------------------
 
@@ -43,18 +42,13 @@
 #  define COUNT_ELEMENTS 6
 # endif
 
-enum e_map_tile_types
+typedef struct s_file_contents
 {
-	TILE_EMPTY = -1,
-	TILE_FLOOR = 1,
-	TILE_WALL = 2,
-};
-
-enum s_parse_rgb_id
-{
-	ID_FLOOR_RGB = 0,
-	ID_CEILING_RGB
-};
+	int				fd;
+	char			**contents;
+	size_t			line_count;
+	size_t			it;
+}	t_file;
 
 typedef struct s_entity
 {
@@ -64,7 +58,15 @@ typedef struct s_entity
 	double			move_speed;
 	double			rotation_speed;
 	bool			has_moved;
+	t_img_quad		*sprite;
 }	t_entity;
+
+enum e_map_tile_types
+{
+	TILE_EMPTY = -1,
+	TILE_FLOOR = 1,
+	TILE_WALL = 2,
+};
 
 typedef struct s_map
 {
@@ -82,14 +84,35 @@ typedef struct s_world
 	t_entity		player;
 }	t_world;
 
+enum s_parse_rgb_id
+{
+	ID_FLOOR_RGB = 0,
+	ID_CEILING_RGB
+};
+
+typedef struct s_raycaster
+{
+	t_v2d	plane;
+	double	camera_x;
+	t_v2d	ray_direction;
+	t_v2i	map_position;
+	t_v2d	side_distance;
+	t_v2d	delta_distance;
+	double	perpendiular_wall_distance;
+	t_v2i	step;
+	bool	ray_hit;
+	int		side;
+}	t_raycast;
+
 typedef struct s_cub3d
 {
+	t_raycast		raycaster;
 	int				*rgb[RGB_COUNT];
 	char			*wall_texture_paths[TEXTURE_COUNT];
 	t_world			world;
+	t_viewport		*game_view;
+	t_viewport		*minimap;
 }	t_cub3d;
-
-typedef struct s_map_file	t_file;
 
 t_cub3d		*cub3d(void);
 void		initialise(t_cub3d *app, const char *map_filepath);
@@ -104,7 +127,7 @@ bool		parse_texture_element(const char *element, size_t id,
 				t_cub3d *app);
 int			get_rgb_id(const char *element);
 bool		parse_rgb_element(const char *element, size_t id, t_cub3d *app);
-bool		parse_map_tiles(t_file *file, t_world *world);
+bool		parse_map_tiles(t_file *m_file, t_world *world);
 
 // Parser Utils
 
@@ -112,5 +135,11 @@ bool		validate_map_tiles(const char *line);
 bool		is_valid_character(int c);
 bool		is_spawn_tile(int c, t_entity *player);
 int			store_tile(char tile);
+
+
+// ----- INGNORE ME - DONT REMOVE!! --------------------------------------------
+bool		define_debug_scene(t_world *world, t_viewport *minimap);
+t_img_quad	*draw_map_texture(t_world *world, t_viewport *minimap);
+// -----------------------------------------------------------------------------
 
 #endif

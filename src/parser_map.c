@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:19:55 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/10 09:44:10 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/24 09:39:55 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,25 +125,25 @@ static bool	check_map_enclosed(t_world *world)
 	return (valid);
 }
 
-bool	parse_map_tiles(t_file *m_file, t_world *world)
+bool	parse_map_tiles(t_file *file, t_world *world)
 {
 	size_t	offset;
-	int		m_width;
+	int		map_width;
 
-	world->map.size.height = m_file->line_count - m_file->it;
+	world->map.size.height = file->line_count - file->it;
 	if (!world->map.size.height)
 		return (!cub3d_error("Invalid parse: There are no map tiles present"));
-	while (m_file->it != m_file->line_count)
+	while (file->it != file->line_count)
 	{
-		if (!validate_map_tiles(m_file->contents[m_file->it]))
+		if (!validate_map_tiles(file->contents[file->it]))
 			return (false);
-		m_width = ft_strlen(m_file->contents[m_file->it]);
-		if (world->map.size.width < m_width)
-			world->map.size.width = m_width;
-		m_file->it++;
+		map_width = ft_strlen(file->contents[file->it]);
+		if (world->map.size.width < map_width)
+			world->map.size.width = map_width;
+		file->it++;
 	}
-	offset = m_file->it - world->map.size.height;
-	if (!populate_map_tiles(&m_file->contents[offset], &world->map))
+	offset = file->it - world->map.size.height;
+	if (!populate_map_tiles(&file->contents[offset], &world->map))
 		return (false);
 	if (!validate_store_player_spawn(world, world->map.size))
 		return (!cub3d_error("Invalid parse: No spawn point detected in map "\

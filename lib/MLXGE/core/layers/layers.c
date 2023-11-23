@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   layers.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:33:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/06 19:10:33 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/23 11:03:41 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,12 @@ t_layer	*create_window_layer(t_dimensions size)
 
 // ----- API -------------------------------------------------------------------
 
+/*
+	Allocates a new layer on the heap.
+	Binds on_update function pointer to the layer. This funcion will be called during the applications update loop.
+	Creates the render frame to draw the layer's images to. (Like a static background image and dynamic foreground e.g. raycast walls)
+*/
+// Create a new layer. Returns NULL on error.
 t_layer	*mlxge_new_layer(t_v2d origin, t_dimensions size,
 			int (*on_update)(t_layer *, double))
 {
@@ -96,6 +102,7 @@ t_layer	*mlxge_new_layer(t_v2d origin, t_dimensions size,
 	return (layer);
 }
 
+// Push layer to back of render queue.
 int	mlxge_push_layer(t_layer *layer)
 {
 	t_layer	*node;
