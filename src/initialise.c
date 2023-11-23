@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 12:53:03 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/24 09:53:18 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/24 10:01:11 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	initialise(t_cub3d *app, const char *map_filepath)
 	// A layer is added to the render queue.
 	// Shouldn't need to create any events as their is input polling with mlxge_is_key_down().
 	game_layer = mlxge_new_layer(window->origin, window->size, game_loop);
-	if (!game_layer || !mlxge_push_layer(game_layer))
+	if (!game_layer || !mlxge_push_layer(game_layer)) // mlxge_push_layer always returns 1 as it cant fail. - just some norminette cheese to save line space.
 		return (mlxge_destroy());
 	initialise_world(app, game_layer);
 }
