@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 15:07:45 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/11 09:27:37 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/09 12:48:58 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@
 # include <unistd.h>
 # include <stdarg.h>
 
-# if defined(__unix__) || defined(unix) || defined(__unix)
-#  include <stdint.h>
+# define OS_LINUX 2
+# ifdef BUILD_OS
+#  if BUILD_OS == OS_LINUX
+#   include <stdint.h>
+#  endif
 # endif
 
 // libft
@@ -73,5 +76,7 @@ size_t	ft_2d_array_len(char **array);
 void	ft_free_str_2d(char **array, size_t len);
 void	*ft_vfree(size_t count, ...);
 char	**ft_strdup_2d(char **array);
+int		**ft_dup_2d_int_n(int **array, size_t n);
+void	*ft_free_2d_int_n(int **array, size_t n);
 
 #endif

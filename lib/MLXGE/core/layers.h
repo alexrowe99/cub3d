@@ -5,31 +5,36 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/05 11:02:13 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/09 14:37:12 by lmells           ###   ########.fr       */
+/*   Created: 2023/10/25 14:34:16 by lmells            #+#    #+#             */
+/*   Updated: 2023/11/06 18:52:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LAYERS_H
 # define LAYERS_H
 
-# include <layers_struct.h>
+# include "events.h"
+# include "image_quad.h"
+# include "viewport.h"
 
-typedef struct s_layer_list	t_window_layer;
-
-typedef enum e_list_type
+typedef struct s_layer_list
 {
-	EVENT_LAYER,
-	WINDOW_LAYER,
-	COUNT_LAYER_LIST_TYPES
-}	t_list_type;
+	int							(*on_update)(struct s_layer_list *, double timestep);
+	t_event						*events[COUNT_EVENT_TYPES];
+	t_img_quad					*frame;
+	struct s_image_quad_list	*images_to_render;
+	t_viewport					*viewport_list;
+	struct s_layer_list			*next;
+}	t_layer;
 
-void	*mlxge_new_layer(int frame_width, int frame_height, void *on_update);
+typedef t_layer	t_render_layer;
 
-void	*mlxge_new_frame(int origin_x, int origin_y, int width, int height,
-			void *mlx_image);
+typedef struct s_event_layer_list
+{
+	t_layer						*layer_ref;
+	struct s_event_layer_list	*next;
+}	t_event_layer;
 
-void	mlxge_push_layer_list_front(t_list_type type, void *layer, void **list);
-void	mlxge_destroy_layers(t_list_type type, void *layers);
+int	mlxge_push_layer(t_layer *layer);
 
 #endif

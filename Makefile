@@ -17,7 +17,8 @@ NAME_BONUS = cub3d_bonus
 # ----- Mandatory C Files ------------------------------------------------------
 
 MANDATORY_SRC = $(addprefix $(SRC_DIR)/, $(addsuffix .c, \
-main initialise parser parser_textures parser_rgb parser_map parser_utils \
+parser parser_textures parser_rgb parser_map parser_utils \
+main initialise destroy \
 ))
 MANDATORY_OBJ = $(MANDATORY_SRC:%.c=%.o)
 
@@ -30,37 +31,36 @@ BONUS_OBJ = $(BONUS_SRC:%.c=%.o)
 
 # ----- Compilation Flags ------------------------------------------------------
 
-CFLAGS = -Wall -Werror -Wextra -O2
+CFLAGS = -Wall -Werror -Wextra# -O2
 
-OSLINK =
-DEF_OS =
 SET_OS = $(shell uname)
 ifeq ($(SET_OS), Darwin)
 	OSLINK = -framework OpenGL -framework AppKit
 	DEF_OS = -DBUILD_OS=1
+	LINK += -Llib/MLXGE -lmlx -lm
 else ifeq ($(SET_OS), Linux)
 	INC += -I/usr/include
 	LINK += -L/usr/lib
 	OSLINK = -lXext -lX11 -lm -lz
 	DEF_OS += -DBUILD_OS=2
 endif
-BUILD_OS = SET_OS=$(SET_OS)
+BUILD_OS = SET_OS=$(SET_OS) CWD=$(shell pwd)
 
 DEBUG =
 ifeq ($(DEBUG),1)
-	CFLAGS += -g -fsanitize=address
+	CFLAGS += -g# -fsanitize=address
 endif
 
 # ----- Build Rules ------------------------------------------------------------
 
 # 	all - Defaults to mandatory build.
-all: mandatory
+all: $(NAME)
+
+$(NAME): mandatory
 
 #	m - Builds the mandatory section.
-mandatory: $(NAME)
-
-$(NAME): $(MLXGE) $(MANDATORY_OBJ)
-	cc $(CFLAGS) $(MANDATORY_OBJ) $(DEF_OS) $(INC) $(LINK) -o $@ $(OSLINK)
+mandatory: $(MLXGE) $(MANDATORY_OBJ)
+	cc $(CFLAGS) $(MANDATORY_OBJ) $(DEF_OS) $(INC) $(LINK) -o $(NAME) $(OSLINK)
 
 $(MANDATORY_OBJ): %.o: %.c
 	cc $(CFLAGS) $(DEF_OS) $(INC) -o $@ -c $<
@@ -84,9 +84,13 @@ else
 endif
 
 clean:
-	rm -rf $(NAME) $(MANDATORY_OBJ) *.dSYM
+	rm -rf $(NAME) $(MANDATORY_OBJ) *.dSYM *.dylib
 
 fclean: clean
 	make -C lib/MLXGE fclean
 
 re: fclean all
+
+norm:
+	norminette src
+	make -C lib/MLXGE norm

@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/09 11:30:08 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/09 11:43:11 by lmells           ###   ########.fr       */
+/*   Created: 2023/10/25 17:23:26 by lmells            #+#    #+#             */
+/*   Updated: 2023/10/27 18:04:49 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 
 typedef struct s_dimensions
 {
-	int width;
+	int	width;
 	int	height;
 }	t_dimensions;
-
-t_dimensions	dimensions(int w, int h);
 
 #endif

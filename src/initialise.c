@@ -3,216 +3,108 @@
 /*                                                        :::      ::::::::   */
 /*   initialise.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 12:53:03 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/19 19:19:09 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/24 10:01:11 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-struct s_key_input
+// !! Add in game + update logic here !!
+// Image bg colour is initalised with value 0xFF000000 - Transparent Pixel (Transparency: 255, Red: 0, Green: 0, Blue: 0)
+// Currently only flushing the image that the raycast engine will draw to.
+// World struct contains the player entity.
+int	game_loop(t_layer *game_layer, double timestep)
 {
-	int		code;
-	bool	is_down;
-};
+	// t_world		*world;
+	// world = &cub3d()->world;
+	t_img_quad	*raycast_image;
 
-enum e_active_key_poll
-{
-	W, S, A, D,
-	COUNT_ACTIVE_KEYS
-};
-
-static struct s_key_input	key_input[COUNT_ACTIVE_KEYS] = {
-	{.code=KEY_W, .is_down=false},
-	{.code=KEY_S, .is_down=false},
-	{.code=KEY_A, .is_down=false},
-	{.code=KEY_D, .is_down=false},
-};
-
-int	store_input(void *index)
-{
-	key_input[*(int *)index].is_down = true;
-	return (0);
+	(void)timestep;
+	raycast_image = game_layer->images_to_render->next;
+	mlxge_fill(raycast_image, raycast_image->bg_colour);
+	return (1);
 }
 
-int	remove_input(void *index)
+typedef struct s_window_display_properties
 {
-	key_input[*(int *)index].is_down = false;
-	return (0);
+	t_v2d			origin;
+	t_dimensions	size;
+	double			aspect_ratio;
+}	t_window;
+
+static t_window	*window(void)
+{
+	static t_window	window;
+
+	return (&window);
 }
 
-bool is_key_down(int index)
+static inline t_window	*set_display_properties(size_t win_height, double aspect_ratio)
 {
-	return (key_input[index].is_down);
-}
+	t_window	*win;
 
-struct s_mlxge_texture
-{
-	void	*img_ptr;
-};
-
-enum texture_count
-{
-	MAP,
-	PLAYER,
-	COUNT_TEXTRUES
-};
-
-struct s_mlxge_texture	g_textures[COUNT_TEXTRUES];
-t_viewport				g_viewport;
-
-void	*draw_map_image(void *map_img, t_cub3d *app)
-{
-	t_v2i		it;
-	t_v2i		start;
-	t_v2i		end;
-	int			colour;
-
-	it = v2i(0, -1);
-	while (++it.y < app->map_dim.height)
-	{
-		it.x = -1;
-		while (++it.x < app->map_dim.width)
-		{
-			if (app->map_tiles[it.y][it.x] == ' ')
-				continue ;
-			colour = 0xFFFFFF;
-			if (app->map_tiles[it.y][it.x] == '1')
-				colour = 0x2EA4FF;
-			start = v2i(it.x * app->tile_size + 1, it.y * app->tile_size + 1);
-			end = v2i((it.x + 1) * app->tile_size - 1, (it.y + 1) * app->tile_size - 1);
-			mlxge_draw_rect_fill(map_img, start, end, colour);
-		}
-	}
-	return (map_img);
-}
-
-int	game_loop(t_layer *viewport, double timestep)
-{
-	t_cub3d		*app;
-	t_entity	*player;
-	int			move_pixels;
-
-	(void)viewport;
-	printf("Delta Time: %f; FPS: %i\n", timestep, (int)(1.0f/timestep));
-	app = cub3d();
-	player = &app->player;
-	player->has_moved = false;
-	move_pixels = app->tile_size * ((double)(player->velocity * timestep));
-	if (is_key_down(W))
-	{
-		mlxge_image_translate(g_textures[MAP].img_ptr, 0, move_pixels);
-		player->has_moved = true;
-	}
-	if (is_key_down(S))
-	{
-		mlxge_image_translate(g_textures[MAP].img_ptr, 0, -move_pixels);
-		player->has_moved = true;
-	}
-	if (is_key_down(A))
-	{
-		mlxge_image_translate(g_textures[MAP].img_ptr, move_pixels, 0);
-		player->has_moved = true;
-	}
-	if (is_key_down(D))
-	{
-		mlxge_image_translate(g_textures[MAP].img_ptr, -move_pixels, 0);
-		player->has_moved = true;
-	}
-	// if (player->has_moved)
-		viewport->has_updated_images = true;//player->has_moved;
-	return (0);
-}
-
-struct s_key_events
-{
-	int	index;
-	int code;
-};
-
-static struct s_key_events	active_keys[COUNT_ACTIVE_KEYS] = {
-	{.index = 0, .code = KEY_W},
-	{.index = 0, .code = KEY_S},
-	{.index = 0, .code = KEY_A},
-	{.index = 0, .code = KEY_D},
-};
-
-void	load_minimap_test(t_cub3d *app)
-{
-	// ---- Define viewport ----------------------------------------------------
-	g_viewport.dim = dimensions(20 * 16, 20 * 10);
-	g_viewport.orig = v2d(g_viewport.dim.width/2, g_viewport.dim.height/2);
-	g_viewport.camera = (t_camera){
-		.offset = v2d(g_viewport.orig.x, g_viewport.orig.y),
-		.pos = v2i(0, 0)
+	win = window();
+	*win = (t_window){
+		.origin = {0, 0},
+		.size = {win_height * aspect_ratio, win_height},
+		.aspect_ratio = aspect_ratio
 	};
-	g_viewport.render = mlxge_new_layer(g_viewport.dim.width,
-						g_viewport.dim.height, game_loop);
-	if (!g_viewport.render)
-		return ((void)mlxge_destroy());
-	mlxge_push_layer(g_viewport.render);
-	mlxge_image_translate(g_viewport.render->frame, 20, 20);
-	g_viewport.render->viewport = &g_viewport;
+	return (win);
+}
 
-	int		i;
-	void	*key_input;
-	i = -1;
-	while (++i < COUNT_ACTIVE_KEYS)
-	{
-		struct s_key_events	*key = &active_keys[i];
-		key->index = i;
-		key_input = mlxge_new_key_event(PRESSED, key->code,
-					store_input, &key->index);
-		if (!key_input)
-			return ((void)mlxge_destroy());
-		mlxge_push_event(key_input, g_viewport.render->event_list);
-	}
-	i = -1;
-	while (++i < COUNT_ACTIVE_KEYS)
-	{
-		struct s_key_events	*key = &active_keys[i];
-		key_input = mlxge_new_key_event(RELEASED, key->code,
-					remove_input, &key->index);
-		if (!key_input)
-			return ((void)mlxge_destroy());
-		mlxge_push_event(key_input, g_viewport.render->event_list);
-	}
-	// ------------------------------------------------------------------------
-	// ---- Create static images ----------------------------------------------
-	g_textures[MAP].img_ptr = mlxge_new_image(&g_viewport.render->image_list,
-				-(app->player.pos.x * app->tile_size) - app->tile_size/2 + 1,
-				-(app->player.pos.y * app->tile_size) - app->tile_size/2 + 1,
-				app->map_dim.width * app->tile_size,
-				app->map_dim.height * app->tile_size);
-	if (!g_textures[MAP].img_ptr)
+// Background is just a static image with 2 rectangles.
+// One for the ceiling and one for the floor.
+void	draw_background(t_world *world, t_layer *game_layer)
+{
+	t_img_quad	*background;
+
+	background = mlxge_new_image(&game_layer->images_to_render,
+			game_layer->frame->origin, game_layer->frame->size);
+	if (!background)
+		return (mlxge_destroy());
+	mlxge_fill_rect(background, (t_v2i){0, 0},
+			(t_v2i){background->size.width, background->size.height / 2},
+			world->map.ceiling_colour);
+	mlxge_fill_rect(background,
+			(t_v2i){0, background->size.height / 2},
+			(t_v2i){background->size.width, background->size.height},
+			world->map.floor_colour);
+}
+
+// Game Foreground is the image that the raycaster will draw to.
+static inline void	initialise_world(t_cub3d *app, t_layer *game_layer)
+{
+	t_world		*world;
+	t_img_quad	*game_foreground;
+
+	world = &app->world;
+	world->map.ceiling_colour = *app->rgb[ID_CEILING_RGB];
+	world->map.floor_colour = *app->rgb[ID_FLOOR_RGB];
+	draw_background(world, game_layer);
+	game_foreground = mlxge_new_image(&game_layer->images_to_render,
+			game_layer->frame->origin, game_layer->frame->size);
+	if (!game_foreground)
 		mlxge_destroy();
-	g_textures[MAP].img_ptr = draw_map_image(g_textures[MAP].img_ptr, app);
-
-	g_textures[PLAYER].img_ptr = mlxge_new_image(&g_viewport.render->image_list,
-									0, 0,
-									app->tile_size/8, app->tile_size/8);
-	if (!g_textures[PLAYER].img_ptr)
-		mlxge_destroy();
-	mlxge_image_translate(g_textures[PLAYER].img_ptr,
-		-((app->tile_size/16)/2),
-		-((app->tile_size/16)/2));
-	mlxge_draw_circle(g_textures[PLAYER].img_ptr, app->tile_size/16, app->tile_size/16, app->tile_size/16, 0x15FC00);
-
-	g_viewport.render->has_updated_images = true;
-	// ------------------------------------------------------------------------
 }
 
 void	initialise(t_cub3d *app, const char *map_filepath)
 {
-	ft_bzero(app, sizeof(t_cub3d));
-	if (!parse_map_file(app, map_filepath))
-		exit(destroy_cub3d(app));
+	t_layer		*game_layer;
+	t_window	*window;
+
+	window = set_display_properties(WIN_H, 16.0f / 9);
 	mlxge_init(app, destroy_cub3d);
-	if (mlxge_create_window(1280, 720, TITLE, true) < 0)
-		mlxge_destroy();
-	app->tile_size = 64;
-	app->player.velocity = 15.0f;
-	load_minimap_test(app);
+	if (!parse_map_file(app, map_filepath)
+		|| mlxge_create_window(window->size.width, window->size.height, TITLE) < 0)
+		return (mlxge_destroy());
+	
+	// A layer is added to the render queue.
+	// Shouldn't need to create any events as their is input polling with mlxge_is_key_down().
+	game_layer = mlxge_new_layer(window->origin, window->size, game_loop);
+	if (!game_layer || !mlxge_push_layer(game_layer)) // mlxge_push_layer always returns 1 as it cant fail. - just some norminette cheese to save line space.
+		return (mlxge_destroy());
+	initialise_world(app, game_layer);
 }

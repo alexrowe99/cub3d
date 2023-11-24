@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:37:07 by lmells            #+#    #+#             */
-/*   Updated: 2023/09/17 16:25:20 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/24 09:40:21 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
 
-static bool	read_file_contents(const char *filepath, t_file *file)
+static bool	get_file_contents(const char *filepath, t_file *file)
 {
 	bool	error;
 	char	*line;
@@ -50,58 +50,58 @@ static bool	check_data_populated(t_cub3d *app, bool validated)
 	i = 0;
 	while (i < TEXTURE_COUNT)
 	{
-		if (app->texture_paths[i++] == NULL)
+		if (app->wall_texture_paths[i++] == NULL)
 			return (!cub3d_error("Invalid parse: Required texture paths are "\
 					"missing"));
 	}
 	i = 0;
 	while (i < RGB_COUNT)
 	{
-		if (app->rgb_floor_ceiling[i++] == NULL)
+		if (app->rgb[i++] == NULL)
 			return (!cub3d_error("Invalid parse: Required RGB values are "\
 					"missing"));
 	}
 	return (true);
 }
 
-static bool	parse_map_settings(t_file *m_file, t_cub3d *app)
+static bool	parse_map_settings(t_file *file, t_cub3d *app)
 {
 	int		id;
 	bool	valid;
 
 	valid = true;
-	while (m_file->it != m_file->line_count)
+	while (file->it != file->line_count)
 	{
-		id = get_texture_id(m_file->contents[m_file->it]);
-		valid = id >= 0 && parse_texture_element(m_file->contents[m_file->it],
+		id = get_texture_id(file->contents[file->it]);
+		valid = id >= 0 && parse_texture_element(file->contents[file->it],
 				id, app);
 		if (!valid && id < 0)
 		{
-			id = get_rgb_id(m_file->contents[m_file->it]);
-			valid = id >= 0 && parse_rgb_element(m_file->contents[m_file->it],
+			id = get_rgb_id(file->contents[file->it]);
+			valid = id >= 0 && parse_rgb_element(file->contents[file->it],
 					id, app);
 		}
 		if (!valid)
 			break ;
-		m_file->it++;
+		file->it++;
 	}
-	if (id == -1 && m_file->it != COUNT_ELEMENTS
-		&& m_file->it != m_file->line_count)
+	if (id == -1 && file->it != COUNT_ELEMENTS
+		&& file->it != file->line_count)
 		return (!cub3d_error("Invalid parse: Line \"%s\" is not recognisable",
-				m_file->contents[m_file->it]));
-	return (check_data_populated(app, valid || m_file->it == COUNT_ELEMENTS));
+				file->contents[file->it]));
+	return (check_data_populated(app, valid || file->it == COUNT_ELEMENTS));
 }
 
 bool	parse_map_file(t_cub3d *app, const char *filepath)
 {
 	bool	success;
-	t_file	map_file;
+	t_file	file;
 
 	errno = 0;
-	ft_bzero(&map_file, sizeof(t_file));
-	success = read_file_contents(filepath, &map_file);
-	success = success && parse_map_settings(&map_file, app);
-	success = success && parse_map_tiles(&map_file, app);
-	ft_free_str_2d(map_file.contents, map_file.line_count);
+	ft_bzero(&file, sizeof(file));
+	success = get_file_contents(filepath, &file);
+	success = success && parse_map_settings(&file, app);
+	success = success && parse_map_tiles(&file, &app->world);
+	ft_free_str_2d(file.contents, file.line_count);
 	return (success);
 }
