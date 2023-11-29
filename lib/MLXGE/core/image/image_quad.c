@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   image_quad.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 08:50:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/06 19:13:13 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/29 16:20:30 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,12 @@ t_img_quad	*mlxge_new_image(t_img_quad **list, t_v2d origin,
 	if (image)
 	{
 		mlxge_fill(image, image->bg_colour);
-		node = *list;
-		if (!node)
+		if (!*list)
 		{
 			*list = image;
 			return (image);
 		}
+		node = *list;
 		while (node->next)
 			node = node->next;
 		node->next = image;

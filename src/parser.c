@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:37:07 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/24 09:40:21 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/29 13:00:46 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,6 @@ static bool	check_data_populated(t_cub3d *app, bool validated)
 	{
 		if (app->wall_texture_paths[i++] == NULL)
 			return (!cub3d_error("Invalid parse: Required texture paths are "\
-					"missing"));
-	}
-	i = 0;
-	while (i < RGB_COUNT)
-	{
-		if (app->rgb[i++] == NULL)
-			return (!cub3d_error("Invalid parse: Required RGB values are "\
 					"missing"));
 	}
 	return (true);

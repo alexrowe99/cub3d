@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 12:53:03 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/24 10:01:11 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/28 20:51:39 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,11 @@ void	draw_background(t_world *world, t_layer *game_layer)
 		return (mlxge_destroy());
 	mlxge_fill_rect(background, (t_v2i){0, 0},
 			(t_v2i){background->size.width, background->size.height / 2},
-			world->map.ceiling_colour);
+			*world->map.ceiling_colour);
 	mlxge_fill_rect(background,
 			(t_v2i){0, background->size.height / 2},
 			(t_v2i){background->size.width, background->size.height},
-			world->map.floor_colour);
+			*world->map.floor_colour);
 }
 
 // Game Foreground is the image that the raycaster will draw to.
@@ -81,8 +81,8 @@ static inline void	initialise_world(t_cub3d *app, t_layer *game_layer)
 	t_img_quad	*game_foreground;
 
 	world = &app->world;
-	world->map.ceiling_colour = *app->rgb[ID_CEILING_RGB];
-	world->map.floor_colour = *app->rgb[ID_FLOOR_RGB];
+	world->map.ceiling_colour = &app->rgb[ID_CEILING_RGB];
+	world->map.floor_colour = &app->rgb[ID_FLOOR_RGB];
 	draw_background(world, game_layer);
 	game_foreground = mlxge_new_image(&game_layer->images_to_render,
 			game_layer->frame->origin, game_layer->frame->size);

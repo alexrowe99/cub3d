@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:33:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/23 11:03:41 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/28 21:04:29 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,10 @@ t_layer	*mlxge_new_layer(t_v2d origin, t_dimensions size,
 	if (!layer->frame)
 	{
 		mlxge_log(ERROR, ERR_LAY_CREAT" : Couldn't create MLXGE frame");
+
+		mlxge_log(DEBUG, "DUMPING PARAMETERS: origin = (%i, %i); size = (%i, %i);",
+			(int)origin.x, (int)origin.y, size.width, size.height);
+
 		free(layer);
 		return ((void *)0);
 	}

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 10:54:58 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/24 09:23:08 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/28 21:44:33 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static void	destroy_world(t_world *world)
 		free(world->map.tiles[world->map.size.height]);
 		world->map.tiles[world->map.size.height] = (void *)0;
 	}
+	free(world->map.tiles);
 }
 
 int	destroy_cub3d(t_cub3d *app)
@@ -35,11 +36,6 @@ int	destroy_cub3d(t_cub3d *app)
 		{
 			free(app->wall_texture_paths[i]);
 			app->wall_texture_paths[i] = (void *)0;
-		}
-		if (i < RGB_COUNT && app->rgb[i])
-		{
-			free(app->rgb[i]);
-			app->rgb[i] = (void *)0;
 		}
 	}
 	return (1);

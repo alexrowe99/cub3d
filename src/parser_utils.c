@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:32:26 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/09 14:51:30 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/28 19:15:06 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,7 @@ int	store_tile(char tile)
 	if (tile != ' ')
 	{
 		if (is_spawn_tile(tile, 0))
-		{
-			// printf("Spawn = %c/%i\n", tile, tile);
 			return (tile);
-		}
 		return (ft_atoi(&tile) + 1);
 	}
 	return (-1);

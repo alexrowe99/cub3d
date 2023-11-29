@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/24 09:39:39 by lmells           ###   ########.fr       */
+/*   Updated: 2023/11/28 20:53:30 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ typedef struct s_map
 	t_dimensions	size;
 	int				**tiles;
 	t_img_quad		*sprite;
-	int				floor_colour;
-	int				ceiling_colour;
+	int				*floor_colour;
+	int				*ceiling_colour;
 }	t_map;
 
 typedef struct s_world
@@ -84,7 +84,7 @@ typedef struct s_world
 
 typedef struct s_cub3d
 {
-	int				*rgb[RGB_COUNT];
+	int				rgb[RGB_COUNT];
 	char			*wall_texture_paths[TEXTURE_COUNT];
 	t_world			world;
 }	t_cub3d;
