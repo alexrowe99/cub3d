@@ -35,7 +35,7 @@ static inline t_img_quad	*clear_layer_frame(t_img_quad *frame,
 static inline void	update_viewports(t_img_quad *update_frame,
 						t_viewport *viewports)
 {
-	t_v2i			projection;
+	t_v2d			projection;
 	t_img_quad		*image;
 
 	while (viewports)
@@ -49,7 +49,7 @@ static inline void	update_viewports(t_img_quad *update_frame,
 			if (viewports->camera)
 			{
 				t_cam_ortho2d	cam = *viewports->camera;
-				projection = (t_v2i){projection.x + cam.origin.x - cam.position.x,
+				projection = (t_v2d){projection.x + cam.origin.x - cam.position.x,
 						projection.y + cam.origin.y - cam.position.y};
 			}
 			viewports->frame = set_pixels(viewports->frame, image, projection);
