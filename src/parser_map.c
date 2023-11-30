@@ -53,15 +53,17 @@ static bool	validate_store_player_spawn(t_world *world, t_dimensions it)
 		it.width = -1;
 		while (++it.width < world->map.size.width)
 		{
-			tile = world->map.tiles[it.height][it.width];
+			tile = world->map.tiles[it.width][it.height];
 			spawn_found = is_spawn_tile(tile, &world->player);
 			if (spawn_found && has_spawn)
 				return (!cub3d_error("Invalid parse: Multiple spawn points "\
 						"detected in map file"));
 			else if (spawn_found && !has_spawn)
 			{
-				world->map.tiles[it.height][it.width] = TILE_FLOOR;
+				world->map.tiles[it.width][it.height] = TILE_FLOOR;
 				world->player.position = (t_v2d){it.width, it.height};
+				world->player.move_speed = 5.0;
+				world->player.rotation_speed = 0.01;
 				has_spawn = true;
 			}
 		}
