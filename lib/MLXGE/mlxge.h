@@ -43,7 +43,7 @@ int				mlxge_run(void);
 int				mlxge_create_window(int width, int height, char *title);
 
 t_layer			*mlxge_new_layer(t_v2d origin, t_dimensions size,
-					int (*on_update)(t_layer *, double));
+					int (*on_update)(t_layer *, double, void *));
 int				mlxge_push_layer(t_layer *layer);
 
 bool			mlxge_is_key_down(enum e_mlxge_keycodes code);
