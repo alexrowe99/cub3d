@@ -19,7 +19,7 @@
 
 typedef struct s_layer_list
 {
-	int							(*on_update)(struct s_layer_list *, double timestep);
+	int							(*on_update)(struct s_layer_list *, double timestep, void *app);
 	t_event						*events[COUNT_EVENT_TYPES];
 	t_img_quad					*frame;
 	struct s_image_quad_list	*images_to_render;
