@@ -16,7 +16,7 @@
 # define MACOS 1
 # define LINUX 2
 # ifndef BUILD_OS
-#  define BUILD_OS MACOS
+#  define BUILD_OS LINUX
 # endif
 # ifdef BUILD_OS
 #  if BUILD_OS == MACOS
@@ -71,7 +71,7 @@ void			mlxge_destroy(void);
 
 t_layer			*create_window_layer(t_dimensions size);
 t_layer			*mlxge_new_layer(t_v2d origin, t_dimensions size,
-					int (*on_update)(t_layer *, double));
+					int (*on_update)(t_layer *, double, void *));
 int				mlxge_push_layer(t_layer *layer);
 void			mlxge_destroy_layers(t_layer *list);
 
