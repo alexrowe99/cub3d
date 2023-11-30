@@ -82,6 +82,22 @@ typedef struct s_world
 	t_entity		player;
 }	t_world;
 
+typedef struct s_raycaster
+{
+	t_v2d	camera;
+	t_v2d	camera_plane;
+	t_v2d	direction;
+	t_v2i	map_pos;
+	t_v2d	side_distance;
+	t_v2d	delta_distance;
+	double	perpendicular_wall_distance;
+	t_v2i	step;
+	int		hit;
+	int		side;
+	int		line_height;
+	t_v2i	draw_line;
+} t_ray;
+
 typedef struct s_cub3d
 {
 	int				*rgb[RGB_COUNT];
@@ -112,5 +128,6 @@ bool		validate_map_tiles(const char *line);
 bool		is_valid_character(int c);
 bool		is_spawn_tile(int c, t_entity *player);
 int			store_tile(char tile);
+
 
 #endif
