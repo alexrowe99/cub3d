@@ -16,7 +16,7 @@
 # define OS_MACOS 1
 # define OS_LINUX 2
 # ifndef BUILD_OS
-#  define BUILD_OS OS_MACOS
+#  define BUILD_OS OS_LINUX
 # endif
 # ifdef BUILD_OS
 #  if BUILD_OS == OS_MACOS
