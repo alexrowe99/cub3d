@@ -31,7 +31,7 @@ BONUS_OBJ = $(BONUS_SRC:%.c=%.o)
 
 # ----- Compilation Flags ------------------------------------------------------
 
-CFLAGS = -Wall -Werror -Wextra# -O2
+CFLAGS = -Wall -Werror -Wextra -g# -O2
 
 SET_OS = $(shell uname)
 ifeq ($(SET_OS), Darwin)
