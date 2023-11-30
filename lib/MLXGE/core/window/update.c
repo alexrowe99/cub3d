@@ -41,7 +41,7 @@ int	mlxge_on_update(t_layer *list)
 	while (layer->next)
 	{
 		layer = layer->next;
-		layer->on_update(layer, core->timer.elapsed_sec);
+		layer->on_update(layer, core->timer.elapsed_sec, core->sandbox->user_app_ref);
 	}
 	mlxge_render(core->mlx_inst_ptr, core->mlx_window->mlx_win_ptr, list);
 	return (1);
