@@ -84,7 +84,7 @@ t_layer	*create_window_layer(t_dimensions size)
 */
 // Create a new layer. Returns NULL on error.
 t_layer	*mlxge_new_layer(t_v2d origin, t_dimensions size,
-			int (*on_update)(t_layer *, double))
+			int (*on_update)(t_layer *, double, void *))
 {
 	t_layer	*layer;
 
