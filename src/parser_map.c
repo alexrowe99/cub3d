@@ -62,7 +62,7 @@ static bool	validate_store_player_spawn(t_world *world, t_dimensions it)
 			{
 				world->map.tiles[it.width][it.height] = TILE_FLOOR;
 				world->player.position = (t_v2d){it.width, it.height};
-				world->player.move_speed = 5.0;
+				world->player.move_speed = 0.01;
 				world->player.rotation_speed = 0.01;
 				has_spawn = true;
 			}
