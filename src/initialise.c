@@ -12,7 +12,6 @@
 
 #include <cub3d.h>
 
-
 typedef struct s_window_display_properties
 {
 	t_v2d origin;
@@ -94,8 +93,8 @@ int game_loop(t_layer *game_layer, double timestep, void *app)
 		raycaster.camera.x = 2 * screen_pos / (double)(game_layer->frame->size.width) - 1;
 		raycaster.direction.x = world->player.direction.x + raycaster.camera_plane.x * raycaster.camera.x;
 		raycaster.direction.y = world->player.direction.y + raycaster.camera_plane.y * raycaster.camera.x;
-		raycaster.map_pos.x = (int)world->player.position.x; // 17
-		raycaster.map_pos.y = (int)world->player.position.y; // 4
+		raycaster.map_pos.x = (int)world->player.position.x;
+		raycaster.map_pos.y = (int)world->player.position.y;
 		if (raycaster.direction.x >= 0)
 		{
 			if (raycaster.direction.x == 0)
@@ -161,17 +160,31 @@ int game_loop(t_layer *game_layer, double timestep, void *app)
 	}
 	if (mlxge_is_key_down(KEY_W))
 	{
-		if (world->map.tiles[(int)(world->player.position.x + world->player.direction.x * world->player.move_speed)][(int)(world->player.position.y)] == 2)
+		if (world->map.tiles[(int)(world->player.position.x + world->player.direction.x * world->player.move_speed)][(int)(world->player.position.y)] != 2)
 			world->player.position.x += world->player.direction.x * world->player.move_speed;
-		if (world->map.tiles[(int)(world->player.position.x)][(int)(world->player.position.y + world->player.direction.y * world->player.move_speed)] == 2)
+		if (world->map.tiles[(int)(world->player.position.x)][(int)(world->player.position.y + world->player.direction.y * world->player.move_speed)] != 2)
 			world->player.position.y += world->player.direction.y * world->player.move_speed;
 	}
 	if (mlxge_is_key_down(KEY_S))
 	{
-		if (world->map.tiles[(int)(world->player.position.x - world->player.direction.x * world->player.move_speed)][(int)(world->player.position.y)] == 2)
+		if (world->map.tiles[(int)(world->player.position.x - world->player.direction.x * world->player.move_speed)][(int)(world->player.position.y)] != 2)
 			world->player.position.x -= world->player.direction.x * world->player.move_speed;
-		if (world->map.tiles[(int)(world->player.position.x)][(int)(world->player.position.y - world->player.direction.y * world->player.move_speed)] == 2)
+		if (world->map.tiles[(int)(world->player.position.x)][(int)(world->player.position.y - world->player.direction.y * world->player.move_speed)] != 2)
 			world->player.position.y -= world->player.direction.y * world->player.move_speed;
+	}
+	if (mlxge_is_key_down(KEY_A))
+	{
+		if (world->map.tiles[(int)(world->player.position.x - raycaster.camera_plane.x * world->player.move_speed)][(int)(world->player.position.y)] != 2)
+			world->player.position.x -= raycaster.camera_plane.x * world->player.move_speed;
+		if (world->map.tiles[(int)(world->player.position.x)][(int)(world->player.position.y - raycaster.camera_plane.y * world->player.move_speed)] != 2)
+			world->player.position.y -= raycaster.camera_plane.y * world->player.move_speed;
+	}
+	if (mlxge_is_key_down(KEY_D))
+	{
+		if (world->map.tiles[(int)(world->player.position.x + raycaster.camera_plane.x * world->player.move_speed)][(int)(world->player.position.y)] != 2)
+			world->player.position.x += raycaster.camera_plane.x * world->player.move_speed;
+		if (world->map.tiles[(int)(world->player.position.x)][(int)(world->player.position.y + raycaster.camera_plane.y * world->player.move_speed)] != 2)
+			world->player.position.y += raycaster.camera_plane.y * world->player.move_speed;
 	}
 	if (mlxge_is_key_down(KEY_ARROW_RIGHT))
 	{
@@ -192,7 +205,7 @@ int game_loop(t_layer *game_layer, double timestep, void *app)
 		raycaster.camera_plane.y = old_plane_x * sin(world->player.rotation_speed) + raycaster.camera_plane.y * cos(world->player.rotation_speed);
 	}
 	// }
-	
+
 	return (1);
 }
 
