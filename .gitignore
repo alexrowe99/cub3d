@@ -63,4 +63,4 @@ cub3d
 **/**/*.swiftdoc
 **/**/*.swiftsourceinfo
 **/**/*.swiftmodule
-
+lib/MLXGE/lib/mlx/linux/test/**

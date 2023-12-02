@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:32:26 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/28 19:15:06 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/02 16:39:46 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,14 @@ bool	validate_map_tiles(const char *line)
 
 int	store_tile(char tile)
 {
+	char	tile_p[1];
+
+	*tile_p = tile;
 	if (tile != ' ')
 	{
 		if (is_spawn_tile(tile, 0))
 			return (tile);
-		return (ft_atoi(&tile) + 1);
+		return (ft_atoi(tile_p) + 1);
 	}
 	return (-1);
 }
