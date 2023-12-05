@@ -57,7 +57,9 @@ Mkfile.old
 dkms.conf
 
 # Additional Ignores...
+output_ppm/
 cub3d
+cub3d_bonus
 .DS_Store
 *.vscode/
 **/**/*.swiftdoc
