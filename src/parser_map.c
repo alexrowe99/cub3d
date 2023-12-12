@@ -6,11 +6,12 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:19:55 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/24 09:39:55 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/12 14:31:45 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cub3d.h>
+#include <cub3d_floodfill_struct.h>
 
 static int	**populate_map_tiles(char **raw_tile_data, t_map *map)
 {
@@ -69,13 +70,6 @@ static bool	validate_store_player_spawn(t_world *world, t_dimensions it)
 	return (has_spawn);
 }
 
-typedef struct s_floodfill_map_validation
-{
-	t_dimensions	dim;
-	int				**grid;
-	bool			*visited;
-}	t_ffill;
-
 static bool	validate_map_floodfill(t_ffill *check, t_v2i pos, int replace_c)
 {
 	bool	enclosed;
@@ -116,7 +110,8 @@ static bool	check_map_enclosed(t_world *world)
 	if (check.visited)
 	{
 		valid = validate_map_floodfill(&check,
-				(t_v2i){world->player.position.x, world->player.position.y}, TILE_WALL);
+				(t_v2i){world->player.position.x, world->player.position.y},
+				TILE_WALL);
 		if (!valid)
 			cub3d_error("Invalid parse: Map is not enclosed by wall tiles");
 		free(check.visited);

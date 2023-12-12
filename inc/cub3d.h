@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/28 20:53:30 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/12 14:26:07 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 # include <mlxge.h>
 # include <cub3d_file_struct.h>
+# include <cub3d_display.h>
 
 // ----- Window definitions -----------------------------------------
 
