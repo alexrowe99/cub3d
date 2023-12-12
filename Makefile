@@ -17,12 +17,12 @@ NAME_BONUS = cub3d_bonus
 
 # ----- Cub3d shared names -----------------------------------------------------
 
-SHARED_FILENAMES = initialise destroy #
+SHARED_FILENAMES = initialise destroy parser parser_textures parser_rgb parser_map parser_utils
 
 # ----- Cub3d core src ---------------------------------------------------------
 
 CUB3D_SRC = $(addprefix $(SRC_DIR)/, $(addsuffix .c, \
-main display parser parser_textures parser_rgb parser_map parser_utils \
+main display \
 ))
 CUB3D_OBJ = $(CUB3D_SRC:%.c=%.o)
 
