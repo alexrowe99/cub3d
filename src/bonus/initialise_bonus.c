@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 08:12:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 10:50:53 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:22:48 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ t_viewport	*define_game_viewport(t_layer *game_layer, struct s_display_propertie
 {
 	t_viewport	*view;
 
-	*view_prop = display_properties(VIEW_H, 16.0 / 9);
+	*view_prop = display_properties(VIEW_H, WIDE_16_9);
+	// printf("Game: %ix%i\n", view_prop->size.width, view_prop->size.height);
 	view = mlxge_new_viewport(&game_layer->viewport_list, view_prop->origin, view_prop->size);
 	if (!view)
 	{
@@ -32,40 +33,6 @@ t_viewport	*define_game_viewport(t_layer *game_layer, struct s_display_propertie
 		return ((void *)0);
 	}
 	view->frame->bg_colour = 0xFF0000;
-	return (view);
-}
-
-// void	create_hud_background(t_viewport *)
-// {
-
-// }
-
-t_viewport	*define_minimap_viewport(t_game *game, struct s_display_properties *game_view,
-				t_window *win)
-{
-	t_viewport					*view;
-	struct s_display_properties	minimap_view;
-
-	minimap_view = display_properties(256, game_view->aspect_ratio);
-	game->hud_size = (t_dimensions){
-		.width = win->size.width,
-		.height = win->size.height - game_view->size.height
-	};
-	minimap_view.origin = (t_v2d){
-		.x = find_middle_value(win->size.width, minimap_view.size.width),
-		.y = win->size.height - game->hud_size.height + find_middle_value(game->hud_size.height,
-			minimap_view.size.height)
-	};
-	view = mlxge_new_viewport(&game->layer->viewport_list, minimap_view.origin,
-			minimap_view.size);
-	if (!view)
-	{
-		cub3d_error("Failed to initialise game viewport because: "
-			"Couldn't allocate memory");
-		return ((void *)0);
-	}
-	view->frame->bg_colour = 0x00FF00;
-	// create_hud_background(view, game->hud_size);
 	return (view);
 }
 
@@ -82,10 +49,11 @@ bool	initialise_game_struct(t_game *game, t_window *win)
 		return (!cub3d_error("Failed to initialise game layer because: "\
 			"Couldn't allocate memory"));
 	game->view = define_game_viewport(game->layer, &view);
-	if (!game->view)
-		return (false);
-	game->minimap = define_minimap_viewport(game, &view, win);
-	return (game->minimap);
+	if (game->view)
+	{
+		game->hud = create_hud(game, win, &view);
+	}
+	return (game->view && game->hud);
 }
 
 // Set window properties - dimensions, aspect ratio & origin.
@@ -93,9 +61,10 @@ bool	initialise_game_struct(t_game *game, t_window *win)
 // Create a new window with defined window properties & title.
 static inline void	initialise_mlxge_application(t_cub3d *app)
 {
-	t_window					*win;
+	t_window	*win;
 
-	win = set_window_size(WIN_H, 6.0 / 5);
+	win = set_window_size(WIN_H, SQUARE_5_4);
+	// printf("Window: %ix%i\n", win->size.width, win->size.height);
 	mlxge_init(app, destroy_cub3d);
 	if (mlxge_create_window(win->size.width, win->size.height, TITLE) < 0
 		|| !initialise_game_struct(app->game, win))

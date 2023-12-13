@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/12 18:57:17 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:23:21 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@
 
 # define WIN_H 1024
 # define VIEW_H 720
-// # define VIEW_H 720
+# define WIDE_16_9 16.0 / 9
+# define SQUARE_5_4 5.0 / 4
 # define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
 
 // ----- Parser definitions -----------------------------------------
@@ -108,12 +109,19 @@ typedef struct s_raycaster
 	int				side;
 }	t_raycast;
 
+typedef struct s_cub3d_hud
+{
+	t_dimensions	size;
+	t_v2d			origin;
+	t_img_quad		*background_image;
+	t_viewport		*minimap;
+}	t_hud;
+
 typedef struct s_cub3d_game
 {
 	t_layer			*layer;
 	t_viewport		*view;
-	t_viewport		*minimap;
-	t_dimensions	hud_size;
+	t_hud			*hud;
 }	t_game;
 
 typedef struct s_cub3d
@@ -150,5 +158,10 @@ int			store_tile(char tile);
 // Utils
 
 int			find_middle_value(int a, int b);
+
+// HUD
+
+t_hud		*create_hud(t_game *game, t_window *win, struct s_display_properties *game_view);
+bool		create_minimap(t_hud *hud, t_layer *game_layer, t_dimensions win_size);
 
 #endif

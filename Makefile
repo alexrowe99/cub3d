@@ -35,6 +35,7 @@ MANDATORY_OBJ = $(MANDATORY_SRC:%.c=%.o)
 # ----- Bonus C Files ----------------------------------------------------------
 
 BONUS_SRC = $(addprefix $(BONUS_SRC_DIR)/, $(addsuffix _bonus.c, $(SHARED_FILENAMES) \
+$(addprefix hud/, hud minimap) \
 ))
 BONUS_OBJ = $(BONUS_SRC:%.c=%.o)
 
