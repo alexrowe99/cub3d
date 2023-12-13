@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/29 16:30:25 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/12 18:57:17 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@
 
 // ----- Window definitions -----------------------------------------
 
-# define WIN_H 600
+# define WIN_H 1024
+# define VIEW_H 720
+// # define VIEW_H 720
 # define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
 
 // ----- Parser definitions -----------------------------------------
@@ -110,15 +112,16 @@ typedef struct s_cub3d_game
 {
 	t_layer			*layer;
 	t_viewport		*view;
+	t_viewport		*minimap;
+	t_dimensions	hud_size;
 }	t_game;
 
 typedef struct s_cub3d
 {
-	int				rgb[RGB_COUNT];
 	char			*wall_texture_paths[TEXTURE_COUNT];
 	t_game			*game;
+	int				rgb[RGB_COUNT];
 	t_world			world;
-	// t_viewport		*minimap_view;
 	// t_raycast		raycaster;
 }	t_cub3d;
 
@@ -143,5 +146,9 @@ bool		validate_map_tiles(const char *line);
 bool		is_valid_character(int c);
 bool		is_spawn_tile(int c, t_entity *player);
 int			store_tile(char tile);
+
+// Utils
+
+int			find_middle_value(int a, int b);
 
 #endif

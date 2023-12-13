@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/12 14:26:07 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/12 18:47:06 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,9 @@ bool		validate_map_tiles(const char *line);
 bool		is_valid_character(int c);
 bool		is_spawn_tile(int c, t_entity *player);
 int			store_tile(char tile);
+
+// Utils
+
+int			find_middle_value(int a, int b);
 
 #endif

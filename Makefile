@@ -22,7 +22,7 @@ SHARED_FILENAMES = initialise destroy parser parser_textures parser_rgb parser_m
 # ----- Cub3d core src ---------------------------------------------------------
 
 CUB3D_SRC = $(addprefix $(SRC_DIR)/, $(addsuffix .c, \
-main display \
+main display utils \
 ))
 CUB3D_OBJ = $(CUB3D_SRC:%.c=%.o)
 

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 10:54:58 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/12 14:38:29 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/12 14:58:20 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ int	destroy_cub3d(t_cub3d *app)
 			free(app->wall_texture_paths[i]);
 			app->wall_texture_paths[i] = (void *)0;
 		}
+	}
+	if (app->game)
+	{
+		free(app->game);
+		app->game = (void *)0;
 	}
 	destroy_world(&app->world);
 	return (1);
