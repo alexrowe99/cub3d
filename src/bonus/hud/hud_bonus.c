@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 12:21:46 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 17:37:11 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 20:33:45 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,14 @@ void	create_hud_display(t_hud *hud, t_dimensions win, int offset_y)
 	hud->size = dimension_2d(win.width, win.height - offset_y);
     hud->origin = vector_2_double(0, offset_y);
 
-    // hud->background_image = mlxge_load_xpm_image();
+    hud->background_image = mlxge_load_xpm_image("./assets/hud/background.xpm");
+    if (!hud->background_image)
+    {
+        printf("\n\nSUCESSFUL TEST!!!\n\n");
+        mlxge_destroy();
+    }
+    mlxge_output_ppm(hud->background_image);
+    hud->background_image->origin = hud->origin;
 }
 
 t_hud	*create_hud(t_game *game, t_window *win,

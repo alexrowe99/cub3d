@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 17:23:21 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_entity
 	double			move_speed;
 	double			rotation_speed;
 	bool			has_moved;
-	t_img_quad		*sprite;
+	t_image		*sprite;
 }	t_entity;
 
 enum e_map_tile_types
@@ -78,7 +78,7 @@ typedef struct s_map
 	int				scale;
 	t_dimensions	size;
 	int				**tiles;
-	t_img_quad		*sprite;
+	t_image		*sprite;
 	int				*floor_colour;
 	int				*ceiling_colour;
 }	t_map;
@@ -113,7 +113,7 @@ typedef struct s_cub3d_hud
 {
 	t_dimensions	size;
 	t_v2d			origin;
-	t_img_quad		*background_image;
+	t_image		*background_image;
 	t_viewport		*minimap;
 }	t_hud;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   viewport.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:52:44 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/06 19:11:09 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:43:08 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static inline void	push_viewport_list_back(t_viewport *view, t_viewport **list)
 
 void	mlxge_destroy_viewports(t_viewport *viewport_list)
 {
-	t_img_quad	*image;
+	t_image	*image;
 	t_viewport	*node;
 
 	node = viewport_list;
@@ -55,10 +55,10 @@ void	mlxge_destroy_viewports(t_viewport *viewport_list)
 		{
 			image = node->images_to_render;
 			node->images_to_render = node->images_to_render->next;
-			mlxge_destroy_image_quad(image);
+			mlxge_destroy_image(image);
 		}
 		if (node->frame)
-			mlxge_destroy_image_quad(node->frame);
+			mlxge_destroy_image(node->frame);
 		free(node);
 		node = viewport_list;
 	}

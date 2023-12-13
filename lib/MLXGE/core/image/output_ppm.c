@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 11:41:12 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/29 15:39:19 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static inline void	write_ppm3_header(t_dimensions size, int out_fd,
 	free(filepath);
 }
 
-static inline void	write_pixels(t_img_quad *image, int out_fd)
+static inline void	write_pixels(t_image *image, int out_fd)
 {
 	int			x;
 	int			y;
@@ -80,7 +80,7 @@ static inline void	write_pixels(t_img_quad *image, int out_fd)
 	}
 }
 
-void	mlxge_output_ppm(t_img_quad *image)
+void	mlxge_output_ppm(t_image *image)
 {
 	int			out_fd;
 	char		*out_filepath;

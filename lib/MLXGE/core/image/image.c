@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   image_quad.c                                       :+:      :+:    :+:   */
+/*   image.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 08:50:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/29 16:20:30 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 18:10:38 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <core.h>
-#include <image_quad.h>
 
-static inline t_img_quad	*new_image_quad(void)
+t_image	*new_image(void)
 {
-	t_img_quad	*image;
+	t_image	*image;
 
-	image = ft_calloc(1, sizeof(t_img_quad));
+	image = ft_calloc(1, sizeof(t_image));
 	if (!image)
 	{
 		mlxge_log(ERROR, "Failed to create MLXGE image quad because : "\
@@ -27,12 +26,12 @@ static inline t_img_quad	*new_image_quad(void)
 	return (image);
 }
 
-static t_img_quad	*create_image_quad(t_v2d origin, t_dimensions size,
+static t_image	*create_image(t_v2d origin, t_dimensions size,
 						bool is_mlx_object)
 {
-	t_img_quad	*image;
+	t_image	*image;
 
-	image = new_image_quad();
+	image = new_image();
 	if (!image)
 		return ((void *)0);
 	image->bg_colour = 0xFF000000;
@@ -53,13 +52,13 @@ static t_img_quad	*create_image_quad(t_v2d origin, t_dimensions size,
 	return (image);
 }
 
-t_img_quad	*mlxge_new_frame(t_v2d origin, t_dimensions size,
+t_image	*mlxge_new_frame(t_v2d origin, t_dimensions size,
 				bool is_mlx_object)
 {
-	return (create_image_quad(origin, size, is_mlx_object));
+	return (create_image(origin, size, is_mlx_object));
 }
 
-void	mlxge_destroy_image_quad(t_img_quad *image)
+void	mlxge_destroy_image(t_image *image)
 {
 	void	*mlx_instance;
 
@@ -77,13 +76,13 @@ void	mlxge_destroy_image_quad(t_img_quad *image)
 
 // ----- API -------------------------------------------------------------------
 
-t_img_quad	*mlxge_new_image(t_img_quad **list, t_v2d origin,
+t_image	*mlxge_new_image(t_image **list, t_v2d origin,
 				t_dimensions size)
 {
-	t_img_quad	*node;
-	t_img_quad	*image;
+	t_image	*node;
+	t_image	*image;
 
-	image = create_image_quad(origin, size, false);
+	image = create_image(origin, size, false);
 	if (image)
 	{
 		mlxge_fill(image, image->bg_colour);
