@@ -3,20 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   dimensions.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 17:23:26 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 18:04:49 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 10:56:44 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DIMENSIONS_H
 # define DIMENSIONS_H
 
-typedef struct s_dimensions
+typedef struct s_dimensions_2D
 {
 	int	width;
 	int	height;
 }	t_dimensions;
 
 #endif
+
+t_dimensions    dimension_2d(int w, int h);
