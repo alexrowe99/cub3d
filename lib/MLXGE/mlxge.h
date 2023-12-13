@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:05:18 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/10 10:34:16 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 18:11:08 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,20 @@ t_event			*mlxge_new_key_event(enum e_key_input_types input, int keycode,
 void			mlxge_push_event(t_event *event, t_event **list);
 
 t_viewport		*mlxge_new_viewport(t_viewport **list, t_v2d origin,
-				t_dimensions size);
+					t_dimensions size);
 t_cam_ortho2d	*mlxge_new_camera_2d_orthographic(t_v2i offset);
 
-t_img_quad		*mlxge_new_image(t_img_quad **list, t_v2d origin,
+t_image			*mlxge_new_image(t_image **list, t_v2d origin,
 					t_dimensions size);
-void			mlxge_output_ppm(t_img_quad *image);
+void			mlxge_output_ppm(t_image *image);
+t_image			*mlxge_load_xpm_image(const char *xpm_filepath);
 
-void			mlxge_fill(t_img_quad *image, int colour);
-void			mlxge_draw_circle(t_img_quad *image, t_v2i center, int radius,
+void			mlxge_fill(t_image *image, int colour);
+void			mlxge_draw_circle(t_image *image, t_v2i center, int radius,
 					int colour);
-void			mlxge_fill_rect(t_img_quad *image, t_v2i start, t_v2i end,
+void			mlxge_fill_rect(t_image *image, t_v2i start, t_v2i end,
 					int colour);
-void			mlxge_draw_vertical_line(t_img_quad *image, int x, t_v2i y_line, int colour);
+void			mlxge_draw_vertical_line(t_image *image, int x, t_v2i y_line,
+					int colour);
 
 #endif

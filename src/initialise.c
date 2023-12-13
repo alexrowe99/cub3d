@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 12:53:03 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/12 14:33:58 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 // World struct contains the player entity.
 int	game_loop(t_layer *game_layer, double timestep)
 {
-	t_img_quad	*raycast_image;
+	t_image	*raycast_image;
 
 	(void)timestep;
 	raycast_image = game_layer->images_to_render->next;
@@ -31,7 +31,7 @@ int	game_loop(t_layer *game_layer, double timestep)
 // One for the ceiling and one for the floor.
 void	draw_background(t_world *world, t_layer *game_layer)
 {
-	t_img_quad	*background;
+	t_image	*background;
 
 	background = mlxge_new_image(&game_layer->images_to_render,
 			game_layer->frame->origin, game_layer->frame->size);
@@ -50,7 +50,7 @@ void	draw_background(t_world *world, t_layer *game_layer)
 static inline void	initialise_world(t_cub3d *app, t_layer *game_layer)
 {
 	t_world		*world;
-	t_img_quad	*game_foreground;
+	t_image	*game_foreground;
 
 	world = &app->world;
 	world->map.ceiling_colour = &app->rgb[ID_CEILING_RGB];

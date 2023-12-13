@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:33:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/28 21:04:29 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:43:08 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	mlxge_destroy_layers(t_layer *list)
 {
 	int			i;
 	t_layer		*node;
-	t_img_quad	*image;
+	t_image	*image;
 
 	node = list;
 	while (node)
@@ -32,12 +32,12 @@ void	mlxge_destroy_layers(t_layer *list)
 		{
 			image = node->images_to_render;
 			node->images_to_render = node->images_to_render->next;
-			mlxge_destroy_image_quad(image);
+			mlxge_destroy_image(image);
 		}
 		if (node->viewport_list)
 			mlxge_destroy_viewports(node->viewport_list);
 		if (node->frame)
-			mlxge_destroy_image_quad(node->frame);
+			mlxge_destroy_image(node->frame);
 		free(node);
 		node = list;
 	}
