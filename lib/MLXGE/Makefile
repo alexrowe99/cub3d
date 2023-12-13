@@ -12,6 +12,7 @@ CORE_C_SRC = $(addprefix $(CORE_DIR)/, $(addsuffix .c, \
  $(addprefix layers/, layers) \
  $(addprefix render/, draw pixels) \
  $(addprefix window/, window update viewport) \
+ $(addprefix math/, vector dimensions) \
 ))
 
 SET_OS ?= $(shell uname)
