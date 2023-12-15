@@ -9,8 +9,8 @@ CORE_C_SRC = $(addprefix $(CORE_DIR)/, $(addsuffix .c, \
  $(addprefix events/, events event_layers hooks key_event) \
  $(addprefix input/, key_input keycodes ) \
  $(addprefix image/, image output_ppm xpm) \
- $(addprefix layers/, layers) \
- $(addprefix render/, draw pixels) \
+ $(addprefix layers/, layers destroy_layers) \
+ $(addprefix render/, draw pixels z_buffer_tree destroy_z_buffer_tree z_buffer) \
  $(addprefix window/, window update viewport) \
  $(addprefix math/, vector dimensions) \
 ))

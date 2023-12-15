@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:06:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/15 15:26:19 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_mlxge_core
 	t_window			*mlx_window;
 	struct s_user_app	*sandbox;
 	t_render_layer		*render_layers;
+	// t_zbuff_node		*
 	t_event_layer		*event_layers;
 	t_gtime				timer;
 }	t_mlxge;
@@ -75,9 +76,9 @@ t_layer			*mlxge_new_layer(t_v2d origin, t_dimensions size,
 int				mlxge_push_layer(t_layer *layer);
 void			mlxge_destroy_layers(t_layer *list);
 
-t_image		*mlxge_new_frame(t_v2d origin, t_dimensions size,
+t_image			*mlxge_new_frame(t_v2d origin, t_dimensions size,
 					bool is_mlx_object);
-t_image		*mlxge_new_image(t_image **list, t_v2d origin,
+t_image			*mlxge_new_image(t_image **list, t_v2d origin,
 					t_dimensions size);
 
 t_event_layer	*mlxge_load_event_layers(t_layer *render_list);

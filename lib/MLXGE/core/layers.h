@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:34:16 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 17:51:44 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/14 14:32:46 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,16 @@
 # include "events.h"
 # include "image_struct.h"
 # include "viewport.h"
+# include "render/render_queue.h"
 
 typedef struct s_layer_list
 {
 	int							(*on_update)(struct s_layer_list *, double timestep);
 	t_event						*events[COUNT_EVENT_TYPES];
-	t_image					*frame;
-	struct s_image_list	*images_to_render;
+	t_image						*frame;
+	struct s_image_list			*images_to_render;
 	t_viewport					*viewport_list;
+	t_zbuff_tree				*z_buffer_tree;
 	struct s_layer_list			*next;
 }	t_layer;
 
