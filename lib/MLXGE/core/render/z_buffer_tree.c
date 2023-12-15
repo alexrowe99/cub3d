@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:44:36 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/14 16:15:22 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/15 16:33:17 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_zbuff_node	**create_tree_branches(size_t branch_count)
 	return (branches);
 }
 
-t_zbuff_node	*new_branch_leaf(t_image *image)
+t_zbuff_node	*new_branch_leaf(t_image **image_addr)
 {
 	t_zbuff_node	*leaf;
 
@@ -37,8 +37,8 @@ t_zbuff_node	*new_branch_leaf(t_image *image)
 			"Couldn't allocate memory");
 		mlxge_destroy();
 	}
-	leaf->image = image;
-	leaf->z_index = image->z_index;
+	leaf->image_ref = image_addr;
+	leaf->z_index = (*image_addr)->z_index;
 	return (leaf);
 }
 
@@ -57,16 +57,13 @@ t_zbuff_tree	*create_z_buffer_tree(size_t max_z)
 
 t_zbuff_tree	*resize_z_buffer_tree(t_zbuff_tree *tree, size_t new_max_z)
 {
-	size_t			i;
+	int				i;
 	t_zbuff_node	**new_branches;
 
-	i = 0;
+	i = -1;
 	new_branches = create_tree_branches(new_max_z + 1);
-	while (i < tree->z_range)
-	{
+	while (++i < tree->z_range)
 		new_branches[i] = tree->branches[i];
-		i++;
-	}
 	free(tree->branches);
 	tree->branches = new_branches;
 	tree->z_range = new_max_z + 1;
@@ -75,9 +72,12 @@ t_zbuff_tree	*resize_z_buffer_tree(t_zbuff_tree *tree, size_t new_max_z)
 
 t_zbuff_tree	*validate_z_buffer_tree(t_zbuff_tree *tree, size_t z_index)
 {
+	int	z_index_i;
+
+	z_index_i = z_index;
 	if (!tree)
 		tree = create_z_buffer_tree(z_index);
-	else if (z_index >= tree->z_range)
+	else if (z_index_i >= tree->z_range)
 		tree = resize_z_buffer_tree(tree, z_index);
 	return (tree);
 }

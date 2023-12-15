@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 08:12:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/14 16:01:21 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/15 16:28:48 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,29 +36,34 @@ t_viewport	*define_game_viewport(t_layer *game_layer, struct s_display_propertie
 	return (view);
 }
 
-bool	initialise_game_struct(t_game *game, t_window *win)
+t_game	*initialise_game_struct(t_game *game, t_window *win)
 {
 	struct s_display_properties	view;
 
 	game = ft_calloc(1, sizeof(t_game));
 	if (!game)
-		return (!cub3d_error("Failed to initialise game struct because: "
-			"Couldn't allocate memory"));
+	{
+		cub3d_error("Failed to initialise game struct because: "\
+			"Couldn't allocate memory");
+		return ((void *)0);
+	}
 	game->layer = mlxge_new_layer(win->origin, win->size, update);
 	if (!game->layer || !mlxge_push_layer(game->layer))
-		return (!cub3d_error("Failed to initialise game layer because: "
-			"Couldn't allocate memory"));
-
+	{
+		cub3d_error("Failed to initialise game layer because: "\
+			"Couldn't allocate memory");
+		mlxge_destroy();
+	}
 	game->view = define_game_viewport(game->layer, &view);
 	if (!game->view)
-		return (false);
+		mlxge_destroy();
+	mlxge_push_image_z_buffer(game->layer, &game->view->frame, 0);
 	game->hud = create_hud(game, win, &view);
 	if (!game->hud)
-		return (false);
-	mlxge_push_image_z_buffer(game->layer, game->view->frame, 0);
-	mlxge_push_image_z_buffer(game->layer, game->hud->background_image, 0);
-	mlxge_push_image_z_buffer(game->layer, game->hud->minimap->frame, 1);
-	return (true);
+		mlxge_destroy();
+	mlxge_push_image_z_buffer(game->layer, &game->hud->background_image, 0);
+	mlxge_push_image_z_buffer(game->layer, &game->hud->minimap->frame, 1);
+	return (game);
 }
 
 // Set window properties - dimensions, aspect ratio & origin.
@@ -71,8 +76,10 @@ static inline void	initialise_mlxge_application(t_cub3d *app)
 	win = set_window_size(WIN_H, SQUARE_5_4);
 	// printf("Window: %ix%i\n", win->size.width, win->size.height);
 	mlxge_init(app, destroy_cub3d);
-	if (mlxge_create_window(win->size.width, win->size.height, TITLE) < 0
-		|| !initialise_game_struct(app->game, win))
+	if (mlxge_create_window(win->size.width, win->size.height, TITLE) < 0)
+		return (mlxge_destroy());
+	app->game = initialise_game_struct(app->game, win);
+	if (!app->game)
 		return (mlxge_destroy());
 }
 

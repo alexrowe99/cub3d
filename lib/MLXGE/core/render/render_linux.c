@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/14 16:16:01 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/15 16:34:47 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,18 +86,19 @@ void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 		// 	}
 		// }
 
-		size_t			i = 0;
-		while (i < layers->z_buffer_tree->z_range)
+		int	i = -1;
+		while (++i < layers->z_buffer_tree->z_range)
 		{
 			t_zbuff_node	*leaf = layers->z_buffer_tree->branches[i];
+			t_image			*image;
 
 			while (leaf)
 			{
+				image = *leaf->image_ref;
 				// mlxge_output_ppm(leaf->image);
-				layers->frame = set_pixels(layers->frame, leaf->image, leaf->image->origin);
+				layers->frame = set_pixels(layers->frame, image, image->origin);
 				leaf = leaf->next;
 			}
-			i++;
 		}
 		// mlxge_output_ppm(layers->frame);
 		set_pixels(win_frame, layers->frame, layers->frame->origin);

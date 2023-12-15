@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 10:54:58 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/12 14:58:20 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/15 15:59:32 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ int	destroy_cub3d(t_cub3d *app)
 	}
 	if (app->game)
 	{
+		if (app->game->hud)
+			free(app->game->hud);
 		free(app->game);
 		app->game = (void *)0;
 	}
