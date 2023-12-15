@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 08:12:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 18:10:29 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/14 16:01:21 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_viewport	*define_game_viewport(t_layer *game_layer, struct s_display_propertie
 	view = mlxge_new_viewport(&game_layer->viewport_list, view_prop->origin, view_prop->size);
 	if (!view)
 	{
-		cub3d_error("Failed to initialise game viewport because: "\
+		cub3d_error("Failed to initialise game viewport because: "
 			"Couldn't allocate memory");
 		return ((void *)0);
 	}
@@ -42,18 +42,23 @@ bool	initialise_game_struct(t_game *game, t_window *win)
 
 	game = ft_calloc(1, sizeof(t_game));
 	if (!game)
-		return (!cub3d_error("Failed to initialise game struct because: "\
+		return (!cub3d_error("Failed to initialise game struct because: "
 			"Couldn't allocate memory"));
 	game->layer = mlxge_new_layer(win->origin, win->size, update);
 	if (!game->layer || !mlxge_push_layer(game->layer))
-		return (!cub3d_error("Failed to initialise game layer because: "\
+		return (!cub3d_error("Failed to initialise game layer because: "
 			"Couldn't allocate memory"));
+
 	game->view = define_game_viewport(game->layer, &view);
-	if (game->view)
-	{
-		game->hud = create_hud(game, win, &view);
-	}
-	return (game->view && game->hud);
+	if (!game->view)
+		return (false);
+	game->hud = create_hud(game, win, &view);
+	if (!game->hud)
+		return (false);
+	mlxge_push_image_z_buffer(game->layer, game->view->frame, 0);
+	mlxge_push_image_z_buffer(game->layer, game->hud->background_image, 0);
+	mlxge_push_image_z_buffer(game->layer, game->hud->minimap->frame, 1);
+	return (true);
 }
 
 // Set window properties - dimensions, aspect ratio & origin.

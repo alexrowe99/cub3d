@@ -1,26 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render.h                                           :+:      :+:    :+:   */
+/*   render_queue.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 09:20:02 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/14 12:23:07 by lmells           ###   ########.fr       */
+/*   Created: 2023/12/14 12:15:55 by lmells            #+#    #+#             */
+/*   Updated: 2023/12/14 14:34:20 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RENDER_H
-# define RENDER_H
+#ifndef RENDER_QUEUE_H
+# define RENDER_QUEUE_H
 
-# include "layers.h"
+# include "../image_struct.h"
 
-void		mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers);
-void		mlxge_fill(t_image *image, int colour);
-void		mlxge_fill_rect(t_image *image, t_v2i start, t_v2i end,
-				int colour);
-t_image		*set_pixels(t_image *frame, t_image *image,
-				t_v2d img_origin);
-void		put_pixel(t_image *image, int x, int y, int colour);
+typedef struct s_z_buffer_node
+{
+	size_t					z_index;
+	t_image					*image;
+	struct s_z_buffer_node	*next;
+}	t_zbuff_node;
+
+typedef struct s_z_buffer_tree
+{
+	size_t					z_range;
+	t_zbuff_node			**branches;
+}	t_zbuff_tree;
+
+
 
 #endif

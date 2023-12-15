@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render.h                                           :+:      :+:    :+:   */
+/*   render_core.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 09:20:02 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/14 12:23:07 by lmells           ###   ########.fr       */
+/*   Created: 2023/12/14 14:30:38 by lmells            #+#    #+#             */
+/*   Updated: 2023/12/14 16:11:18 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RENDER_H
-# define RENDER_H
+#ifndef RENDER_CORE_H
+# define RENDER_CORE_H
 
-# include "layers.h"
+# include <render/render_queue.h>
 
-void		mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers);
-void		mlxge_fill(t_image *image, int colour);
-void		mlxge_fill_rect(t_image *image, t_v2i start, t_v2i end,
-				int colour);
-t_image		*set_pixels(t_image *frame, t_image *image,
-				t_v2d img_origin);
-void		put_pixel(t_image *image, int x, int y, int colour);
+t_zbuff_node	*new_branch_leaf(t_image *image);
+t_zbuff_tree	*create_z_buffer_tree(size_t max_z);
+t_zbuff_tree	*resize_z_buffer_tree(t_zbuff_tree *tree, size_t new_max_z);
+t_zbuff_tree	*validate_z_buffer_tree(t_zbuff_tree *tree, size_t z_index);
+void			push_image_z_buffer_tree(t_zbuff_tree *tree, t_image *image);
 
 #endif

@@ -24,10 +24,11 @@ typedef struct s_image_list
 	t_dimensions				size;
 	int							bg_colour;
 	bool						is_mlx_object;
-	void						*mlx_ptr;
 	int							ctx[3];
+	int							z_index;
+	void						*mlx_ptr;
 	int							*buff;
-	struct s_image_list	*next;
+	struct s_image_list			*next;
 }	t_image;
 
 void	mlxge_destroy_image(t_image *ptr);

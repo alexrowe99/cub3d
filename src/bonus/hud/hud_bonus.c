@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 12:21:46 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 20:33:45 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/14 15:59:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	create_hud_display(t_hud *hud, t_dimensions win, int offset_y)
         printf("\n\nSUCESSFUL TEST!!!\n\n");
         mlxge_destroy();
     }
-    mlxge_output_ppm(hud->background_image);
+    // mlxge_output_ppm(hud->background_image);
     hud->background_image->origin = hud->origin;
 }
 

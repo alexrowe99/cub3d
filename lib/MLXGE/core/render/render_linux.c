@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/14 16:16:01 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static inline t_image	*clear_layer_frame(t_image *frame,
 static inline void	update_viewports(t_image *update_frame,
 						t_viewport *viewports)
 {
-	t_v2d			projection;
+	t_v2d		projection;
 	t_image		*image;
 
 	while (viewports)
@@ -64,9 +64,10 @@ static inline void	update_viewports(t_image *update_frame,
 
 void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 {
-	t_image	*image;
+	// t_image	*image;
 	t_image	*win_frame;
 
+	// mlxge_log(DEBUG, "In Render Loop");
 	win_frame = clear_layer_frame(layers->frame, layers->frame->is_mlx_object);
 	while (layers->next)
 	{
@@ -75,16 +76,32 @@ void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 				layers->frame->is_mlx_object);
 		if (layers->viewport_list)
 			update_viewports(layers->frame, layers->viewport_list);
-		else
+		// else
+		// {
+		// 	image = layers->images_to_render;
+		// 	while (image)
+		// 	{
+		// 		layers->frame = set_pixels(layers->frame, image, image->origin);
+		// 		image = image->next;
+		// 	}
+		// }
+
+		size_t			i = 0;
+		while (i < layers->z_buffer_tree->z_range)
 		{
-			image = layers->images_to_render;
-			while (image)
+			t_zbuff_node	*leaf = layers->z_buffer_tree->branches[i];
+
+			while (leaf)
 			{
-				layers->frame = set_pixels(layers->frame, image, image->origin);
-				image = image->next;
+				// mlxge_output_ppm(leaf->image);
+				layers->frame = set_pixels(layers->frame, leaf->image, leaf->image->origin);
+				leaf = leaf->next;
 			}
+			i++;
 		}
+		// mlxge_output_ppm(layers->frame);
 		set_pixels(win_frame, layers->frame, layers->frame->origin);
 	}
 	mlx_put_image_to_window(mlx_inst, mlx_win, win_frame->mlx_ptr, 0, 0);
+	// mlxge_destroy();
 }
