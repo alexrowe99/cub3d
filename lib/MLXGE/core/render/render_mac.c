@@ -6,14 +6,14 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/22 16:51:40 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <core.h>
 #include <render.h>
 
-static inline t_img_quad	*clear_layer_frame(t_img_quad *frame,
+static inline t_image	*clear_layer_frame(t_image *frame,
 								bool is_mlx_object)
 {
 	void	*mlx_instance;
@@ -32,11 +32,11 @@ static inline t_img_quad	*clear_layer_frame(t_img_quad *frame,
 	return (frame);
 }
 
-static inline void	update_viewports(t_img_quad *update_frame,
+static inline void	update_viewports(t_image *update_frame,
 						t_viewport *viewports)
 {
 	t_v2d			projection;
-	t_img_quad		*image;
+	t_image		*image;
 
 	// printf("Update Frame = %p\n", update_frame);
 	while (viewports)
@@ -64,8 +64,8 @@ static inline void	update_viewports(t_img_quad *update_frame,
 
 void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 {
-	t_img_quad	*image;
-	t_img_quad	*win_frame;
+	t_image	*image;
+	t_image	*win_frame;
 
 	// printf("Rendering frame.\n");
 	win_frame = clear_layer_frame(layers->frame, layers->frame->is_mlx_object);

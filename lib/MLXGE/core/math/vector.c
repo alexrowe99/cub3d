@@ -1,35 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   viewport.h                                         :+:      :+:    :+:   */
+/*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 10:54:30 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 18:21:39 by lmells           ###   ########.fr       */
+/*   Created: 2023/12/13 10:54:07 by lmells            #+#    #+#             */
+/*   Updated: 2023/12/13 11:15:07 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VIEWPORT_H
-# define VIEWPORT_H
+#include <vector.h>
 
-# include "dimensions.h"
-# include "image_struct.h"
-
-typedef struct s_2d_orthographic_camera
+t_v2d   vector_2_double(double x, double y)
 {
-	t_v2i	origin;
-	t_v2d	position;
-}	t_cam_ortho2d;
+    return ((t_v2d){x, y});
+}
 
-typedef struct s_viewport
+t_v2i   vector_2_int(int x, int y)
 {
-	t_cam_ortho2d				*camera;
-	t_image					*frame;
-	struct s_image_list	*images_to_render;
-	struct s_viewport			*next;
-}	t_viewport;
-
-void	mlxge_destroy_viewports(t_viewport *viewport_list);
-
-#endif
+    return ((t_v2i){x, y});
+}

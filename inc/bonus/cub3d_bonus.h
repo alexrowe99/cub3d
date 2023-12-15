@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/29 16:30:25 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@
 
 // ----- Window definitions -----------------------------------------
 
-# define WIN_H 600
+# define WIN_H 1024
+# define VIEW_H 720
+# define WIDE_16_9 16.0 / 9
+# define SQUARE_5_4 5.0 / 4
 # define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
 
 // ----- Parser definitions -----------------------------------------
@@ -60,7 +63,7 @@ typedef struct s_entity
 	double			move_speed;
 	double			rotation_speed;
 	bool			has_moved;
-	t_img_quad		*sprite;
+	t_image		*sprite;
 }	t_entity;
 
 enum e_map_tile_types
@@ -75,7 +78,7 @@ typedef struct s_map
 	int				scale;
 	t_dimensions	size;
 	int				**tiles;
-	t_img_quad		*sprite;
+	t_image		*sprite;
 	int				*floor_colour;
 	int				*ceiling_colour;
 }	t_map;
@@ -106,19 +109,27 @@ typedef struct s_raycaster
 	int				side;
 }	t_raycast;
 
+typedef struct s_cub3d_hud
+{
+	t_dimensions	size;
+	t_v2d			origin;
+	t_image		*background_image;
+	t_viewport		*minimap;
+}	t_hud;
+
 typedef struct s_cub3d_game
 {
 	t_layer			*layer;
 	t_viewport		*view;
+	t_hud			*hud;
 }	t_game;
 
 typedef struct s_cub3d
 {
-	int				rgb[RGB_COUNT];
 	char			*wall_texture_paths[TEXTURE_COUNT];
 	t_game			*game;
+	int				rgb[RGB_COUNT];
 	t_world			world;
-	// t_viewport		*minimap_view;
 	// t_raycast		raycaster;
 }	t_cub3d;
 
@@ -143,5 +154,14 @@ bool		validate_map_tiles(const char *line);
 bool		is_valid_character(int c);
 bool		is_spawn_tile(int c, t_entity *player);
 int			store_tile(char tile);
+
+// Utils
+
+int			find_middle_value(int a, int b);
+
+// HUD
+
+t_hud		*create_hud(t_game *game, t_window *win, struct s_display_properties *game_view);
+bool		create_minimap(t_hud *hud, t_layer *game_layer, t_dimensions win_size);
 
 #endif

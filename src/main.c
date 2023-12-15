@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 10:55:13 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/12 14:32:04 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ bool	cub3d_error(const char *format_message, ...)
 	free(output);
 	return (true);
 }
-
 
 static bool	validate_args(int ac, char **av)
 {

@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 09:34:18 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/29 16:18:41 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:26:16 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,13 @@ struct s_display_properties
 };
 
 typedef struct s_display_properties	t_window;
+typedef struct s_display_properties	t_display;
 
 t_window					*window(void);
 t_window					*set_window_size(size_t win_height,
 								double aspect_ratio);
 struct s_display_properties	display_properties(size_t height,
 								double aspect_ratio);
+
 
 #endif

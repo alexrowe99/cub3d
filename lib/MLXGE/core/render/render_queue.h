@@ -1,35 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   viewport.h                                         :+:      :+:    :+:   */
+/*   render_queue.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 10:54:30 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 18:21:39 by lmells           ###   ########.fr       */
+/*   Created: 2023/12/14 12:15:55 by lmells            #+#    #+#             */
+/*   Updated: 2023/12/15 16:33:06 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VIEWPORT_H
-# define VIEWPORT_H
+#ifndef RENDER_QUEUE_H
+# define RENDER_QUEUE_H
 
-# include "dimensions.h"
-# include "image_struct.h"
+# include "../image_struct.h"
 
-typedef struct s_2d_orthographic_camera
+typedef struct s_z_buffer_node
 {
-	t_v2i	origin;
-	t_v2d	position;
-}	t_cam_ortho2d;
+	int						z_index;
+	t_image					**image_ref;
+	struct s_z_buffer_node	*next;
+}	t_zbuff_node;
 
-typedef struct s_viewport
+typedef struct s_z_buffer_tree
 {
-	t_cam_ortho2d				*camera;
-	t_image					*frame;
-	struct s_image_list	*images_to_render;
-	struct s_viewport			*next;
-}	t_viewport;
+	int						z_range;
+	t_zbuff_node			**branches;
+}	t_zbuff_tree;
 
-void	mlxge_destroy_viewports(t_viewport *viewport_list);
+
 
 #endif

@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   viewport.h                                         :+:      :+:    :+:   */
+/*   cub3d_floodfill_struct.h                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/26 10:54:30 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 18:21:39 by lmells           ###   ########.fr       */
+/*   Created: 2023/12/12 14:30:01 by lmells            #+#    #+#             */
+/*   Updated: 2023/12/12 14:31:14 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VIEWPORT_H
-# define VIEWPORT_H
+#ifndef CUB3D_FLOODFILL_STRUCT_H
+# define CUB3D_FLOODFILL_STRUCT_H
 
-# include "dimensions.h"
-# include "image_struct.h"
+# include <mlxge.h>
 
-typedef struct s_2d_orthographic_camera
+typedef struct s_floodfill_map_validation
 {
-	t_v2i	origin;
-	t_v2d	position;
-}	t_cam_ortho2d;
-
-typedef struct s_viewport
-{
-	t_cam_ortho2d				*camera;
-	t_image					*frame;
-	struct s_image_list	*images_to_render;
-	struct s_viewport			*next;
-}	t_viewport;
-
-void	mlxge_destroy_viewports(t_viewport *viewport_list);
+	t_dimensions	dim;
+	int				**grid;
+	bool			*visited;
+}	t_ffill;
 
 #endif
