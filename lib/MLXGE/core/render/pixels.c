@@ -6,14 +6,14 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/28 20:08:49 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/22 16:22:44 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <render.h>
 #include <dimensions.h>
 
-void	put_pixel(t_img_quad *image, int x, int y, int colour)
+void	put_pixel(t_image *image, int x, int y, int colour)
 {
 	char	*buff;
 	char	*dst;
@@ -30,7 +30,7 @@ void	put_pixel(t_img_quad *image, int x, int y, int colour)
 	*(unsigned int *)dst = colour;
 }
 
-t_img_quad	*set_pixels(t_img_quad *frame, t_img_quad *image,
+t_image	*set_pixels(t_image *frame, t_image *image,
 				t_v2d img_origin)
 {
 	t_v2i	p;

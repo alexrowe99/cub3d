@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_ppm.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 11:41:12 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/27 12:16:35 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,19 @@ static inline void	write_ppm3_header(t_dimensions size, int out_fd,
 	char	*filename;
 
 	filename = ft_strrchr(filepath, '/') + 1;
-	dprintf(out_fd, "P3\n\n");
 	dprintf(out_fd, "# %s\n\n", filename);
+	dprintf(out_fd, "P3\n");
 	dprintf(out_fd, "%i %i\n", size.width, size.height);
-	dprintf(out_fd, "%i\n\n", 255);
+	dprintf(out_fd, "%i\n", 255);
 	free(filepath);
 }
 
-static inline void	write_pixels(t_img_quad *image, int out_fd)
+static inline void	write_pixels(t_image *image, int out_fd)
 {
-	int		x;
-	int		y;
-	int		colour;
-	uint8_t	rgb[3];
+	int			x;
+	int			y;
+	int			colour;
+	__uint8_t	rgb[3];
 
 	y = -1;
 	while (++y < image->size.height)
@@ -74,13 +74,13 @@ static inline void	write_pixels(t_img_quad *image, int out_fd)
 			rgb[0] = colour >> 16 & 0xFF;
 			rgb[1] = colour >> 8 & 0xFF;
 			rgb[2] = colour & 0xFF;
-			dprintf(out_fd, "%i %i %i\t", rgb[0], rgb[1], rgb[2]);
+			dprintf(out_fd, "%i %i %i ", rgb[0], rgb[1], rgb[2]);
 		}
 		dprintf(out_fd, "\n");
 	}
 }
 
-void	mlxge_output_ppm(t_img_quad *image)
+void	mlxge_output_ppm(t_image *image)
 {
 	int			out_fd;
 	char		*out_filepath;

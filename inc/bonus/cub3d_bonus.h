@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bonus_cub3d.h                                      :+:      :+:    :+:   */
+/*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/24 09:27:28 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,15 @@
 # include <math.h>
 
 # include <mlxge.h>
+# include <cub3d_file_struct.h>
+# include <cub3d_display.h>
 
 // ----- Window definitions -----------------------------------------
 
-# define WIN_H 720
+# define WIN_H 1024
+# define VIEW_H 720
+# define WIDE_16_9 16.0 / 9
+# define SQUARE_5_4 5.0 / 4
 # define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
 
 // ----- Parser definitions -----------------------------------------
@@ -58,7 +63,7 @@ typedef struct s_entity
 	double			move_speed;
 	double			rotation_speed;
 	bool			has_moved;
-	t_img_quad		*sprite;
+	t_image		*sprite;
 }	t_entity;
 
 enum e_map_tile_types
@@ -73,9 +78,9 @@ typedef struct s_map
 	int				scale;
 	t_dimensions	size;
 	int				**tiles;
-	t_img_quad		*sprite;
-	int				floor_colour;
-	int				ceiling_colour;
+	t_image		*sprite;
+	int				*floor_colour;
+	int				*ceiling_colour;
 }	t_map;
 
 typedef struct s_world
@@ -92,26 +97,40 @@ enum s_parse_rgb_id
 
 typedef struct s_raycaster
 {
-	t_v2d	plane;
-	double	camera_x;
-	t_v2d	ray_direction;
-	t_v2i	map_position;
-	t_v2d	side_distance;
-	t_v2d	delta_distance;
-	double	perpendiular_wall_distance;
-	t_v2i	step;
-	bool	ray_hit;
-	int		side;
+	t_v2d			plane;
+	double			camera_x;
+	t_v2d			ray_direction;
+	t_v2i			map_position;
+	t_v2d			side_distance;
+	t_v2d			delta_distance;
+	double			perpendiular_wall_distance;
+	t_v2i			step;
+	bool			ray_hit;
+	int				side;
 }	t_raycast;
+
+typedef struct s_cub3d_hud
+{
+	t_dimensions	size;
+	t_v2d			origin;
+	t_image		*background_image;
+	t_viewport		*minimap;
+}	t_hud;
+
+typedef struct s_cub3d_game
+{
+	t_layer			*layer;
+	t_viewport		*view;
+	t_hud			*hud;
+}	t_game;
 
 typedef struct s_cub3d
 {
-	t_raycast		raycaster;
-	int				*rgb[RGB_COUNT];
 	char			*wall_texture_paths[TEXTURE_COUNT];
+	t_game			*game;
+	int				rgb[RGB_COUNT];
 	t_world			world;
-	t_viewport		*game_view;
-	t_viewport		*minimap;
+	// t_raycast		raycaster;
 }	t_cub3d;
 
 t_cub3d		*cub3d(void);
@@ -136,10 +155,13 @@ bool		is_valid_character(int c);
 bool		is_spawn_tile(int c, t_entity *player);
 int			store_tile(char tile);
 
+// Utils
 
-// ----- INGNORE ME - DONT REMOVE!! --------------------------------------------
-bool		define_debug_scene(t_world *world, t_viewport *minimap);
-t_img_quad	*draw_map_texture(t_world *world, t_viewport *minimap);
-// -----------------------------------------------------------------------------
+int			find_middle_value(int a, int b);
+
+// HUD
+
+t_hud		*create_hud(t_game *game, t_window *win, struct s_display_properties *game_view);
+bool		create_minimap(t_hud *hud, t_layer *game_layer, t_dimensions win_size);
 
 #endif

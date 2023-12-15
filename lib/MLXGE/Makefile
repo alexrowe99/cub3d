@@ -8,10 +8,11 @@ CORE_C_SRC = $(addprefix $(CORE_DIR)/, $(addsuffix .c, \
  log core \
  $(addprefix events/, events event_layers hooks key_event) \
  $(addprefix input/, key_input keycodes ) \
- $(addprefix image/, image_quad output_ppm) \
- $(addprefix layers/, layers) \
- $(addprefix render/, draw pixels) \
+ $(addprefix image/, image output_ppm xpm) \
+ $(addprefix layers/, layers destroy_layers) \
+ $(addprefix render/, draw pixels z_buffer_tree destroy_z_buffer_tree z_buffer) \
  $(addprefix window/, window update viewport) \
+ $(addprefix math/, vector dimensions) \
 ))
 
 SET_OS ?= $(shell uname)

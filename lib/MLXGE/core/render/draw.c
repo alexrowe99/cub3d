@@ -6,14 +6,14 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:39:05 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/22 16:22:11 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <render.h>
 #include <dimensions.h>
 
-void	mlxge_fill(t_img_quad *image, int colour)
+void	mlxge_fill(t_image *image, int colour)
 {
 	t_v2i	p;
 
@@ -33,7 +33,7 @@ void	mlxge_fill(t_img_quad *image, int colour)
 		image->buff[p.x] = colour;
 }
 
-void	mlxge_draw_circle(t_img_quad *image, t_v2i center, int radius,
+void	mlxge_draw_circle(t_image *image, t_v2i center, int radius,
 			int colour)
 {
 	t_v2i	d;
@@ -60,7 +60,7 @@ void	mlxge_draw_circle(t_img_quad *image, t_v2i center, int radius,
 	}
 }
 
-void	mlxge_fill_rect(t_img_quad *image, t_v2i start, t_v2i end,
+void	mlxge_fill_rect(t_image *image, t_v2i start, t_v2i end,
 			int colour)
 {
 	int	px;
@@ -83,7 +83,7 @@ typedef struct s_line_y
 	int	end;
 }	t_line;
 
-void	mlxge_draw_vertical_line(t_img_quad *image, int x, t_v2i y_line, int colour)
+void	mlxge_draw_vertical_line(t_image *image, int x, t_v2i y_line, int colour)
 {
 	t_line	y;
 

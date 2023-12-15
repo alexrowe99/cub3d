@@ -2,6 +2,7 @@
 
 SRC_DIR = src
 INC_DIR = inc
+BONUS_SRC_DIR = src/bonus
 
 # ----- Cub3d Dependencies -----------------------------------------------------
 
@@ -14,18 +15,27 @@ LINK = -Llib/MLXGE -lmlxge
 NAME = cub3d
 NAME_BONUS = cub3d_bonus
 
+# ----- Cub3d shared names -----------------------------------------------------
+
+SHARED_FILENAMES = initialise destroy parser parser_textures parser_rgb parser_map parser_utils
+
+# ----- Cub3d core src ---------------------------------------------------------
+
+CUB3D_SRC = $(addprefix $(SRC_DIR)/, $(addsuffix .c, \
+main display utils \
+))
+CUB3D_OBJ = $(CUB3D_SRC:%.c=%.o)
+
 # ----- Mandatory C Files ------------------------------------------------------
 
-MANDATORY_SRC = $(addprefix $(SRC_DIR)/, $(addsuffix .c, \
-parser parser_textures parser_rgb parser_map parser_utils \
-main initialise destroy \
+MANDATORY_SRC = $(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SHARED_FILENAMES) \
 ))
 MANDATORY_OBJ = $(MANDATORY_SRC:%.c=%.o)
 
 # ----- Bonus C Files ----------------------------------------------------------
 
-BONUS_SRC = $(addprefix $(SRC_DIR)/bonus, $(addsuffix _bonus.c, \
-# main initialise parser parser_textures parser_rgb parser_map parser_utils \
+BONUS_SRC = $(addprefix $(BONUS_SRC_DIR)/, $(addsuffix _bonus.c, $(SHARED_FILENAMES) \
+$(addprefix hud/, hud minimap) \
 ))
 BONUS_OBJ = $(BONUS_SRC:%.c=%.o)
 
@@ -51,30 +61,35 @@ ifeq ($(DEBUG),1)
 	CFLAGS += -g# -fsanitize=address
 endif
 
-# ----- Build Rules ------------------------------------------------------------
+# ----- Build Targets ----------------------------------------------------------
 
 # 	all - Defaults to mandatory build.
 all: $(NAME)
-
-$(NAME): mandatory
-
 #	m - Builds the mandatory section.
-mandatory: $(MLXGE) $(MANDATORY_OBJ)
-	cc $(CFLAGS) $(MANDATORY_OBJ) $(DEF_OS) $(INC) $(LINK) -o $(NAME) $(OSLINK)
+mandatory: $(NAME)
+# 	b - Builds the bonus section
+bonus: $(NAME_BONUS)
+
+# ----- Compile Source ---------------------------------------------------------
+
+$(CUB3D_OBJ): %.o: %.c
+	cc $(CFLAGS) $(DEF_OS) $(INC) -o $@ -c $<
 
 $(MANDATORY_OBJ): %.o: %.c
 	cc $(CFLAGS) $(DEF_OS) $(INC) -o $@ -c $<
 
-# 	b - Builds the bonus section
+$(BONUS_OBJ): %.o: %.c
+	cc $(CFLAGS) $(DEF_OS) $(INC) -o $@ -c $<
 
-# bonus: set_build_bonus $(NAME_BONUS)
+# ----- Compile Executables ----------------------------------------------------
 
-# set_build_bonus:
+$(NAME): $(MLXGE) $(CUB3D_OBJ) $(MANDATORY_OBJ)
+	cc $(CFLAGS) -o $(NAME) $(CUB3D_OBJ) $(MANDATORY_OBJ) $(DEF_OS) $(INC) $(LINK) $(OSLINK)
 
-# $(NAME): $(MLXGE) $(COBJS)
-# cc $(CFLAGS) $(COBJS) $(INC) $(LINK) -o $@ $(OSLINK)
+$(NAME_BONUS): $(MLXGE) $(CUB3D_OBJ) $(BONUS_OBJ)
+	cc $(CFLAGS) -o $(NAME_BONUS) $(CUB3D_OBJ) $(BONUS_OBJ) $(DEF_OS) $(INC) $(LINK) $(OSLINK)
 
-# ------------------------------------------------------------------------------
+# ----- Build Dependencies -----------------------------------------------------
 
 $(MLXGE):
 ifeq ($(DEBUG), 1)
@@ -83,14 +98,22 @@ else
 	make -C lib/MLXGE $(BUILD_OS)
 endif
 
+# ----- Clean Targets ----------------------------------------------------------
+
 clean:
-	rm -rf $(NAME) $(MANDATORY_OBJ) *.dSYM *.dylib
+	rm -rf $(NAME) $(NAME_BONUS) $(CUB3D_OBJ) $(MANDATORY_OBJ) $(BONUS_OBJ) *.dSYM *.dylib
 
 fclean: clean
 	make -C lib/MLXGE fclean
 
+# ----- Rebuild Mandatory Target -----------------------------------------------
+
 re: fclean all
+
+# ----- Norminette Recipe ------------------------------------------------------
 
 norm:
 	norminette src
 	make -C lib/MLXGE norm
+
+# ------------------------------------------------------------------------------

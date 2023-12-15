@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   viewport.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:52:44 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/06 19:11:09 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/15 15:53:16 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ static inline void	push_viewport_list_back(t_viewport *view, t_viewport **list)
 
 void	mlxge_destroy_viewports(t_viewport *viewport_list)
 {
-	t_img_quad	*image;
+	t_image		*image;
 	t_viewport	*node;
 
-	node = viewport_list;
-	while (node)
+	while (viewport_list)
 	{
+		node = viewport_list;
 		viewport_list = viewport_list->next;
 		if (node->camera)
 			free(node->camera);
@@ -55,10 +55,11 @@ void	mlxge_destroy_viewports(t_viewport *viewport_list)
 		{
 			image = node->images_to_render;
 			node->images_to_render = node->images_to_render->next;
-			mlxge_destroy_image_quad(image);
+			if (image->z_index == -1)
+				mlxge_destroy_image(&image);
 		}
-		if (node->frame)
-			mlxge_destroy_image_quad(node->frame);
+		if (node->frame && node->frame->z_index == -1)
+			mlxge_destroy_image(&node->frame);
 		free(node);
 		node = viewport_list;
 	}

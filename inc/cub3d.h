@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/24 09:39:39 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 # include <mlxge.h>
 # include <cub3d_file_struct.h>
+# include <cub3d_display.h>
 
 // ----- Window definitions -----------------------------------------
 
@@ -71,9 +72,9 @@ typedef struct s_map
 	int				scale;
 	t_dimensions	size;
 	int				**tiles;
-	t_img_quad		*sprite;
-	int				floor_colour;
-	int				ceiling_colour;
+	t_image		*sprite;
+	int				*floor_colour;
+	int				*ceiling_colour;
 }	t_map;
 
 typedef struct s_world
@@ -84,7 +85,7 @@ typedef struct s_world
 
 typedef struct s_cub3d
 {
-	int				*rgb[RGB_COUNT];
+	int				rgb[RGB_COUNT];
 	char			*wall_texture_paths[TEXTURE_COUNT];
 	t_world			world;
 }	t_cub3d;
@@ -112,5 +113,9 @@ bool		validate_map_tiles(const char *line);
 bool		is_valid_character(int c);
 bool		is_spawn_tile(int c, t_entity *player);
 int			store_tile(char tile);
+
+// Utils
+
+int			find_middle_value(int a, int b);
 
 #endif

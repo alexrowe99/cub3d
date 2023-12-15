@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:06:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/06 19:10:11 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/15 15:26:19 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_mlxge_core
 	t_window			*mlx_window;
 	struct s_user_app	*sandbox;
 	t_render_layer		*render_layers;
+	// t_zbuff_node		*
 	t_event_layer		*event_layers;
 	t_gtime				timer;
 }	t_mlxge;
@@ -75,9 +76,9 @@ t_layer			*mlxge_new_layer(t_v2d origin, t_dimensions size,
 int				mlxge_push_layer(t_layer *layer);
 void			mlxge_destroy_layers(t_layer *list);
 
-t_img_quad		*mlxge_new_frame(t_v2d origin, t_dimensions size,
+t_image			*mlxge_new_frame(t_v2d origin, t_dimensions size,
 					bool is_mlx_object);
-t_img_quad		*mlxge_new_image(t_img_quad **list, t_v2d origin,
+t_image			*mlxge_new_image(t_image **list, t_v2d origin,
 					t_dimensions size);
 
 t_event_layer	*mlxge_load_event_layers(t_layer *render_list);
@@ -91,7 +92,7 @@ int				mlxge_handle_key_release_events(int keycode,
 					t_event_layer *list);
 void			mlxge_destroy_event_layers(t_event_layer *list);
 
-void			mlxge_output_ppm(t_img_quad *image);
+void			mlxge_output_ppm(t_image *image);
 
 t_key_input		*mlxge_keyboard(void);
 

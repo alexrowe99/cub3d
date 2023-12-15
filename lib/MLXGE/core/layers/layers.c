@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:33:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/23 11:03:41 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/15 15:37:31 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,6 @@
 #include <layers.h>
 
 #define ERR_LAY_CREAT "Failed to create a new MLXGE layer because"
-
-void	mlxge_destroy_layers(t_layer *list)
-{
-	int			i;
-	t_layer		*node;
-	t_img_quad	*image;
-
-	node = list;
-	while (node)
-	{
-		list = list->next;
-		i = -1;
-		while (++i < COUNT_EVENT_TYPES)
-			mlxge_destroy_events(node->events[i]);
-		while (node->images_to_render)
-		{
-			image = node->images_to_render;
-			node->images_to_render = node->images_to_render->next;
-			mlxge_destroy_image_quad(image);
-		}
-		if (node->viewport_list)
-			mlxge_destroy_viewports(node->viewport_list);
-		if (node->frame)
-			mlxge_destroy_image_quad(node->frame);
-		free(node);
-		node = list;
-	}
-}
 
 static inline t_layer	*new_layer(void)
 {
@@ -96,6 +68,10 @@ t_layer	*mlxge_new_layer(t_v2d origin, t_dimensions size,
 	if (!layer->frame)
 	{
 		mlxge_log(ERROR, ERR_LAY_CREAT" : Couldn't create MLXGE frame");
+
+		mlxge_log(DEBUG, "DUMPING PARAMETERS: origin = (%i, %i); size = (%i, %i);",
+			(int)origin.x, (int)origin.y, size.width, size.height);
+
 		free(layer);
 		return ((void *)0);
 	}
