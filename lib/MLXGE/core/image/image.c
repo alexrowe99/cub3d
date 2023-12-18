@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 08:50:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/15 16:34:30 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/18 15:47:33 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,10 @@ t_image	*mlxge_new_frame(t_v2d origin, t_dimensions size,
 	return (create_image(origin, size, is_mlx_object));
 }
 
-void	mlxge_destroy_image(t_image **image_addr)
+void	mlxge_destroy_image(t_image *image)
 {
-	t_image	*image;
 	void	*mlx_instance;
 
-	image = *image_addr;
 	if (image)
 	{
 		mlx_instance = get_core()->mlx_inst_ptr;
@@ -79,49 +77,52 @@ void	mlxge_destroy_image(t_image **image_addr)
 			free(image->buff);
 		free(image);
 	}
-	*image_addr = (void *)0;
+	image = (void *)0;
 }
 
 // ----- API -------------------------------------------------------------------
 
-t_image	*mlxge_new_image(t_image **list, t_v2d origin,
-				t_dimensions size)
-{
-	t_image	*node;
-	t_image	*image;
-
-	image = create_image(origin, size, false);
-	if (image)
-	{
-		mlxge_fill(image, image->bg_colour);
-		if (!*list)
-		{
-			*list = image;
-			return (image);
-		}
-		node = *list;
-		while (node->next)
-			node = node->next;
-		node->next = image;
-	}
-	return (image);
-}
-
+// Creates a new image and pushes to the layer's z buffer at z_index 0.
 // Z-Index is used as too keep track of drawing order.
 // Will error exit program if memory allocation fails.
+// Returns the image pointer it creates.
+t_image	*mlxge_new_image(t_layer *layer, t_v2d origin, t_dimensions size)
+{
+	t_zbuff_node	*new;
+
+	layer->z_buffer_tree = validate_z_buffer_tree(layer->z_buffer_tree, 0);
+	new = new_branch_leaf(0);
+	*new->image_ref = create_image(origin, size, false);
+	if (!*new->image_ref)
+	{
+		free(new->image_ref);
+		free(new);
+		mlxge_destroy();
+	}
+	mlxge_fill(*new->image_ref, (*new->image_ref)->bg_colour);
+	push_z_buffer(layer->z_buffer_tree, 0, new);
+	return (*new->image_ref);
+}
+
+// Creates a new image and pushes to the layer's z buffer at the specified z_index.
+// Z-Index is used as too keep track of drawing order.
+// Will error exit program if memory allocation fails.
+// Returns the image pointer it creates.
 t_image	*mlxge_new_image_z(t_layer *layer, size_t z_index, t_v2d origin,
 			t_dimensions size)
 {
-	t_image	*image;
+	t_zbuff_node	*new;
 
-	image = create_image(origin, size, false);
-	if (image)
+	layer->z_buffer_tree = validate_z_buffer_tree(layer->z_buffer_tree, z_index);
+	new = new_branch_leaf(0);
+	*new->image_ref = create_image(origin, size, false);
+	if (!*new->image_ref)
 	{
-		image->z_index = z_index;
-		layer->z_buffer_tree = validate_z_buffer_tree(layer->z_buffer_tree, z_index);
-		mlxge_log(DEBUG, "Image Ptr = %p", (void *)image);
-		push_image_z_buffer_tree(layer->z_buffer_tree, &image);
-		mlxge_log(DEBUG, "Image Ptr = %p", (void *)(*layer->z_buffer_tree->branches[image->z_index]->image_ref));
+		free(new->image_ref);
+		free(new);
+		mlxge_destroy();
 	}
-	return (image);
+	mlxge_fill(*new->image_ref, (*new->image_ref)->bg_colour);
+	push_z_buffer(layer->z_buffer_tree, z_index, new);
+	return (*new->image_ref);
 }

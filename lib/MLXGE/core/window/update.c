@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 20:39:42 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/28 21:15:47 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/18 12:24:39 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	mlxge_on_update(t_layer *list)
 	core->timer.since_last_print += core->timer.elapsed_sec;
 	if (core->timer.since_last_print >= ONE_SECOND)
 	{
-		printf("\033[A\33[2K\rElapsed: %f | FPS: %i\n",
-			core->timer.elapsed_sec,
-			(int)(ONE_SECOND / core->timer.elapsed_sec));
+		// printf("\033[A\33[2K\rElapsed: %f | FPS: %i\n",
+		// 	core->timer.elapsed_sec,
+		// 	(int)(ONE_SECOND / core->timer.elapsed_sec));
 		core->timer.since_last_print = 0.0f;
 	}
 	layer = list;
@@ -60,6 +60,6 @@ int	mlxge_run(void)
 	mlx_loop_hook(core->mlx_inst_ptr, mlxge_on_update, core->render_layers);
 	core->timer = (t_gtime){{0}, {0}, 0.0f, 0.0f};
 	gettimeofday(&core->timer.start, 0);
-	printf("\n");
+	// printf("\n");
 	return (mlx_loop(core->mlx_inst_ptr));
 }

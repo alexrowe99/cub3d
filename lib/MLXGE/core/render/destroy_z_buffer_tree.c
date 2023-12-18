@@ -6,11 +6,12 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:44:36 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/15 16:33:34 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/18 15:49:04 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <render/render_core.h>
+#include <stdio.h>
 
 void	destory_tree_leaves(t_zbuff_node *leaf)
 {
@@ -20,7 +21,13 @@ void	destory_tree_leaves(t_zbuff_node *leaf)
 	{
 		dead = leaf;
 		leaf = leaf->next;
-		mlxge_destroy_image(dead->image_ref);
+		if (*dead->image_ref)
+		{
+			mlxge_destroy_image(*dead->image_ref);
+			*dead->image_ref = (void *)0;
+		}
+		if (dead->node_allocated_image)
+			free(dead->image_ref);
 		free(dead);
 	}
 }

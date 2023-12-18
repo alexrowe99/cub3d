@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:06:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/15 15:26:19 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/18 15:50:33 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,8 @@ void			mlxge_destroy_layers(t_layer *list);
 
 t_image			*mlxge_new_frame(t_v2d origin, t_dimensions size,
 					bool is_mlx_object);
-t_image			*mlxge_new_image(t_image **list, t_v2d origin,
-					t_dimensions size);
+t_image			*mlxge_new_image(t_layer *layer, t_v2d origin, t_dimensions size);
+void			mlxge_output_ppm(t_image *image);
 
 t_event_layer	*mlxge_load_event_layers(t_layer *render_list);
 int				mlxge_handle_destroy_events(t_event_layer *layers_list);
@@ -91,8 +91,6 @@ int				mlxge_handle_key_press_events(int keycode, t_event_layer *list);
 int				mlxge_handle_key_release_events(int keycode,
 					t_event_layer *list);
 void			mlxge_destroy_event_layers(t_event_layer *list);
-
-void			mlxge_output_ppm(t_image *image);
 
 t_key_input		*mlxge_keyboard(void);
 

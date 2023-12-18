@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/15 16:34:47 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/18 16:04:03 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,26 @@ static inline t_image	*clear_layer_frame(t_image *frame,
 	return (frame);
 }
 
-static inline void	update_viewports(t_image *update_frame,
-						t_viewport *viewports)
+inline void	draw_layer_frame(t_zbuff_tree *z_buffer, t_image *layer_frame)
+{
+	int				i;
+	t_zbuff_node	*leaf;
+	t_image			*image;
+		
+	i = -1;
+	while (++i < z_buffer->z_range)
+	{
+		leaf = z_buffer->branches[i];
+		while (leaf)
+		{
+			image = *leaf->image_ref;
+			layer_frame = set_pixels(layer_frame, image, image->origin);
+			leaf = leaf->next;
+		}
+	}
+}
+
+static inline void	update_layer_viewports(t_viewport *viewports)
 {
 	t_v2d		projection;
 	t_image		*image;
@@ -55,16 +73,12 @@ static inline void	update_viewports(t_image *update_frame,
 			viewports->frame = set_pixels(viewports->frame, image, projection);
 			image = image->next;
 		}
-		update_frame = set_pixels(update_frame, viewports->frame,
-				viewports->frame->origin);
 		viewports = viewports->next;
 	}
 }
 
-
 void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 {
-	// t_image	*image;
 	t_image	*win_frame;
 
 	// mlxge_log(DEBUG, "In Render Loop");
@@ -74,33 +88,9 @@ void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 		layers = layers->next;
 		layers->frame = clear_layer_frame(layers->frame,
 				layers->frame->is_mlx_object);
-		if (layers->viewport_list)
-			update_viewports(layers->frame, layers->viewport_list);
-		// else
-		// {
-		// 	image = layers->images_to_render;
-		// 	while (image)
-		// 	{
-		// 		layers->frame = set_pixels(layers->frame, image, image->origin);
-		// 		image = image->next;
-		// 	}
-		// }
-
-		int	i = -1;
-		while (++i < layers->z_buffer_tree->z_range)
-		{
-			t_zbuff_node	*leaf = layers->z_buffer_tree->branches[i];
-			t_image			*image;
-
-			while (leaf)
-			{
-				image = *leaf->image_ref;
-				// mlxge_output_ppm(leaf->image);
-				layers->frame = set_pixels(layers->frame, image, image->origin);
-				leaf = leaf->next;
-			}
-		}
-		// mlxge_output_ppm(layers->frame);
+		// if (layers->viewport_list)
+		update_layer_viewports(layers->viewport_list);
+		draw_layer_frame(layers->z_buffer_tree, layers->frame);
 		set_pixels(win_frame, layers->frame, layers->frame->origin);
 	}
 	mlx_put_image_to_window(mlx_inst, mlx_win, win_frame->mlx_ptr, 0, 0);

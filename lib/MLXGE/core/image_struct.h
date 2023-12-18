@@ -31,6 +31,6 @@ typedef struct s_image_list
 	struct s_image_list			*next;
 }	t_image;
 
-void	mlxge_destroy_image(t_image **image_addr);
+void	mlxge_destroy_image(t_image *image);
 
 #endif

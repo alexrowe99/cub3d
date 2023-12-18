@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   core.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:03:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/11/03 17:43:33 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/18 12:46:32 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void	mlxge_destroy(void)
 		core->sandbox->user_app_destroy(core->sandbox->user_app_ref);
 	free(core->sandbox);
 	free(core);
+	printf("\n");
 	mlxge_log(INFO, "MLXGE has successfully been destroyed... Exiting!");
 	exit(SUCCESS);
 }

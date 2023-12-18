@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:15:55 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/15 16:33:06 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/18 14:50:17 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 typedef struct s_z_buffer_node
 {
 	int						z_index;
+	bool					node_allocated_image;
 	t_image					**image_ref;
 	struct s_z_buffer_node	*next;
 }	t_zbuff_node;
@@ -27,7 +28,5 @@ typedef struct s_z_buffer_tree
 	int						z_range;
 	t_zbuff_node			**branches;
 }	t_zbuff_tree;
-
-
 
 #endif

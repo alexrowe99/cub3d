@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 08:12:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/15 16:28:48 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/18 16:05:22 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,13 @@ t_game	*initialise_game_struct(t_game *game, t_window *win)
 	game->view = define_game_viewport(game->layer, &view);
 	if (!game->view)
 		mlxge_destroy();
-	mlxge_push_image_z_buffer(game->layer, &game->view->frame, 0);
+	// printf("\n\nGame View Frame\t\t: ptr = %p; address = %p\n", game->view->frame, &game->view->frame);
+	// mlxge_push_image_z_buffer(&game->view->frame, 0, game->layer);
 	game->hud = create_hud(game, win, &view);
 	if (!game->hud)
 		mlxge_destroy();
-	mlxge_push_image_z_buffer(game->layer, &game->hud->background_image, 0);
-	mlxge_push_image_z_buffer(game->layer, &game->hud->minimap->frame, 1);
+	// mlxge_push_image_z_buffer(&game->hud->background_image, 0, game->layer);
+	// mlxge_push_image_z_buffer(&game->hud->minimap->frame, 0, game->layer);
 	return (game);
 }
 

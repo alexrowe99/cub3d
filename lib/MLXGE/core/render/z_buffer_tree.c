@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:44:36 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/15 16:33:17 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/18 15:49:41 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,32 @@ t_zbuff_node	**create_tree_branches(size_t branch_count)
 	return (branches);
 }
 
-t_zbuff_node	*new_branch_leaf(t_image **image_addr)
+t_zbuff_node	*new_branch_leaf(t_image **image)
 {
 	t_zbuff_node	*leaf;
 
 	leaf = ft_calloc(1, sizeof(t_zbuff_node));
+	if (leaf && image)
+	{
+		leaf->image_ref = image;
+		leaf->z_index = (*image)->z_index;
+	}
+	else if (leaf)
+	{
+		leaf->node_allocated_image = true;
+		leaf->image_ref = ft_calloc(1, sizeof(t_image *));
+		if (!leaf->image_ref)
+		{
+			free(leaf);
+			leaf = (void *)0;
+		}
+	}
 	if (!leaf)
 	{
 		mlxge_log(ERROR, "Failed to create new z_buffer branch leaf because: "\
 			"Couldn't allocate memory");
 		mlxge_destroy();
 	}
-	leaf->image_ref = image_addr;
-	leaf->z_index = (*image_addr)->z_index;
 	return (leaf);
 }
 

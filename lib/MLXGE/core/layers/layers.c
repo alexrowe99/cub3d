@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:33:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/15 15:37:31 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/18 12:30:31 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ static inline t_layer	*new_layer(void)
 
 	layer = ft_calloc(1, sizeof(t_layer));
 	if (!layer)
-	{
 		mlxge_log(ERROR, ERR_LAY_CREAT" : Couldn't allocate memory");
-		return ((void *)0);
-	}
 	return (layer);
 }
 
@@ -42,7 +39,7 @@ t_layer	*create_window_layer(t_dimensions size)
 	{
 		mlxge_log(ERROR, ERR_LAY_CREAT" : Couldn't create MLXGE frame");
 		free(win_layer);
-		return ((void *)0);
+		win_layer = (void *)0;
 	}
 	return (win_layer);
 }
@@ -68,12 +65,8 @@ t_layer	*mlxge_new_layer(t_v2d origin, t_dimensions size,
 	if (!layer->frame)
 	{
 		mlxge_log(ERROR, ERR_LAY_CREAT" : Couldn't create MLXGE frame");
-
-		mlxge_log(DEBUG, "DUMPING PARAMETERS: origin = (%i, %i); size = (%i, %i);",
-			(int)origin.x, (int)origin.y, size.width, size.height);
-
 		free(layer);
-		return ((void *)0);
+		layer = (void *)0;
 	}
 	return (layer);
 }
@@ -86,13 +79,13 @@ int	mlxge_push_layer(t_layer *layer)
 
 	list = &get_core()->render_layers;
 	node = *list;
-	if (!node)
+	if (node)
 	{
-		*list = layer;
-		return (1);
+		while (node->next)
+			node = node->next;
+		node->next = layer;
 	}
-	while (node->next)
-		node = node->next;
-	node->next = layer;
+	else
+		*list = layer;
 	return (1);
 }
