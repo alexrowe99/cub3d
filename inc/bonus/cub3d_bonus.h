@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 15:10:22 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/19 10:09:50 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,23 @@
 
 // ----- Window definitions -----------------------------------------
 
-# define WIN_H 1024
-# define VIEW_H 720
+
 # define WIDE_16_9 16.0 / 9
 # define SQUARE_5_4 5.0 / 4
+
+# define MACOS 1
+# define LINUX 2
+# ifndef BUILD_OS
+#  define BUILD_OS == MACOS
+# endif
+
+# if BUILD_OS == MACOS
+#  define WIN_H 1024 + 28
+# else
+#  define WIN_H 1024
+# endif
+# define WIN_W 1024 * SQUARE_5_4
+# define VIEW_H 720
 # define TITLE "Cub3D Ray-Casting Demo - Alex & Leighton"
 
 // ----- Parser definitions -----------------------------------------

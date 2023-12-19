@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_linux.c                                     :+:      :+:    :+:   */
+/*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 09:20:53 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/18 16:04:03 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/19 08:20:31 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,59 @@ static inline void	update_layer_viewports(t_viewport *viewports)
 	}
 }
 
+#if BUILD_OS == MACOS
+void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
+{
+	// t_image	*image;
+	t_image	*win_frame;
+
+	// printf("Rendering frame.\n");
+	// win_frame = clear_layer_frame(layers->frame, layers->frame->is_mlx_object);
+	// mlx_sync(MLX_SYNC_IMAGE_WRITABLE, win_frame->mlx_ptr);
+	// while (layers->next)
+	// {
+	// 	layers = layers->next;
+	// 	layers->frame = clear_layer_frame(layers->frame,
+	// 			layers->frame->is_mlx_object);
+	// 	if (layers->viewport_list)
+	// 		update_viewports(layers->frame, layers->viewport_list);
+	// 	else
+	// 	{
+	// 		image = layers->images_to_render;
+	// 		while (image)
+	// 		{
+	// 			layers->frame = set_pixels(layers->frame, image, image->origin);
+	// 			image = image->next;
+	// 		}
+	// 	}
+	// 	// mlxge_output_ppm(layers->frame);
+	// 	set_pixels(win_frame, layers->frame, layers->frame->origin);
+	// }
+	// mlx_put_image_to_window(mlx_inst, mlx_win, win_frame->mlx_ptr, 0, 0);
+
+
+	// t_image	*win_frame;
+
+	// mlxge_log(DEBUG, "In Render Loop");
+	win_frame = clear_layer_frame(layers->frame, layers->frame->is_mlx_object);
+	mlx_sync(MLX_SYNC_IMAGE_WRITABLE, win_frame->mlx_ptr);
+	while (layers->next)
+	{
+		layers = layers->next;
+		layers->frame = clear_layer_frame(layers->frame,
+				layers->frame->is_mlx_object);
+		// if (layers->viewport_list)
+		update_layer_viewports(layers->viewport_list);
+		draw_layer_frame(layers->z_buffer_tree, layers->frame);
+		set_pixels(win_frame, layers->frame, layers->frame->origin);
+	}
+	mlx_put_image_to_window(mlx_inst, mlx_win, win_frame->mlx_ptr, 0, 0);
+	// mlxge_destroy();
+
+	mlx_sync(MLX_SYNC_WIN_CMD_COMPLETED, mlx_win);
+	// printf("Frame Complete.\n");
+}
+#elif BUILD_OS == LINUX
 void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 {
 	t_image	*win_frame;
@@ -96,3 +149,4 @@ void	mlxge_render(void *mlx_inst, void *mlx_win, t_render_layer *layers)
 	mlx_put_image_to_window(mlx_inst, mlx_win, win_frame->mlx_ptr, 0, 0);
 	// mlxge_destroy();
 }
+#endif

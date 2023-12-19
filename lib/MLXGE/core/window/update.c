@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   update.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 20:39:42 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/18 12:24:39 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/19 09:45:55 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ int	mlxge_on_update(t_layer *list)
 	core->timer.since_last_print += core->timer.elapsed_sec;
 	if (core->timer.since_last_print >= ONE_SECOND)
 	{
-		// printf("\033[A\33[2K\rElapsed: %f | FPS: %i\n",
-		// 	core->timer.elapsed_sec,
-		// 	(int)(ONE_SECOND / core->timer.elapsed_sec));
+		printf("\033[A\33[2K\rElapsed: %f | FPS: %i\n",
+			core->timer.elapsed_sec,
+			(int)(ONE_SECOND / core->timer.elapsed_sec));
 		core->timer.since_last_print = 0.0f;
 	}
 	layer = list;

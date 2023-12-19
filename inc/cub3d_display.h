@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_display.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/24 09:34:18 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 17:26:16 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/19 08:21:11 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_DISPLAY_H
-# define CUB3D_DIPSLAY_H
+# define CUB3D_DISPLAY_H
 
 # include <mlxge.h>
 

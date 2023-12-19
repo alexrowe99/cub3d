@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_map.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:19:55 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/12 14:31:45 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/19 09:45:30 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,28 +70,100 @@ static bool	validate_store_player_spawn(t_world *world, t_dimensions it)
 	return (has_spawn);
 }
 
+// static bool	g_track_enclosed = true;
+// static int	g_track_stack = 0;
+
+// void	dump_visited_tiles(t_ffill *check)
+// {
+// 	t_v2i	p;
+// 	char	*int_to_char;
+
+// 	p.y = -1;
+// 	while (++p.y < check->dim.height)
+// 	{
+// 		p.x = -1;
+// 		while (++p.x < check->dim.width)
+// 		{
+// 			int_to_char = ft_itoa(check->grid[p.y][p.x]);
+// 			if (!int_to_char)
+// 				mlxge_destroy();
+// 			printf("%3s,", int_to_char);
+// 			free(int_to_char);
+// 			int_to_char = (void *)0;
+// 		}
+// 		printf("\n");
+// 	}
+// 	printf("\n");
+// }
+
 static bool	validate_map_floodfill(t_ffill *check, t_v2i pos, int replace_c)
 {
 	bool	enclosed;
 
+	// g_track_stack++;
 	if (pos.x < 0 || check->dim.width <= pos.x
 		|| pos.y < 0 || check->dim.height <= pos.y)
+	{
+		// g_track_stack--;
 		return (false);
+	}
 	if (check->grid[pos.y][pos.x] == replace_c
 		|| check->visited[pos.x + pos.y * check->dim.width])
+	{
+		// g_track_stack--;
 		return (true);
+	}
 	check->visited[pos.x + pos.y * check->dim.width] = true;
 	check->grid[pos.y][pos.x] = replace_c;
 	enclosed = true;
 	pos.y += 1;
 	enclosed &= validate_map_floodfill(check, pos, replace_c);
+	// if (g_track_enclosed && !enclosed)
+	// {
+	// 	printf("\nNOT ENCLOSED : DOWN\n");
+	// 	printf("  - Grid Pos = X = %i, Y = %i\n", pos.x, pos.y);
+	// 	printf("  - Bool flagged at stack level %i\n", g_track_stack);
+	// 	printf("\n");
+	// 	dump_visited_tiles(check);
+	// 	// printf("  - Tile = %i\n", check->grid[pos.y][pos.x]);
+	// 	// printf("  - Visited = %s\n\n", check->visited[pos.x + pos.y * check->dim.width] ? "true" : "false");
+	// 	g_track_enclosed = enclosed;
+	// }
 	pos.y -= 2;
 	enclosed &= validate_map_floodfill(check, pos, replace_c);
+	// if (g_track_enclosed && !enclosed)
+	// {
+	// 	printf("\nNOT ENCLOSED : UP\n");
+	// 	printf("  - Grid Pos = X = %i; Y = %i)\n", pos.x, pos.y);
+	// 	printf("  - Bool flagged at stack level %i\n", g_track_stack);
+	// 	// printf("  - Tile = %i\n", check->grid[pos.y][pos.x]);
+	// 	// printf("  - Visited = %s\n\n", check->visited[pos.x + pos.y * check->dim.width] ? "true" : "false");
+	// 	g_track_enclosed = enclosed;
+	// }
 	pos.y += 1;
 	pos.x += 1;
 	enclosed &= validate_map_floodfill(check, pos, replace_c);
+	// if (g_track_enclosed && !enclosed)
+	// {
+	// 	printf("\nNOT ENCLOSED : RIGHT\n");
+	// 	printf("  - Grid Pos = X = %i; Y = %i)\n", pos.x, pos.y);
+	// 	printf("  - Bool flagged at stack level %i\n", g_track_stack);
+	// 	// printf("  - Tile = %i\n", check->grid[pos.y][pos.x]);
+	// 	// printf("  - Visited = %s\n\n", check->visited[pos.x + pos.y * check->dim.width] ? "true" : "false");
+	// 	g_track_enclosed = enclosed;
+	// }
 	pos.x -= 2;
 	enclosed &= validate_map_floodfill(check, pos, replace_c);
+	// if (g_track_enclosed && !enclosed)
+	// {
+	// 	printf("\nNOT ENCLOSED : LEFT\n");
+	// 	printf("  - Grid Pos = X = %i; Y = %i)\n", pos.x, pos.y);
+	// 	printf("  - Bool flagged at stack level %i\n", g_track_stack);
+	// 	// printf("  - Tile = %i\n", check->grid[pos.y][pos.x]);
+	// 	// printf("  - Visited = %s\n\n", check->visited[pos.x + pos.y * check->dim.width] ? "true" : "false");
+	// 	g_track_enclosed = enclosed;
+	// }
+	// g_track_stack--;
 	return (enclosed);
 }
 
@@ -100,6 +172,10 @@ static bool	check_map_enclosed(t_world *world)
 	bool	valid;
 	t_ffill	check;
 
+	check.grid = world->map.tiles;
+	check.dim = world->map.size;
+	// dump_visited_tiles(&check);
+	// printf("\n\n");
 	check.grid = ft_dup_2d_int_n(world->map.tiles, world->map.size.height);
 	if (!check.grid)
 		return (!cub3d_error("Something unexpected happened"));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialise_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/23 08:12:31 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/18 16:05:22 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/19 10:08:40 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ t_game	*initialise_game_struct(t_game *game, t_window *win)
 	if (!game->view)
 		mlxge_destroy();
 	// printf("\n\nGame View Frame\t\t: ptr = %p; address = %p\n", game->view->frame, &game->view->frame);
-	// mlxge_push_image_z_buffer(&game->view->frame, 0, game->layer);
+	mlxge_push_image_z_buffer(&game->view->frame, 0, game->layer);
 	game->hud = create_hud(game, win, &view);
 	if (!game->hud)
 		mlxge_destroy();
-	// mlxge_push_image_z_buffer(&game->hud->background_image, 0, game->layer);
-	// mlxge_push_image_z_buffer(&game->hud->minimap->frame, 0, game->layer);
+	mlxge_push_image_z_buffer(&game->hud->background_image, 0, game->layer);
+	mlxge_push_image_z_buffer(&game->hud->minimap->frame, 0, game->layer);
 	return (game);
 }
 
@@ -75,6 +75,8 @@ static inline void	initialise_mlxge_application(t_cub3d *app)
 	t_window	*win;
 
 	win = set_window_size(WIN_H, SQUARE_5_4);
+	if (BUILD_OS == MACOS)
+		win->size.width = WIN_W;
 	// printf("Window: %ix%i\n", win->size.width, win->size.height);
 	mlxge_init(app, destroy_cub3d);
 	if (mlxge_create_window(win->size.width, win->size.height, TITLE) < 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 11:02:12 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/18 10:03:43 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/19 10:13:26 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ inline static t_v2d   set_minimap_screen_pos(t_dimensions view,
 
 	center_win_x = find_middle_value(win.width, view.width);
 	center_hud_y = find_middle_value(hud.height, view.height);
-	minimap_start_y = win.height - hud.height + center_hud_y;
+	if (BUILD_OS == LINUX)
+		minimap_start_y = win.height - hud.height + center_hud_y;
+	else
+		minimap_start_y = win.height - 14 - hud.height + center_hud_y;
 	return (vector_2_double(center_win_x, minimap_start_y));
 }
 

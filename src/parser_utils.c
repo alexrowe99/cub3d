@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 12:32:26 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/02 16:39:46 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/19 09:38:49 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,16 @@ bool	validate_map_tiles(const char *line)
 	return (true);
 }
 
+// Bloody NULL Terminators man...;
 int	store_tile(char tile)
 {
-	char	tile_p[1];
+	char	tile_p[2];
 
-	*tile_p = tile;
-	if (tile != ' ')
-	{
-		if (is_spawn_tile(tile, 0))
-			return (tile);
-		return (ft_atoi(tile_p) + 1);
-	}
-	return (-1);
+	if (tile == ' ')
+		return (-1);
+	if (is_spawn_tile(tile, 0))
+		return (tile);
+	tile_p[0] = tile;
+	tile_p[1] = '\0';
+	return (ft_atoi(tile_p) + 1);
 }
