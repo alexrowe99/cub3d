@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   linux_keycodes.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:26:24 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/30 16:42:02 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/24 12:34:52 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LINUX_KEYCODES_H
 # define LINUX_KEYCODES_H
 
-enum s_linux_keycodes_wsl
+enum e_linux_keycodes_wsl
 {
 	MLX_KEY_ESCAPE = 65307,
 	MLX_KEY_BACKTICK = 96,

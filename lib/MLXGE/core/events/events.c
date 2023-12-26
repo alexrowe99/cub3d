@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 13:27:57 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/30 15:12:17 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/26 13:27:05 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	mlxge_handle_destroy_events(t_event_layer *layers_list)
 		}
 		layers_list = layers_list->next;
 	}
-	// mlxge_destroy();
 	return (1);
 }
 

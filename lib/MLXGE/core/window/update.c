@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   update.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 20:39:42 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/19 09:45:55 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/26 13:31:27 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <core.h>
+
+static void	start_global_timer(t_gtime *timer)
+{
+	*timer = (t_gtime){{0}, {0}, 0.0f, 0.0f};
+	gettimeofday(&timer->start, 0);
+	printf("\n");
+}
 
 static inline double	get_elapsed_secs(struct timeval *s, struct timeval *e)
 {
@@ -58,8 +65,6 @@ int	mlxge_run(void)
 	mlxge_load_mlx_event_hooks(core->mlx_window->mlx_win_ptr,
 		core->event_layers);
 	mlx_loop_hook(core->mlx_inst_ptr, mlxge_on_update, core->render_layers);
-	core->timer = (t_gtime){{0}, {0}, 0.0f, 0.0f};
-	gettimeofday(&core->timer.start, 0);
-	// printf("\n");
+	start_global_timer(&core->timer);
 	return (mlx_loop(core->mlx_inst_ptr));
 }

@@ -5,10 +5,10 @@ EXTERN_LIBS = lib/$(LIBALL_DIR)/libftall.a
 
 CORE_DIR = core
 CORE_C_SRC = $(addprefix $(CORE_DIR)/, $(addsuffix .c, \
- log core \
+ log core destroy \
  $(addprefix events/, events event_layers hooks key_event) \
  $(addprefix input/, key_input keycodes ) \
- $(addprefix image/, image output_ppm xpm) \
+ $(addprefix image/, image frame output_ppm xpm) \
  $(addprefix layers/, layers destroy_layers) \
  $(addprefix render/, render draw pixels z_buffer_tree destroy_z_buffer_tree z_buffer) \
  $(addprefix window/, window update viewport) \
@@ -21,13 +21,11 @@ ifeq ($(SET_OS), Darwin)
 	KEYCODE_FILENAME = macos_keycodes.h
 	MLX_BUILD_DIR = mlx/mac
 	EXTERN_LIBS += lib/$(MLX_BUILD_DIR)/libmlx.dylib
-# CORE_C_SRC += $(addprefix $(CORE_DIR)/render/render_, $(addsuffix .c, mac ))
 else ifeq ($(SET_OS), Linux)
 	BUILD_OS = -DBUILD_OS=2
 	KEYCODE_FILENAME = linux_keycodes.h
 	MLX_BUILD_DIR = mlx/linux
 	EXTERN_LIBS += lib/$(MLX_BUILD_DIR)/libmlx.a
-# CORE_C_SRC += $(addprefix $(CORE_DIR)/render/render_, $(addsuffix .c, linux ))
 else
 	@echo Your operating system is not supported!
 	exit 1

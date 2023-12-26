@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 09:06:23 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/18 15:50:33 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/24 12:36:15 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define MACOS 1
 # define LINUX 2
 # ifndef BUILD_OS
-#  define BUILD_OS MACOS
+#  define BUILD_OS LINUX
 # endif
 # ifdef BUILD_OS
 #  if BUILD_OS == MACOS
@@ -43,13 +43,13 @@
 
 typedef struct s_global_time
 {
-	struct timeval	start;
-	struct timeval	end;
-	double			elapsed_sec;
-	double			since_last_print;
+	struct timeval		start;
+	struct timeval		end;
+	double				elapsed_sec;
+	double				since_last_print;
 }	t_gtime;
 
-typedef int(*t_destroy_app)(void *);
+typedef int	(*t_destroy_app)(void *);
 struct s_user_app
 {
 	void				*user_app_ref;
@@ -62,7 +62,6 @@ typedef struct s_mlxge_core
 	t_window			*mlx_window;
 	struct s_user_app	*sandbox;
 	t_render_layer		*render_layers;
-	// t_zbuff_node		*
 	t_event_layer		*event_layers;
 	t_gtime				timer;
 }	t_mlxge;
@@ -78,7 +77,8 @@ void			mlxge_destroy_layers(t_layer *list);
 
 t_image			*mlxge_new_frame(t_v2d origin, t_dimensions size,
 					bool is_mlx_object);
-t_image			*mlxge_new_image(t_layer *layer, t_v2d origin, t_dimensions size);
+t_image			*mlxge_new_image(t_layer *layer, t_v2d origin,
+					t_dimensions size);
 void			mlxge_output_ppm(t_image *image);
 
 t_event_layer	*mlxge_load_event_layers(t_layer *render_list);

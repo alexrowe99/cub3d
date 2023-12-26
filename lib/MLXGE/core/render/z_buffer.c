@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:44:36 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/18 15:48:59 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/26 13:15:51 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,17 @@ void	push_image_z_buffer_tree(t_zbuff_tree *tree, t_image **image)
 	}
 }
 
-void	mlxge_push_image_z_buffer(t_image **image, size_t z_index, t_layer *layer)
+void	mlxge_push_image_z_buffer(t_image **image, size_t z_index,
+			t_layer *layer)
 {
 	(*image)->z_index = z_index;
-	layer->z_buffer_tree = validate_z_buffer_tree(layer->z_buffer_tree, z_index);
+	layer->z_buffer_tree = validate_z_buffer_tree(layer->z_buffer_tree,
+			z_index);
 	push_image_z_buffer_tree(layer->z_buffer_tree, image);
 }
 
-void	push_z_buffer(t_zbuff_tree *tree, size_t z_index, t_zbuff_node *new_node)
+void	push_z_buffer(t_zbuff_tree *tree, size_t z_index,
+			t_zbuff_node *new_node)
 {
 	t_zbuff_node	*leaf;
 

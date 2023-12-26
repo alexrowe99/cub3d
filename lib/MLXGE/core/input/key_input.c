@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_input.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/29 13:14:48 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/30 16:38:05 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/26 13:32:24 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,3 @@ bool	mlxge_is_key_down(enum e_mlxge_keycodes code)
 {
 	return (mlxge_keyboard()->input[code].is_down);
 }
-

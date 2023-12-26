@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/25 14:33:54 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/18 12:30:31 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/26 13:13:25 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,10 @@ t_layer	*create_window_layer(t_dimensions size)
 
 /*
 	Allocates a new layer on the heap.
-	Binds on_update function pointer to the layer. This funcion will be called during the applications update loop.
-	Creates the render frame to draw the layer's images to. (Like a static background image and dynamic foreground e.g. raycast walls)
+	Binds on_update function pointer to the layer.
+	This funcion will be called during the applications update loop.
+	Creates the render frame that the layer's images will be drawn to.
+	(Like a static background image and dynamic foreground e.g. raycast walls)
 */
 // Create a new layer. Returns NULL on error.
 t_layer	*mlxge_new_layer(t_v2d origin, t_dimensions size,

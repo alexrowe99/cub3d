@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keycodes.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmells <lmells@student.42adel.org.au>      +#+  +:+       +#+        */
+/*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/30 12:16:11 by lmells            #+#    #+#             */
-/*   Updated: 2023/10/30 14:50:58 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/26 13:32:10 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ void	*map_mlx_keycodes(t_key_input *keyboard)
 {
 	int	keycodes_fd;
 	int	track_key_count;
-	
+
 	keycodes_fd = open_mlxge_keycodes_os(FULL_PATH_MLXGE);
 	if (keycodes_fd < 0)
 	{

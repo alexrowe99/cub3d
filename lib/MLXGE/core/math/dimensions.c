@@ -6,13 +6,13 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/13 10:54:38 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 11:15:24 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/26 13:24:06 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <dimensions.h>
 
-t_dimensions    dimension_2d(int w, int h)
+t_dimensions	dimension_2d(int w, int h)
 {
-    return ((t_dimensions){w, h});
+	return ((t_dimensions){w, h});
 }

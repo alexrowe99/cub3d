@@ -6,7 +6,7 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 12:44:36 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/18 15:49:04 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/26 13:16:17 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	destroy_z_buffer_tree(t_zbuff_tree *tree)
 	t_zbuff_node	*leaf;
 
 	if (tree)
-	{	
+	{
 		while (tree->z_range--)
 		{
 			leaf = tree->branches[tree->z_range];

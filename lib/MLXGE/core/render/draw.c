@@ -6,11 +6,12 @@
 /*   By: lmells <lmells@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/27 09:39:05 by lmells            #+#    #+#             */
-/*   Updated: 2023/12/13 17:42:34 by lmells           ###   ########.fr       */
+/*   Updated: 2023/12/26 13:15:13 by lmells           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <render.h>
+#include <render/render_core.h>
 #include <dimensions.h>
 
 void	mlxge_fill(t_image *image, int colour)
@@ -77,13 +78,8 @@ void	mlxge_fill_rect(t_image *image, t_v2i start, t_v2i end,
 	}
 }
 
-typedef struct s_line_y
-{
-	int	start;
-	int	end;
-}	t_line;
-
-void	mlxge_draw_vertical_line(t_image *image, int x, t_v2i y_line, int colour)
+void	mlxge_draw_vertical_line(t_image *image, int x, t_v2i y_line,
+			int colour)
 {
 	t_line	y;
 
